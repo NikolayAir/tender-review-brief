@@ -245,3 +245,9 @@ p {
 .analyzer-actions .secondary-button:hover {
   background: #bcccdc;
 }
+
+button:focus-visible,
+.excerpt-input:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
