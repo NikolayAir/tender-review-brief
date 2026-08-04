@@ -4,6 +4,8 @@ Tender Review Brief turns public construction tender excerpts into structured, s
 
 The application uses an explicit set of boundary-aware keyword rules to identify technical scopes, review focus areas, follow-up checks, reviewer questions, and supporting source passages. It is designed to support, not replace, human technical review.
 
+**Live application:** [Open Tender Review Brief](https://nikolayair.github.io/tender-review-brief/)
+
 **Stack:** React · JavaScript · CSS · Vite · Vitest · ESLint
 
 ## Interface
@@ -28,8 +30,8 @@ The application uses an explicit set of boundary-aware keyword rules to identify
 
 1. Paste a public, non-confidential tender excerpt.
 2. Generate a structured review brief.
-3. Review the detected scopes and potential focus areas.
-4. Check the suggested follow-up questions against the complete source documentation.
+3. Review the detected scopes and suggested focus areas.
+4. Check the suggested follow-up checks and reviewer questions against the complete tender documentation.
 5. Confirm each finding through human technical review.
 
 The reviewer remains responsible for interpreting the source material and deciding what requires further investigation.
