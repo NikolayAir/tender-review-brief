@@ -32,14 +32,14 @@ describe('analyzeExcerpt', () => {
       'The tender notice contains general administrative information.',
     )
 
-    expect(brief.projectTitle).toBe('Pasted public excerpt')
+    expect(brief.projectTitle).toBe('Generated review brief')
     expect(brief.reviewerRole).toBe('Technical review support')
     expect(brief.technicalScopes).toEqual(['Manual review required'])
     expect(brief.reviewDomains).toEqual(['Manual review'])
     expect(brief.evidenceSnippets).toEqual([
       expect.objectContaining({
         id: 'no-rule-match',
-        source: 'No lexical rule match',
+        source: 'No matching technical scope',
       }),
     ])
   })
@@ -72,7 +72,7 @@ describe('analyzeExcerpt', () => {
     expect(brief.evidenceSnippets).toEqual([
       expect.objectContaining({
         id: 'rule-building-envelope',
-        source: 'Matched building-envelope signal',
+        source: 'Building envelope',
         text: 'The facade repair includes roof interfaces and external wall coordination',
       }),
     ])

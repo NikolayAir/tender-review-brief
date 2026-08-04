@@ -14,7 +14,7 @@ const validBrief = {
   evidenceSnippets: [
     {
       id: 'rule-structural',
-      source: 'Matched structural signal',
+      source: 'Structural works',
       text: 'Structural drawings are required',
     },
   ],

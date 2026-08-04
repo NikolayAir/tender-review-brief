@@ -55,13 +55,13 @@ export default function App() {
 
         <TagList
           id="review-focus-areas"
-          title="Potential review focus areas"
+          title="Suggested review focus areas"
           items={activeBrief.reviewDomains}
         />
 
         <TextList
           id="follow-up-checks"
-          title="Potential follow-up checks"
+          title="Suggested follow-up checks"
           items={activeBrief.followUpChecks}
         />
 
