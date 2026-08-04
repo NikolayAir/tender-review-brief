@@ -11,7 +11,6 @@ const rules = [
       'Confirm whether structural drawings and calculation notes are available for review.',
     question:
       'Which structural drawings and calculation notes should be reviewed?',
-    source: 'Matched structural signal',
     keywords: [
       'structural',
       'structure',
@@ -28,7 +27,6 @@ const rules = [
     followUpCheck: 'Check whether fire-safety interfaces are described in sufficient detail.',
     question:
       'Which fire-safety elements require inspection or third-party coordination?',
-    source: 'Matched fire-safety signal',
     keywords: [
       'fire',
       'fire-safety',
@@ -44,7 +42,6 @@ const rules = [
     followUpCheck: 'Verify whether accessibility or PMR requirements are defined in the full tender documents.',
     question:
       'Which accessibility or PMR requirements should be verified?',
-    source: 'Matched accessibility signal',
     keywords: ['accessibility', 'accessible', 'pmr', 'disabled access', 'barrier-free'],
   },
   {
@@ -54,7 +51,6 @@ const rules = [
     followUpCheck: 'Confirm whether facade, roof, window, and external-wall interfaces are defined.',
     question:
       'Which facade, roof, or envelope interfaces require inspection follow-up?',
-    source: 'Matched building-envelope signal',
     keywords: ['envelope', 'facade', 'façade', 'roof', 'window', 'external wall'],
   },
   {
@@ -65,7 +61,6 @@ const rules = [
       'Check whether water, drainage, and plumbing interfaces are specified across relevant trades.',
     question:
       'Which water, drainage, or plumbing interfaces require inspection or coordination with other trades?',
-    source: 'Matched water/drainage signal',
     keywords: [
       'water',
       'drainage',
@@ -85,7 +80,6 @@ const rules = [
       'Verify whether site access, occupation, and phasing constraints are defined.',
     question:
       'Are the works phased around continued building occupation or restricted site access?',
-    source: 'Matched phasing/access signal',
     keywords: [
       'occupied',
       'occupation',
@@ -102,7 +96,6 @@ const rules = [
     followUpCheck:
       'Confirm which technical documents and acceptance criteria govern the review.',
     question: 'Which documents define the applicable acceptance criteria?',
-    source: 'Matched documentation signal',
     keywords: [
       'documentation',
       'documents',
@@ -175,15 +168,15 @@ export function analyzeExcerpt(excerpt) {
 
   if (matchedRules.length === 0) {
     return {
-      projectTitle: 'Pasted public excerpt',
-      subtitle: 'Source-linked technical review brief',
+      projectTitle: 'Generated review brief',
+      subtitle: 'Source-linked analysis of a pasted public tender excerpt',
       reviewerRole: 'Technical review support',
       summary:
-        'No predefined technical signals were detected. Review the source document manually to identify relevant scopes, documentation, constraints, and coordination interfaces.',
+        'No predefined technical terms or phrases were identified. Review the complete tender documentation for relevant scopes, requirements, constraints, and coordination interfaces.',
       technicalScopes: ['Manual review required'],
       reviewDomains: ['Manual review'],
       followUpChecks: [
-        'Review the complete source documentation for technical requirements not covered by the current lexical rules.',
+        'Review the complete tender documentation for technical requirements not covered by the current rules.',
       ],
       reviewerQuestions: [
         'Which technical scopes, drawings, constraints, and acceptance criteria are defined in the full tender documents?',
@@ -191,29 +184,29 @@ export function analyzeExcerpt(excerpt) {
       evidenceSnippets: [
         {
           id: 'no-rule-match',
-          source: 'No lexical rule match',
-          text: 'The pasted excerpt did not match the current predefined lexical rules.',
+          source: 'No matching technical scope',
+          text: 'The excerpt did not match any technical terms or phrases in the current rule set.',
         },
       ],
     }
   }
 
   return {
-    projectTitle: 'Pasted public excerpt',
-    subtitle: 'Source-linked technical review brief',
+    projectTitle: 'Generated review brief',
+    subtitle: 'Source-linked analysis of a pasted public tender excerpt',
     reviewerRole: 'Technical review support',
     summary:
-      'The browser-based analysis detected explicit technical signals in the pasted excerpt. Review the generated brief against the complete source documentation.',
+      'Rule-based analysis identified explicit technical terms and phrases in the excerpt. Review the brief against the complete tender documentation.',
     technicalScopes: unique(matchedRules.map((rule) => rule.scope)),
     reviewDomains: unique(matchedRules.map((rule) => rule.focus)),
     followUpChecks: unique(matchedRules.map((rule) => rule.followUpCheck)),
     reviewerQuestions: unique(matchedRules.map((rule) => rule.question)),
     evidenceSnippets: matchedRules.map((rule) => ({
       id: `rule-${rule.id}`,
-      source: rule.source,
+      source: rule.scope,
       text:
         findEvidenceText(excerpt, rule.keywords) ??
-        'A lexical signal matched the pasted excerpt.',
+        'A predefined rule matched, but no source passage could be isolated.',
     })),
   }
 }

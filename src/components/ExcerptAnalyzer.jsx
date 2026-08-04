@@ -56,14 +56,14 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
 
   return (
     <section className="card analyzer-card" aria-labelledby="analyzer-title">
-      <h2 id="analyzer-title">Analyze public excerpt</h2>
+      <h2 id="analyzer-title">Analyze tender excerpt</h2>
       <p id="excerpt-help" className="analyzer-note">
         Paste a public, non-confidential tender excerpt to generate a
-        structured review brief with source-linked evidence.
+        structured, source-linked review brief.
       </p>
       <p id="excerpt-storage-note" className="analyzer-limit-note">
-        Browser-only: text remains in this tab session and is not sent to a
-        server. Human review required.
+        Browser-only processing: text stays in this tab session and is not sent to
+        a server. Human review is required.
       </p>
 
       <textarea
@@ -93,7 +93,7 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
           Generate review brief
         </button>
         <button type="button" className="secondary-button" onClick={handleReset}>
-          Reset sample brief
+          Restore bundled sample
         </button>
       </div>
     </section>
