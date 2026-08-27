@@ -73,8 +73,86 @@ describe('analyzeExcerpt', () => {
       expect.objectContaining({
         id: 'rule-building-envelope',
         source: 'Building envelope',
-        text: 'The facade repair includes roof interfaces and external wall coordination',
+        text: 'The facade repair includes roof interfaces and external wall coordination.',
       }),
+    ])
+  })
+})
+
+describe('source evidence fidelity', () => {
+  it.each([
+    {
+      name: 'decimal values and their units',
+      excerpt:
+        'Water pressure must be 1.5 bar and water temperature must be 60.5 °C.',
+    },
+    {
+      name: 'decimal commas, percentages, and semicolons',
+      excerpt: 'Water pressure must be 1,5 bar; drainage slope must be 2.0%.',
+    },
+    {
+      name: 'abbreviations and section numbers',
+      excerpt: 'Water tests shall follow Sec. 3.2 of spec. No. 5.',
+    },
+    {
+      name: 'URLs with dotted paths and query punctuation',
+      excerpt:
+        'Water requirements: https://example.test/specs/1.5?rev=2#sec-3.2.',
+    },
+    {
+      name: 'abbreviations inside parentheses',
+      excerpt:
+        'Water installation (e.g. valves, pipes, etc.) must meet the spec.',
+    },
+    {
+      name: 'quotation marks and terminal punctuation',
+      excerpt: 'Water testing: “Are all pipes sealed?” Check them!',
+    },
+    {
+      name: 'surrounding sentences on the same source line',
+      excerpt:
+        'Administrative note. Water pressure must be 1.5 bar. Retain this requirement.',
+    },
+  ])('preserves $name', ({ excerpt }) => {
+    expect(analyzeExcerpt(excerpt).evidenceSnippets).toEqual([
+      {
+        id: 'rule-water-drainage',
+        source: 'Water and drainage systems',
+        text: excerpt,
+      },
+    ])
+  })
+
+  it('isolates source lines while preserving punctuation and trimming outer whitespace', () => {
+    const brief = analyzeExcerpt(
+      'Administrative notice.\n\n  Water pressure must be 1.5 bar.  \nRoof interfaces must be sealed!',
+    )
+
+    expect(brief.evidenceSnippets).toEqual([
+      {
+        id: 'rule-building-envelope',
+        source: 'Building envelope',
+        text: 'Roof interfaces must be sealed!',
+      },
+      {
+        id: 'rule-water-drainage',
+        source: 'Water and drainage systems',
+        text: 'Water pressure must be 1.5 bar.',
+      },
+    ])
+  })
+
+  it('uses the first matching source line regardless of keyword order', () => {
+    const brief = analyzeExcerpt(
+      'Roof repairs are required.\nThe facade interfaces follow later.',
+    )
+
+    expect(brief.evidenceSnippets).toEqual([
+      {
+        id: 'rule-building-envelope',
+        source: 'Building envelope',
+        text: 'Roof repairs are required.',
+      },
     ])
   })
 })
@@ -129,10 +207,10 @@ describe('lexical matching safeguards', () => {
       'rule-fire-safety',
     ])
     expect(brief.evidenceSnippets[0].text).toBe(
-      'Structural adaptation requires fire safety coordination',
+      'Structural adaptation requires fire safety coordination.',
     )
     expect(brief.evidenceSnippets[1].text).toBe(
-      'Structural adaptation requires fire safety coordination',
+      'Structural adaptation requires fire safety coordination.',
     )
   })
 

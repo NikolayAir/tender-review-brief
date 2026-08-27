@@ -137,8 +137,9 @@ function matchesRule(text, rule) {
 }
 
 function splitIntoSnippets(text) {
+  // Keep punctuation intact: periods may belong to numbers, abbreviations, or URLs.
   return text
-    .split(/[.!?\n]+/)
+    .split(/[\r\n\u2028\u2029]+/u)
     .map((part) => part.trim())
     .filter(Boolean)
 }
