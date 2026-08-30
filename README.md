@@ -18,7 +18,7 @@ The application uses an explicit set of boundary-aware keyword rules to identify
 
 * Generates a structured review brief from a pasted public tender excerpt.
 * Matches explicit English and selected French construction terms using predefined review rules.
-* Pairs each matched rule with a supporting passage from the source text.
+* Pairs each matched rule with a supporting source passage, preserving punctuation and internal line breaks.
 * Separates detected scopes, review focus areas, follow-up checks, reviewer questions, and evidence.
 * Uses boundary-aware matching to reduce false positives from terms embedded inside longer words.
 * Produces deterministic results from an explicit, inspectable rule set.
@@ -53,18 +53,24 @@ flowchart LR
     browser["Local processing<br/>No backend or external services"] --- matcher
 ```
 
+## Evidence extraction
+
+For each matched rule, the analyzer quotes the complete source line containing the first matching term or phrase. The quote includes all lines spanned by that phrase. When several terms start at the same position, the longest matching phrase determines the quoted lines.
+
+Evidence preserves source punctuation and internal whitespace, including decimal values such as `1.5 bar`, abbreviations, section references, URLs, and line breaks. Only leading and trailing whitespace is trimmed.
+
 ## Current scope
 
 The current rule set covers explicit signals related to structural works, fire safety, accessibility, the building envelope, water and drainage systems, site access and phasing, and technical documentation.
 
-The interface accepts excerpts of up to 50,000 characters. Automated tests cover input validation, matching safeguards, evidence links, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks.
+The interface accepts excerpts of up to 50,000 characters. Automated tests cover input validation, matching safeguards, source-evidence fidelity, phrases spanning line breaks, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks.
 
 ## Known limitations
 
 * The analyzer uses keyword rules rather than semantic or contextual language understanding.
 * Technical areas outside the current rule set will not be detected.
 * French-language support is limited to selected construction terms.
-* Evidence extraction returns the first matching source passage for each rule.
+* Evidence uses source-line boundaries, so a quote may contain more than one sentence.
 * Multiple matched rules may reference the same source passage.
 * The application does not fetch URLs, scrape websites, parse PDFs, or perform OCR.
 * Browser storage is best-effort, limited to the current tab session, and may be unavailable under some browser settings.
