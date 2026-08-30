@@ -157,6 +157,95 @@ describe('source evidence fidelity', () => {
   })
 })
 
+describe('multi-line source evidence', () => {
+  it.each([
+    { name: 'LF', separator: '\n' },
+    { name: 'CRLF', separator: '\r\n' },
+    { name: 'CR', separator: '\r' },
+    { name: 'Unicode line separators', separator: '\u2028' },
+    { name: 'Unicode paragraph separators', separator: '\u2029' },
+    { name: 'blank lines', separator: '\n\n' },
+    { name: 'tabs and indentation', separator: '\t\n  \t' },
+  ])('preserves $name inside a matched phrase', ({ separator }) => {
+    const passage = `Disabled${separator}access is mandatory.`
+    const brief = analyzeExcerpt(
+      `Administrative notice.${separator}${separator}  ${passage}  ${separator}Roof interfaces follow.`,
+    )
+
+    expect(brief.evidenceSnippets).toEqual([
+      {
+        id: 'rule-accessibility',
+        source: 'Accessibility',
+        text: passage,
+      },
+      {
+        id: 'rule-building-envelope',
+        source: 'Building envelope',
+        text: 'Roof interfaces follow.',
+      },
+    ])
+  })
+
+  it.each([
+    {
+      id: 'structural',
+      scope: 'Structural works',
+      passage: 'Reinforced\nconcrete must reach 25.5 MPa.',
+    },
+    {
+      id: 'fire-safety',
+      scope: 'Fire safety',
+      passage: 'Fire\nsafety interfaces must be coordinated.',
+    },
+    {
+      id: 'accessibility',
+      scope: 'Accessibility',
+      passage: 'Disabled\naccess is mandatory.',
+    },
+    {
+      id: 'building-envelope',
+      scope: 'Building envelope',
+      passage: 'External\nwall joints must be sealed.',
+    },
+    {
+      id: 'water-drainage',
+      scope: 'Water and drainage systems',
+      passage: 'Eaux\nusées : pente minimale de 1,5 %.',
+    },
+    {
+      id: 'phasing',
+      scope: 'Site access and phasing',
+      passage: 'Restricted site\naccess applies throughout the works.',
+    },
+    {
+      id: 'documentation',
+      scope: 'Technical documentation',
+      passage: 'Acceptance\ncriteria must be stated.',
+    },
+  ])('quotes the complete first phrase for $scope', ({ id, scope, passage }) => {
+    const brief = analyzeExcerpt(passage)
+
+    expect(brief.technicalScopes).toEqual([scope])
+    expect(brief.evidenceSnippets).toEqual([
+      { id: `rule-${id}`, source: scope, text: passage },
+    ])
+  })
+
+  it('uses an earlier multi-line phrase before a later single-word signal', () => {
+    const brief = analyzeExcerpt(
+      'Disabled\naccess is mandatory.\nAccessibility review follows.',
+    )
+
+    expect(brief.evidenceSnippets).toEqual([
+      {
+        id: 'rule-accessibility',
+        source: 'Accessibility',
+        text: 'Disabled\naccess is mandatory.',
+      },
+    ])
+  })
+})
+
 describe('lexical matching safeguards', () => {
   it('matches case-insensitively and preserves accented French signals', () => {
     const brief = analyzeExcerpt(

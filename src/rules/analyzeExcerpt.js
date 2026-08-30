@@ -128,28 +128,44 @@ function getKeywordPattern(keyword) {
   return keywordPatternCache.get(keyword)
 }
 
-function matchesKeyword(text, keyword) {
-  return getKeywordPattern(keyword).test(text)
+function findRuleMatch(excerpt, rule) {
+  let firstMatch = null
+
+  for (const keyword of rule.keywords) {
+    const match = getKeywordPattern(keyword).exec(excerpt)
+
+    if (!match) continue
+
+    const start = match.index + match[1].length
+    const end = match.index + match[0].length
+
+    // The longest match at the same position keeps multi-line phrases complete.
+    if (
+      firstMatch === null ||
+      start < firstMatch.start ||
+      (start === firstMatch.start && end > firstMatch.end)
+    ) {
+      firstMatch = { start, end }
+    }
+  }
+
+  return firstMatch
 }
 
-function matchesRule(text, rule) {
-  return rule.keywords.some((keyword) => matchesKeyword(text, keyword))
-}
+function extractEvidenceText(excerpt, match) {
+  // Quote complete source lines, preserving punctuation and internal whitespace.
+  const beforeMatch = excerpt.slice(0, match.start)
+  const start =
+    Math.max(
+      beforeMatch.lastIndexOf('\n'),
+      beforeMatch.lastIndexOf('\r'),
+      beforeMatch.lastIndexOf('\u2028'),
+      beforeMatch.lastIndexOf('\u2029'),
+    ) + 1
+  const nextLineBreak = excerpt.slice(match.end).search(/[\r\n\u2028\u2029]/u)
+  const end = nextLineBreak === -1 ? excerpt.length : match.end + nextLineBreak
 
-function splitIntoSnippets(text) {
-  // Keep punctuation intact: periods may belong to numbers, abbreviations, or URLs.
-  return text
-    .split(/[\r\n\u2028\u2029]+/u)
-    .map((part) => part.trim())
-    .filter(Boolean)
-}
-
-function findEvidenceText(excerpt, keywords) {
-  const snippets = splitIntoSnippets(excerpt)
-
-  return snippets.find((snippet) =>
-    keywords.some((keyword) => matchesKeyword(snippet, keyword)),
-  )
+  return excerpt.slice(start, end).trim()
 }
 
 export function validateExcerptInput(text) {
@@ -165,9 +181,11 @@ export function validateExcerptInput(text) {
 }
 
 export function analyzeExcerpt(excerpt) {
-  const matchedRules = rules.filter((rule) => matchesRule(excerpt, rule))
+  const ruleMatches = rules
+    .map((rule) => ({ rule, match: findRuleMatch(excerpt, rule) }))
+    .filter(({ match }) => match !== null)
 
-  if (matchedRules.length === 0) {
+  if (ruleMatches.length === 0) {
     return {
       projectTitle: 'Generated review brief',
       subtitle: 'Source-linked analysis of a pasted public tender excerpt',
@@ -198,16 +216,14 @@ export function analyzeExcerpt(excerpt) {
     reviewerRole: 'Technical review support',
     summary:
       'Rule-based analysis identified explicit technical terms and phrases in the excerpt. Review the brief against the complete tender documentation.',
-    technicalScopes: unique(matchedRules.map((rule) => rule.scope)),
-    reviewDomains: unique(matchedRules.map((rule) => rule.focus)),
-    followUpChecks: unique(matchedRules.map((rule) => rule.followUpCheck)),
-    reviewerQuestions: unique(matchedRules.map((rule) => rule.question)),
-    evidenceSnippets: matchedRules.map((rule) => ({
+    technicalScopes: unique(ruleMatches.map(({ rule }) => rule.scope)),
+    reviewDomains: unique(ruleMatches.map(({ rule }) => rule.focus)),
+    followUpChecks: unique(ruleMatches.map(({ rule }) => rule.followUpCheck)),
+    reviewerQuestions: unique(ruleMatches.map(({ rule }) => rule.question)),
+    evidenceSnippets: ruleMatches.map(({ rule, match }) => ({
       id: `rule-${rule.id}`,
       source: rule.scope,
-      text:
-        findEvidenceText(excerpt, rule.keywords) ??
-        'A predefined rule matched, but no source passage could be isolated.',
+      text: extractEvidenceText(excerpt, match),
     })),
   }
 }
