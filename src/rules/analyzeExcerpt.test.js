@@ -71,7 +71,6 @@ describe('analyzeExcerpt', () => {
     expect(brief.technicalScopes).toContain('Building envelope')
     expect(brief.evidenceSnippets).toEqual([
       expect.objectContaining({
-        id: 'rule-building-envelope',
         source: 'Building envelope',
         text: 'The facade repair includes roof interfaces and external wall coordination.',
       }),
@@ -79,7 +78,7 @@ describe('analyzeExcerpt', () => {
   })
 })
 
-describe('source evidence fidelity', () => {
+describe('source paragraph preservation', () => {
   it.each([
     {
       name: 'decimal values and their units',
@@ -115,49 +114,45 @@ describe('source evidence fidelity', () => {
     },
   ])('preserves $name', ({ excerpt }) => {
     expect(analyzeExcerpt(excerpt).evidenceSnippets).toEqual([
-      {
-        id: 'rule-water-drainage',
+      expect.objectContaining({
         source: 'Water and drainage systems',
         text: excerpt,
-      },
+      }),
     ])
   })
 
-  it('isolates source lines while preserving punctuation and trimming outer whitespace', () => {
+  it('isolates source paragraphs while preserving punctuation and trimming outer whitespace', () => {
     const brief = analyzeExcerpt(
-      'Administrative notice.\n\n  Water pressure must be 1.5 bar.  \nRoof interfaces must be sealed!',
+      'Administrative notice.\n\n  Water pressure must be 1.5 bar.  \n\nRoof interfaces must be sealed!',
     )
 
     expect(brief.evidenceSnippets).toEqual([
-      {
-        id: 'rule-building-envelope',
+      expect.objectContaining({
         source: 'Building envelope',
         text: 'Roof interfaces must be sealed!',
-      },
-      {
-        id: 'rule-water-drainage',
+      }),
+      expect.objectContaining({
         source: 'Water and drainage systems',
         text: 'Water pressure must be 1.5 bar.',
-      },
+      }),
     ])
   })
 
-  it('uses the first matching source line regardless of keyword order', () => {
+  it('uses the first matching source paragraph regardless of keyword order', () => {
     const brief = analyzeExcerpt(
-      'Roof repairs are required.\nThe facade interfaces follow later.',
+      'Roof repairs are required.\n\nThe facade interfaces follow later.',
     )
 
     expect(brief.evidenceSnippets).toEqual([
-      {
-        id: 'rule-building-envelope',
+      expect.objectContaining({
         source: 'Building envelope',
         text: 'Roof repairs are required.',
-      },
+      }),
     ])
   })
 })
 
-describe('multi-line source evidence', () => {
+describe('multiline keyword phrases in source evidence', () => {
   it.each([
     { name: 'LF', separator: '\n' },
     { name: 'CRLF', separator: '\r\n' },
@@ -169,79 +164,69 @@ describe('multi-line source evidence', () => {
   ])('preserves $name inside a matched phrase', ({ separator }) => {
     const passage = `Disabled${separator}access is mandatory.`
     const brief = analyzeExcerpt(
-      `Administrative notice.${separator}${separator}  ${passage}  ${separator}Roof interfaces follow.`,
+      `Administrative notice.\n\n  ${passage}  \n\nRoof interfaces follow.`,
     )
 
     expect(brief.evidenceSnippets).toEqual([
-      {
-        id: 'rule-accessibility',
+      expect.objectContaining({
         source: 'Accessibility',
         text: passage,
-      },
-      {
-        id: 'rule-building-envelope',
+      }),
+      expect.objectContaining({
         source: 'Building envelope',
         text: 'Roof interfaces follow.',
-      },
+      }),
     ])
   })
 
   it.each([
     {
-      id: 'structural',
       scope: 'Structural works',
       passage: 'Reinforced\nconcrete must reach 25.5 MPa.',
     },
     {
-      id: 'fire-safety',
       scope: 'Fire safety',
       passage: 'Fire\nsafety interfaces must be coordinated.',
     },
     {
-      id: 'accessibility',
       scope: 'Accessibility',
       passage: 'Disabled\naccess is mandatory.',
     },
     {
-      id: 'building-envelope',
       scope: 'Building envelope',
       passage: 'External\nwall joints must be sealed.',
     },
     {
-      id: 'water-drainage',
       scope: 'Water and drainage systems',
       passage: 'Eaux\nusées : pente minimale de 1,5 %.',
     },
     {
-      id: 'phasing',
       scope: 'Site access and phasing',
       passage: 'Restricted site\naccess applies throughout the works.',
     },
     {
-      id: 'documentation',
       scope: 'Technical documentation',
       passage: 'Acceptance\ncriteria must be stated.',
     },
-  ])('quotes the complete first phrase for $scope', ({ id, scope, passage }) => {
+  ])('quotes the paragraphs spanning a matched phrase for $scope', ({ scope, passage }) => {
     const brief = analyzeExcerpt(passage)
 
     expect(brief.technicalScopes).toEqual([scope])
     expect(brief.evidenceSnippets).toEqual([
-      { id: `rule-${id}`, source: scope, text: passage },
+      expect.objectContaining({ source: scope, text: passage }),
     ])
   })
 
-  it('uses an earlier multi-line phrase before a later single-word signal', () => {
+  it('uses an earlier multiline phrase before a later single-word signal', () => {
     const brief = analyzeExcerpt(
-      'Disabled\naccess is mandatory.\nAccessibility review follows.',
+      'Disabled\naccess is mandatory.\n\nAccessibility review follows.',
     )
 
     expect(brief.evidenceSnippets).toEqual([
-      {
-        id: 'rule-accessibility',
+      expect.objectContaining({
         source: 'Accessibility',
         text: 'Disabled\naccess is mandatory.',
-      },
+      }),
     ])
   })
 })
@@ -283,23 +268,22 @@ describe('lexical matching safeguards', () => {
 
     expect(brief.technicalScopes).toEqual(['Structural works'])
     expect(brief.evidenceSnippets).toHaveLength(1)
-    expect(brief.evidenceSnippets[0].id).toBe('rule-structural')
+    expect(brief.evidenceSnippets[0].source).toBe('Structural works')
   })
 
-  it('keeps stable evidence ids when one sentence matches multiple rules', () => {
-    const brief = analyzeExcerpt(
-      'Structural adaptation requires fire safety coordination.',
-    )
+  it('shares one stable passage id when multiple rules match the same paragraph', () => {
+    const excerpt = 'Structural adaptation requires fire safety coordination.'
+    const brief = analyzeExcerpt(excerpt)
 
-    expect(brief.evidenceSnippets.map((snippet) => snippet.id)).toEqual([
-      'rule-structural',
-      'rule-fire-safety',
+    expect(brief.evidenceSnippets).toEqual([
+      expect.objectContaining({
+        id: expect.any(String),
+        source: 'Structural works · Fire safety',
+        text: excerpt,
+      }),
     ])
-    expect(brief.evidenceSnippets[0].text).toBe(
-      'Structural adaptation requires fire safety coordination.',
-    )
-    expect(brief.evidenceSnippets[1].text).toBe(
-      'Structural adaptation requires fire safety coordination.',
+    expect(analyzeExcerpt(excerpt).evidenceSnippets[0].id).toBe(
+      brief.evidenceSnippets[0].id,
     )
   })
 

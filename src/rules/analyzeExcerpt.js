@@ -1,3 +1,5 @@
+import { buildEvidencePassages } from './evidencePassages.js'
+
 export const MAX_EXCERPT_CHARS = 50000
 
 // Rule order defines the stable order of generated scopes, checks,
@@ -128,14 +130,18 @@ function getKeywordPattern(keyword) {
   return keywordPatternCache.get(keyword)
 }
 
-function findRuleMatch(excerpt, rule) {
+// Match spans use UTF-16 offsets compatible with slice; the end is exclusive.
+function findFirstRuleMatch(excerpt, rule) {
   let firstMatch = null
 
   for (const keyword of rule.keywords) {
     const match = getKeywordPattern(keyword).exec(excerpt)
 
-    if (!match) continue
+    if (!match) {
+      continue
+    }
 
+    // Exclude the leading word-boundary capture from the keyword's span.
     const start = match.index + match[1].length
     const end = match.index + match[0].length
 
@@ -152,22 +158,6 @@ function findRuleMatch(excerpt, rule) {
   return firstMatch
 }
 
-function extractEvidenceText(excerpt, match) {
-  // Quote complete source lines, preserving punctuation and internal whitespace.
-  const beforeMatch = excerpt.slice(0, match.start)
-  const start =
-    Math.max(
-      beforeMatch.lastIndexOf('\n'),
-      beforeMatch.lastIndexOf('\r'),
-      beforeMatch.lastIndexOf('\u2028'),
-      beforeMatch.lastIndexOf('\u2029'),
-    ) + 1
-  const nextLineBreak = excerpt.slice(match.end).search(/[\r\n\u2028\u2029]/u)
-  const end = nextLineBreak === -1 ? excerpt.length : match.end + nextLineBreak
-
-  return excerpt.slice(start, end).trim()
-}
-
 export function validateExcerptInput(text) {
   if (!text || !text.trim()) {
     return 'Please paste a public, non-confidential tender excerpt to generate a review brief.'
@@ -182,8 +172,8 @@ export function validateExcerptInput(text) {
 
 export function analyzeExcerpt(excerpt) {
   const ruleMatches = rules
-    .map((rule) => ({ rule, match: findRuleMatch(excerpt, rule) }))
-    .filter(({ match }) => match !== null)
+    .map((rule) => ({ rule, matchSpan: findFirstRuleMatch(excerpt, rule) }))
+    .filter(({ matchSpan }) => matchSpan !== null)
 
   if (ruleMatches.length === 0) {
     return {
@@ -220,10 +210,6 @@ export function analyzeExcerpt(excerpt) {
     reviewDomains: unique(ruleMatches.map(({ rule }) => rule.focus)),
     followUpChecks: unique(ruleMatches.map(({ rule }) => rule.followUpCheck)),
     reviewerQuestions: unique(ruleMatches.map(({ rule }) => rule.question)),
-    evidenceSnippets: ruleMatches.map(({ rule, match }) => ({
-      id: `rule-${rule.id}`,
-      source: rule.scope,
-      text: extractEvidenceText(excerpt, match),
-    })),
+    evidenceSnippets: buildEvidencePassages(excerpt, ruleMatches),
   }
 }
