@@ -140,12 +140,33 @@ p {
   gap: 14px;
 }
 
+.evidence-note {
+  margin-bottom: 14px;
+  color: #52606d;
+}
+
 .evidence-snippet {
+  min-width: 0;
   border-left: 4px solid #829ab1;
   border-radius: 12px;
   padding: 14px 16px;
   background: #f8fafc;
   text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.evidence-text {
+  white-space: pre-wrap;
+}
+
+.evidence-details summary {
+  color: #243b53;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.evidence-details[open] summary {
+  margin-bottom: 12px;
 }
 
 .disclaimer {
@@ -247,7 +268,8 @@ p {
 }
 
 button:focus-visible,
-.excerpt-input:focus-visible {
+.excerpt-input:focus-visible,
+.evidence-details summary:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
