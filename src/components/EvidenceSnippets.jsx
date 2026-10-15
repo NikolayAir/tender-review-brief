@@ -1,5 +1,12 @@
 const MAX_INLINE_PASSAGE_CHARS = 1000
 
+function EvidenceText({ text }) {
+  // pre-wrap handles LF; render Unicode separators as LF without changing source data.
+  const displayText = text.replace(/[\u2028\u2029]/gu, '\n')
+
+  return <p className="evidence-text">{displayText}</p>
+}
+
 export function EvidenceSnippets({ snippets }) {
   return (
     <section className="card evidence-card" aria-labelledby="evidence-title">
@@ -17,10 +24,10 @@ export function EvidenceSnippets({ snippets }) {
                 <summary>
                   Full source passage ({snippet.text.length.toLocaleString()} characters)
                 </summary>
-                <p className="evidence-text">{snippet.text}</p>
+                <EvidenceText text={snippet.text} />
               </details>
             ) : (
-              <p className="evidence-text">{snippet.text}</p>
+              <EvidenceText text={snippet.text} />
             )}
           </article>
         ))}

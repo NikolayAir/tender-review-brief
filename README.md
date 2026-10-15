@@ -61,7 +61,9 @@ Newly generated briefs quote the complete source paragraph containing the match.
 
 Overlapping passages are combined and stored once. Each passage lists its matched technical scopes in rule order. Evidence preserves source punctuation and internal whitespace, including decimal values such as `1.5 bar`, abbreviations, section references, URLs, tabs, and line breaks. Only leading and trailing whitespace is trimmed.
 
-The interface preserves this formatting. Passages longer than 1,000 characters are collapsed by default and can be expanded using the keyboard or pointer. Their complete text remains available without truncation.
+Supporting passages display ordinary line breaks, tabs, and Unicode line and paragraph separators (U+2028/U+2029). Unicode separators are displayed as line breaks without changing the source text in the generated brief. The input field uses the browser's native textarea rendering, which may display these separators differently.
+
+Passages longer than 1,000 characters are collapsed by default and can be expanded using the keyboard or pointer. Their complete text remains available without truncation. Lengths and input limits use JavaScript's UTF-16 count: an ASCII letter counts as one code unit and `😀` counts as two.
 
 ## Current scope
 
