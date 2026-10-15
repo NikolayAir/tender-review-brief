@@ -55,23 +55,28 @@ flowchart LR
 
 ## Evidence extraction
 
-For each matched rule, the analyzer quotes the complete source line containing the first matching term or phrase. The quote includes all lines spanned by that phrase. When several terms start at the same position, the longest matching phrase determines the quoted lines.
+For each matched rule, the analyzer selects the first matching term or phrase in source order. When several terms start at the same position, it selects the longest matching phrase.
 
-Evidence preserves source punctuation and internal whitespace, including decimal values such as `1.5 bar`, abbreviations, section references, URLs, and line breaks. Only leading and trailing whitespace is trimmed.
+Newly generated briefs quote the complete source paragraph containing the match. Blank or whitespace-only lines separate paragraphs; ordinary line breaks stay within the paragraph. If a phrase spans paragraphs, all intersected paragraphs are included. This keeps wrapped values, units, lists, negations, and exclusions together with their surrounding paragraph context.
+
+Overlapping passages are combined and stored once. Each passage lists its matched technical scopes in rule order. Evidence preserves source punctuation and internal whitespace, including decimal values such as `1.5 bar`, abbreviations, section references, URLs, tabs, and line breaks. Only leading and trailing whitespace is trimmed.
+
+The interface preserves this formatting. Passages longer than 1,000 characters are collapsed by default and can be expanded using the keyboard or pointer. Their complete text remains available without truncation.
 
 ## Current scope
 
 The current rule set covers explicit signals related to structural works, fire safety, accessibility, the building envelope, water and drainage systems, site access and phasing, and technical documentation.
 
-The interface accepts excerpts of up to 50,000 characters. Automated tests cover input validation, matching safeguards, source-evidence fidelity, phrases spanning line breaks, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks.
+The interface accepts excerpts of up to 50,000 characters. Automated tests cover input validation, matching safeguards, paragraph context, multiline phrases, shared passages, maximum-length input, disclosure markup, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks. [Browser checks for source evidence](docs/testing-evidence.md) cover visible whitespace, keyboard interaction, and narrow-screen layout.
 
 ## Known limitations
 
 * The analyzer uses keyword rules rather than semantic or contextual language understanding.
 * Technical areas outside the current rule set will not be detected.
 * French-language support is limited to selected construction terms.
-* Evidence uses source-line boundaries, so a quote may contain more than one sentence.
-* Multiple matched rules may reference the same source passage.
+* Evidence follows paragraph boundaries. Conditions in other paragraphs may still be relevant; review the full excerpt and complete tender documentation.
+* Keyword matching does not determine whether a mentioned scope is included, excluded, or negated.
+* Briefs restored from an older session keep their previous evidence until you generate a new brief.
 * The application does not fetch URLs, scrape websites, parse PDFs, or perform OCR.
 * Browser storage is best-effort, limited to the current tab session, and may be unavailable under some browser settings.
 * The application does not provide document history, authentication, or multi-user workflows.
