@@ -92,6 +92,18 @@ describe('shared source passages', () => {
     ])
   })
 
+  it('merges a chain of three overlapping contexts into one complete passage', () => {
+    const passage = 'Fire\n\nsafety and disabled\n\naccess\n\nconstraints must remain documented.'
+    const excerpt = `Administrative notice.\n\n${passage}\n\nEnd of notice.`
+
+    expect(analyzeExcerpt(excerpt).evidenceSnippets).toEqual([
+      expect.objectContaining({
+        source: 'Fire safety · Accessibility · Site access and phasing',
+        text: passage,
+      }),
+    ])
+  })
+
   it('keeps a passage id stable when another paragraph matches an earlier rule', () => {
     const passage = 'Water pressure must be 1.5 bar.'
     const original = analyzeExcerpt(passage).evidenceSnippets[0]

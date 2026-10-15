@@ -33,6 +33,14 @@ function findParagraphContextSpan(paragraphs, matchSpan) {
   return { start: first.start, end: last.end }
 }
 
+/**
+ * Builds shared passages from matches supplied in rule order.
+ * Each span identifies a real, nonempty match in this excerpt, using UTF-16
+ * offsets compatible with slice and an exclusive end.
+ * @param {string} excerpt
+ * @param {Array<{ rule: { scope: string }, matchSpan: { start: number, end: number } }>} ruleMatches
+ * @returns {Array<{ id: string, source: string, text: string }>}
+ */
 export function buildEvidencePassages(excerpt, ruleMatches) {
   const paragraphs = findParagraphSpans(excerpt)
   const candidates = ruleMatches
