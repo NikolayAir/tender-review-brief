@@ -6,7 +6,7 @@ The application uses an explicit set of boundary-aware keyword rules to identify
 
 **Live application:** [Open Tender Review Brief](https://nikolayair.github.io/tender-review-brief/)
 
-**Stack:** React · JavaScript · CSS · Vite · Vitest · ESLint
+**Stack:** React · JavaScript · CSS · Vite · Vitest · Playwright · ESLint
 
 ## Interface
 
@@ -69,7 +69,7 @@ Passages longer than 1,000 characters are collapsed by default and can be expand
 
 The current rule set covers explicit signals related to structural works, fire safety, accessibility, the building envelope, water and drainage systems, site access and phasing, and technical documentation.
 
-The interface accepts excerpts of up to 50,000 characters. Automated tests cover input validation, matching safeguards, paragraph context, multiline phrases, shared passages, maximum-length input, disclosure markup, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks. [Browser checks for source evidence](docs/testing-evidence.md) cover visible whitespace, keyboard interaction, and narrow-screen layout.
+The interface accepts excerpts of up to 50,000 characters. Unit tests cover input validation, matching safeguards, paragraph context, multiline phrases, shared passages, maximum-length input, disclosure markup, bundled-sample consistency, stored-brief validation, and browser-storage fallbacks. Playwright tests in Chromium check visible whitespace, Unicode line breaks, keyboard interaction, disclosure reset, and narrow-screen layout. [Browser checks for source evidence](docs/testing-evidence.md) provide additional manual checks.
 
 ## Known limitations
 
@@ -106,6 +106,15 @@ npm test
 npm run lint
 npm run build
 ```
+
+Install Chromium once, then run the browser regressions:
+
+```bash
+npx playwright install chromium
+npm run test:browser
+```
+
+The browser command builds the app and starts a temporary local preview on port 4188. Keep that port available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
 Run dependency audits:
 
