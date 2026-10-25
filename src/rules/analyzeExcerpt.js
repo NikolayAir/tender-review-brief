@@ -1,3 +1,5 @@
+import { buildEvidencePassages } from './evidencePassages.js'
+
 export const MAX_EXCERPT_CHARS = 50000
 
 // Rule order defines the stable order of generated scopes, checks,
@@ -128,27 +130,32 @@ function getKeywordPattern(keyword) {
   return keywordPatternCache.get(keyword)
 }
 
-function matchesKeyword(text, keyword) {
-  return getKeywordPattern(keyword).test(text)
-}
+// Match spans use UTF-16 offsets compatible with slice; the end is exclusive.
+function findFirstRuleMatch(excerpt, rule) {
+  let firstMatch = null
 
-function matchesRule(text, rule) {
-  return rule.keywords.some((keyword) => matchesKeyword(text, keyword))
-}
+  for (const keyword of rule.keywords) {
+    const match = getKeywordPattern(keyword).exec(excerpt)
 
-function splitIntoSnippets(text) {
-  return text
-    .split(/[.!?\n]+/)
-    .map((part) => part.trim())
-    .filter(Boolean)
-}
+    if (!match) {
+      continue
+    }
 
-function findEvidenceText(excerpt, keywords) {
-  const snippets = splitIntoSnippets(excerpt)
+    // Exclude the leading word-boundary capture from the keyword's span.
+    const start = match.index + match[1].length
+    const end = match.index + match[0].length
 
-  return snippets.find((snippet) =>
-    keywords.some((keyword) => matchesKeyword(snippet, keyword)),
-  )
+    // The longest match at the same position keeps multi-line phrases complete.
+    if (
+      firstMatch === null ||
+      start < firstMatch.start ||
+      (start === firstMatch.start && end > firstMatch.end)
+    ) {
+      firstMatch = { start, end }
+    }
+  }
+
+  return firstMatch
 }
 
 export function validateExcerptInput(text) {
@@ -164,9 +171,11 @@ export function validateExcerptInput(text) {
 }
 
 export function analyzeExcerpt(excerpt) {
-  const matchedRules = rules.filter((rule) => matchesRule(excerpt, rule))
+  const ruleMatches = rules
+    .map((rule) => ({ rule, matchSpan: findFirstRuleMatch(excerpt, rule) }))
+    .filter(({ matchSpan }) => matchSpan !== null)
 
-  if (matchedRules.length === 0) {
+  if (ruleMatches.length === 0) {
     return {
       projectTitle: 'Generated review brief',
       subtitle: 'Source-linked analysis of a pasted public tender excerpt',
@@ -197,16 +206,10 @@ export function analyzeExcerpt(excerpt) {
     reviewerRole: 'Technical review support',
     summary:
       'Rule-based analysis identified explicit technical terms and phrases in the excerpt. Review the brief against the complete tender documentation.',
-    technicalScopes: unique(matchedRules.map((rule) => rule.scope)),
-    reviewDomains: unique(matchedRules.map((rule) => rule.focus)),
-    followUpChecks: unique(matchedRules.map((rule) => rule.followUpCheck)),
-    reviewerQuestions: unique(matchedRules.map((rule) => rule.question)),
-    evidenceSnippets: matchedRules.map((rule) => ({
-      id: `rule-${rule.id}`,
-      source: rule.scope,
-      text:
-        findEvidenceText(excerpt, rule.keywords) ??
-        'A predefined rule matched, but no source passage could be isolated.',
-    })),
+    technicalScopes: unique(ruleMatches.map(({ rule }) => rule.scope)),
+    reviewDomains: unique(ruleMatches.map(({ rule }) => rule.focus)),
+    followUpChecks: unique(ruleMatches.map(({ rule }) => rule.followUpCheck)),
+    reviewerQuestions: unique(ruleMatches.map(({ rule }) => rule.question)),
+    evidenceSnippets: buildEvidencePassages(excerpt, ruleMatches),
   }
 }
