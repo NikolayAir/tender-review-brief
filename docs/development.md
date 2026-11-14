@@ -1,6 +1,6 @@
 # Development
 
-Follow [Run locally](../README.md#run-locally) to clone the repository and start Vite. CI uses Node.js **22.23.2**, pinned in [`.nvmrc`](../.nvmrc). With nvm installed, prepare an existing checkout with:
+Follow [Run locally](../README.md#run-locally) to clone the repository and start Vite. CI uses Node.js **26.13.1**, pinned in [`.nvmrc`](../.nvmrc). With nvm installed, prepare an existing checkout with:
 
 ```bash
 nvm install
@@ -8,7 +8,7 @@ nvm use
 npm ci
 ```
 
-Supported Node.js ranges are declared in [package.json](../package.json). Node.js 20 is not supported by Vitest. Use `npm ci` to install the dependency versions recorded in the lockfile.
+The supported Node.js line is 26.x, declared in [package.json](../package.json). Use `npm ci` to install the dependency versions recorded in the lockfile.
 
 ## Local commands
 

@@ -39,7 +39,7 @@ When browser storage is available, the current excerpt and last generated brief 
 
 ## Run locally
 
-Use Node.js **22.23.2**, pinned in [`.nvmrc`](.nvmrc) and used by CI. With [Git](https://git-scm.com/downloads) and [nvm](https://github.com/nvm-sh/nvm) installed:
+Use Node.js **26.13.1**, pinned in [`.nvmrc`](.nvmrc) and used by CI. With [Git](https://git-scm.com/downloads) and [nvm](https://github.com/nvm-sh/nvm) installed:
 
 ```bash
 git clone https://github.com/NikolayAir/tender-review-brief.git
@@ -50,7 +50,7 @@ npm ci
 npm run dev
 ```
 
-Open the local URL printed by Vite. If you use another Node.js manager, select the pinned version before running `npm ci`. Supported Node.js ranges are declared in [package.json](package.json); Node.js 20 is not supported by the test tooling.
+Open the local URL printed by Vite. If you use another Node.js manager, select the pinned version before running `npm ci`. The supported Node.js line is 26.x, declared in [package.json](package.json).
 
 See [development](docs/development.md) for checks, browser setup, rule changes, and deployment.
 

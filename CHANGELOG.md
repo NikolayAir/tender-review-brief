@@ -48,7 +48,8 @@ long passages easier to read.
   [GHSA-mrhx-c7xc-m3w5](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5).
 - Update ESLint to 10.15.0 and its transitive minimatch dependency to 11.0.8 to
   address [GHSA-g3hv-75wg-m249](https://github.com/advisories/GHSA-g3hv-75wg-m249).
-- Declare the supported Node.js versions and document the CI-pinned local setup.
+- Standardize local development, CI, and deployment on Node.js 26.x, pinned to
+  26.13.1 in `.nvmrc`.
 
 The analyzer still uses explicit keyword rules and does not interpret whether
 requirements are included, excluded, or negated. Existing tab-session briefs
