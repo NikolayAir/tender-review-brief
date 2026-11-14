@@ -10,6 +10,8 @@ npm ci
 
 The supported Node.js line is 26.x, declared in [package.json](../package.json). Use `npm ci` to install the dependency versions recorded in the lockfile.
 
+On macOS, `npm ci` can report an unreviewed install script for the optional `fsevents` dependency. The validated setup works with that script skipped. `npm install-scripts ls` lists pending scripts without changing the project; see [npm's install-script documentation](https://docs.npmjs.com/cli/v11/commands/npm-install-scripts/).
+
 ## Local commands
 
 | Command | Purpose |
@@ -88,4 +90,11 @@ The [deployment workflow](../.github/workflows/deploy.yml) runs on pushes to `ma
 
 The Vite base path is `/tender-review-brief/`. Branch-protection rules are configured separately in GitHub; workflow changes do not enable them.
 
-For a release, update the package and lockfile versions together, record the changes in [CHANGELOG.md](../CHANGELOG.md), and run the checks and audits above. After the release PR passes CI and is merged, verify the deployed application, then tag the merged commit and publish its release notes.
+## Preparing a release
+
+1. Keep implementation, dependency, and documentation changes on a working branch. Record their release notes under **Unreleased** in [CHANGELOG.md](../CHANGELOG.md); package versions stay at the latest released version. Run the checks and both audits above.
+2. Create `release/<version>` from the reviewed working branch. Its final commit updates the version in `package.json` and both root version fields in `package-lock.json`, then renames **Unreleased** to the release version.
+3. Merge the working PR first. The release PR should be based on the updated `main` and contain only version and changelog finalization. If the working PR was squash-merged, recreate the release branch from the updated `main` and apply only the final release commit.
+4. After the release PR passes CI and is merged, wait for deployment and verify the application. Tag the merged commit and publish the release notes from the changelog.
+
+For v0.2.0, the working branch is `fix/v0.2.0-pre-release-review` and the final branch is `release/v0.2.0`.
