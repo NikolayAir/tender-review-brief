@@ -41,9 +41,9 @@ const rules = [
     id: 'accessibility',
     scope: 'Accessibility',
     focus: 'Requirement verification',
-    followUpCheck: 'Verify whether accessibility or PMR requirements are defined in the full tender documents.',
+    followUpCheck: 'Verify whether accessibility requirements are defined in the full tender documents.',
     question:
-      'Which accessibility or PMR requirements should be verified?',
+      'Which accessibility requirements should be verified?',
     keywords: ['accessibility', 'accessible', 'pmr', 'disabled access', 'barrier-free'],
   },
   {
@@ -178,7 +178,7 @@ export function analyzeExcerpt(excerpt) {
   if (ruleMatches.length === 0) {
     return {
       projectTitle: 'Generated review brief',
-      subtitle: 'Source-linked analysis of a pasted public tender excerpt',
+      subtitle: 'Suggested review points from a pasted public tender excerpt',
       reviewerRole: 'Technical review support',
       summary:
         'No predefined technical terms or phrases were identified. Review the complete tender documentation for relevant scopes, requirements, constraints, and coordination interfaces.',
@@ -202,7 +202,7 @@ export function analyzeExcerpt(excerpt) {
 
   return {
     projectTitle: 'Generated review brief',
-    subtitle: 'Source-linked analysis of a pasted public tender excerpt',
+    subtitle: 'Suggested review points from a pasted public tender excerpt',
     reviewerRole: 'Technical review support',
     summary:
       'Rule-based analysis identified explicit technical terms and phrases in the excerpt. Review the brief against the complete tender documentation.',
