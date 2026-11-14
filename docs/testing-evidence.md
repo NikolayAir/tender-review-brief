@@ -2,7 +2,7 @@
 
 Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Restore the bundled sample before starting. Generate a new brief after each input change.
 
-Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` for automated Chromium checks of visible line breaks, keyboard operation, disclosure reset, and narrow layouts; see the [browser setup instructions](../README.md#local-development). The manual checks below also help verify these behaviors in other browsers.
+Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` for automated Chromium checks of visible line breaks, keyboard operation, disclosure reset, and narrow layouts; see the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
 
 For fixtures containing tabs, Unicode separators, or long padding, the commands below use the [Chrome DevTools Console `copy()` utility](https://developer.chrome.com/docs/devtools/console/utilities#copyobject). Run each command in that console, then paste into the excerpt field. JavaScript escapes such as `\n`, `\t`, and `\u2028` produce real characters. To check another browser, paste the copied fixture there.
 
