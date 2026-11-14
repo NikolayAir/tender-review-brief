@@ -16,8 +16,15 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  checks:
+    name: Pre-deployment checks
+    uses: ./.github/workflows/ci.yml
+    permissions:
+      contents: read
+
   deploy:
     name: GitHub Pages deployment
+    needs: checks
     runs-on: ubuntu-latest
     timeout-minutes: 10
     environment:
