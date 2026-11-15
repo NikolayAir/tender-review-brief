@@ -10,7 +10,7 @@ const TABS = [
   { id: 'passages', label: 'Source passages' },
 ]
 
-export function ReviewBrief({ brief }) {
+export function ReviewBrief({ brief, headingRef }) {
   const [activeTab, setActiveTab] = useState('overview')
   const tabRefs = useRef({})
 
@@ -37,10 +37,11 @@ export function ReviewBrief({ brief }) {
           <p className="section-label"><span aria-hidden="true">02 / </span>Review brief</p>
           <span className="method-label">Keyword rules</span>
         </div>
-        <h2 id="review-brief-title">
+        <h2 id="review-brief-title" ref={headingRef} tabIndex={-1}>
           {brief.projectTitle}
         </h2>
         <p className="review-subtitle">{brief.subtitle}</p>
+        <a className="edit-excerpt-link" href="#public-tender-excerpt">Edit excerpt ↑</a>
       </header>
 
       <div className="review-tabs" role="tablist" aria-label="Review sections">

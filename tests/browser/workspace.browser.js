@@ -43,6 +43,30 @@ test('operates result tabs with arrows, Home, End, and a single tab stop', async
   await expect(page.getByRole('tabpanel', { name: 'Overview', exact: true })).toBeFocused()
 })
 
+test('moves to a generated brief on mobile and provides a way back to editing', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  await input.fill('Water pressure must remain at 1.5 bar.')
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+
+  const heading = page.getByRole('heading', { name: 'Generated review brief', exact: true })
+  await expect(heading).toBeFocused()
+  expect((await heading.boundingBox()).y).toBeLessThan(844 / 3)
+  const result = await page.getByRole('region', { name: 'Review brief', exact: true }).boundingBox()
+  expect(result.y).toBeGreaterThanOrEqual(0)
+  expect(result.y + result.height).toBeLessThanOrEqual(844)
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(page.locator('.evidence-text')).toHaveText('Water pressure must remain at 1.5 bar.')
+
+  await page.getByRole('link', { name: 'Edit excerpt', exact: false }).click()
+  await expect(input).toBeFocused()
+  const widths = await page.evaluate(() => ({
+    page: document.documentElement.scrollWidth,
+    viewport: document.documentElement.clientWidth,
+  }))
+  expect(widths.page).toBeLessThanOrEqual(widths.viewport)
+})
+
 test('keeps the previous brief and the full input when validation fails', async ({ page }) => {
   const input = page.getByLabel('Public tender excerpt', { exact: true })
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
