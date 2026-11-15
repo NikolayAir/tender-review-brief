@@ -33,7 +33,14 @@ export function ReviewBrief({ brief }) {
   return (
     <section className="workspace-panel review-panel" aria-label="Review brief">
       <header className="review-header">
-        <h2 id="review-brief-title">Review brief</h2>
+        <div className="review-header-label">
+          <p className="section-label"><span aria-hidden="true">02 / </span>Review brief</p>
+          <span className="method-label">Keyword rules</span>
+        </div>
+        <h2 id="review-brief-title">
+          {brief.projectTitle}
+        </h2>
+        <p className="review-subtitle">{brief.subtitle}</p>
       </header>
 
       <div className="review-tabs" role="tablist" aria-label="Review sections">

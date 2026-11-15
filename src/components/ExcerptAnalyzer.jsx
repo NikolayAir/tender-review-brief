@@ -55,15 +55,13 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
   }
 
   return (
-    <section className="card analyzer-card" aria-labelledby="analyzer-title">
-      <h2 id="analyzer-title">Analyze tender excerpt</h2>
+    <section className="workspace-panel analyzer-card" aria-labelledby="analyzer-title">
+      <div className="panel-heading">
+        <span className="section-number" aria-hidden="true">01</span>
+        <h2 id="analyzer-title">Tender excerpt</h2>
+      </div>
       <p id="excerpt-help" className="analyzer-note">
-        Paste a public, non-confidential tender excerpt to get suggested review
-        points and supporting source passages.
-      </p>
-      <p id="excerpt-storage-note" className="analyzer-limit-note">
-        Your excerpt is processed in this browser and is not sent to a server.
-        Human review is required.
+        Paste a public, non-confidential excerpt, or try the bundled sample.
       </p>
 
       <textarea
@@ -71,7 +69,7 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
         className="excerpt-input"
         value={excerpt}
         onChange={handleExcerptChange}
-        rows={6}
+        rows={12}
         aria-label="Public tender excerpt"
         aria-describedby={excerptDescription}
         aria-invalid={Boolean(error)}
@@ -91,11 +89,15 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
       <div className="analyzer-actions">
         <button type="button" onClick={handleAnalyze}>
           Generate review brief
+          <span aria-hidden="true">→</span>
         </button>
         <button type="button" className="secondary-button" onClick={handleReset}>
-          Restore bundled sample
+          Restore sample
         </button>
       </div>
+      <p id="excerpt-storage-note" className="analyzer-limit-note">
+        Processed in this browser. Your text is not sent to a server.
+      </p>
     </section>
   )
 }

@@ -73,7 +73,7 @@ test('operates disclosures by keyboard and resets same-length source replacement
   await generateBrief(page, first)
   const disclosure = page.locator('.evidence-details')
   const summary = disclosure.locator('summary')
-  const restore = page.getByRole('button', { name: 'Restore bundled sample', exact: true })
+  const restore = page.getByRole('button', { name: 'Restore sample', exact: true })
 
   await expect(disclosure).toHaveJSProperty('open', false)
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).press('Tab')

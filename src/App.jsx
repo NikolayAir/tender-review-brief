@@ -36,16 +36,15 @@ export default function App() {
   }
 
   return (
-    <main className="app-shell">
-      <BriefHeader brief={activeBrief} />
-
-      <div className="brief-grid">
-        <ExcerptAnalyzer onAnalyze={handleAnalyze} onReset={handleReset} />
-
-        <ReviewBrief brief={activeBrief} />
-      </div>
-
-      <DisclaimerFooter />
-    </main>
+    <>
+      <BriefHeader />
+      <main className="app-shell">
+        <div className="review-workspace">
+          <ExcerptAnalyzer onAnalyze={handleAnalyze} onReset={handleReset} />
+          <ReviewBrief brief={activeBrief} />
+        </div>
+        <DisclaimerFooter />
+      </main>
+    </>
   )
 }
