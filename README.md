@@ -23,14 +23,15 @@ After editing the excerpt, generate the brief again. Editing alone leaves the pr
 The React interface checks the input and applies English and selected French keyword rules. Matching uses word boundaries to avoid terms embedded inside longer words. The bundled example uses the same rules as pasted text. No backend, API key, or external text-processing service is required.
 
 ```mermaid
-flowchart TD
-    accTitle: Tender review brief generation
-    accDescr: A bundled or pasted excerpt is validated, then matched against keyword rules to produce a review brief. Empty or oversized input produces an error.
-    sample["Bundled excerpt"] --> validate("Validate input")
-    pasted["Pasted public excerpt"] --> validate
-    validate -->|Valid input| rules("Match keywords")
-    validate -->|Empty or too long| error["Input error"]
-    rules --> brief["Review brief<br/>Scopes, checks, questions,<br/>and source passages"]
+flowchart LR
+    accTitle: Generating a review brief
+    accDescr: When Generate review brief is selected, a bundled sample or pasted excerpt is validated. Valid input is matched against keyword rules to produce a brief. Empty input or more than 50,000 UTF-16 code units produces an input error.
+    input["Bundled sample<br/>or pasted excerpt"] --> validate("Validate input")
+    validate -->|Valid| rules("Match keywords")
+    rules --> brief["Review brief"]
+    validate -->|Invalid| error["Input error"]
+    classDef processing fill:#3b82f633
+    class validate,rules processing
 ```
 
 For each matched rule, the brief quotes the paragraphs containing its earliest match. Overlapping passages appear once, and long quotes can be expanded without losing text. See [how source passages are selected](docs/evidence.md) for paragraph boundaries, formatting, and limits.
