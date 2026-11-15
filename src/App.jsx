@@ -5,7 +5,8 @@ import { DisclaimerFooter } from './components/DisclaimerFooter'
 import { ExcerptAnalyzer } from './components/ExcerptAnalyzer'
 import { ReviewBrief } from './components/ReviewBrief'
 import { parseStoredBrief } from './brief/parseStoredBrief'
-import { sampleBrief } from './sampleBrief'
+import { validateExcerptInput } from './rules/analyzeExcerpt'
+import { sampleBrief, sampleExcerpt } from './sampleBrief'
 import {
   readSessionValue,
   removeSessionValue,
@@ -13,6 +14,11 @@ import {
 } from './storage/sessionStorage'
 
 const ACTIVE_BRIEF_STORAGE_KEY = 'tender-brief-ui-active-brief'
+const EXCERPT_STORAGE_KEY = 'tender-brief-ui-current-excerpt'
+
+function loadStoredExcerpt() {
+  return readSessionValue(EXCERPT_STORAGE_KEY, sampleExcerpt)
+}
 
 function loadStoredBrief() {
   return readSessionValue(
@@ -24,6 +30,7 @@ function loadStoredBrief() {
 
 export default function App() {
   const [activeBrief, setActiveBrief] = useState(loadStoredBrief)
+  const [excerpt, setExcerpt] = useState(loadStoredExcerpt)
   const resultHeadingRef = useRef(null)
   const focusResult = useRef(false)
 
@@ -38,15 +45,33 @@ export default function App() {
 
   function handleAnalyze(brief) {
     focusResult.current = true
-    setActiveBrief(brief)
-    writeSessionValue(ACTIVE_BRIEF_STORAGE_KEY, brief, JSON.stringify)
+    const nextBrief = { ...brief, sourceExcerpt: excerpt }
+    setActiveBrief(nextBrief)
+    writeSessionValue(ACTIVE_BRIEF_STORAGE_KEY, nextBrief, JSON.stringify)
+  }
+
+  function handleExcerptChange(nextExcerpt) {
+    setExcerpt(nextExcerpt)
+    writeSessionValue(EXCERPT_STORAGE_KEY, nextExcerpt)
   }
 
   function handleReset() {
     focusResult.current = false
+    setExcerpt(sampleExcerpt)
     setActiveBrief(sampleBrief)
+    removeSessionValue(EXCERPT_STORAGE_KEY)
     removeSessionValue(ACTIVE_BRIEF_STORAGE_KEY)
   }
+
+  const savedSource = activeBrief.sourceExcerpt
+  const briefSource = activeBrief === sampleBrief
+    ? sampleExcerpt
+    : typeof savedSource === 'string' && validateExcerptInput(savedSource) === null
+      ? savedSource
+      : null
+  const sourceStatus = briefSource === null
+    ? 'unknown'
+    : briefSource === excerpt ? 'current' : 'stale'
 
   return (
     <>
@@ -54,8 +79,13 @@ export default function App() {
       <BriefHeader />
       <main className="app-shell">
         <div className="review-workspace">
-          <ExcerptAnalyzer onAnalyze={handleAnalyze} onReset={handleReset} />
-          <ReviewBrief brief={activeBrief} headingRef={resultHeadingRef} />
+          <ExcerptAnalyzer
+            excerpt={excerpt}
+            onExcerptChange={handleExcerptChange}
+            onAnalyze={handleAnalyze}
+            onReset={handleReset}
+          />
+          <ReviewBrief brief={activeBrief} sourceStatus={sourceStatus} headingRef={resultHeadingRef} />
         </div>
         <DisclaimerFooter />
       </main>

@@ -10,9 +10,25 @@ const TABS = [
   { id: 'passages', label: 'Source passages' },
 ]
 
-export function ReviewBrief({ brief, headingRef }) {
+const SOURCE_STATUS = {
+  current: {
+    label: 'Current excerpt',
+    message: 'This brief uses the current excerpt.',
+  },
+  stale: {
+    label: 'Excerpt changed',
+    message: 'The excerpt has changed. Generate the brief again to update the results.',
+  },
+  unknown: {
+    label: 'Saved brief',
+    message: 'Generate this saved brief again to confirm it matches the current excerpt.',
+  },
+}
+
+export function ReviewBrief({ brief, sourceStatus, headingRef }) {
   const [activeTab, setActiveTab] = useState('overview')
   const tabRefs = useRef({})
+  const status = SOURCE_STATUS[sourceStatus]
 
   function handleTabKeyDown(event, index) {
     const nextIndex = {
@@ -35,7 +51,10 @@ export function ReviewBrief({ brief, headingRef }) {
       <header className="review-header">
         <div className="review-header-label">
           <p className="section-label"><span aria-hidden="true">02 / </span>Review brief</p>
-          <span className="method-label">Keyword rules</span>
+          <span className={`source-status source-status--${sourceStatus}`}>
+            <span aria-hidden="true" className="source-status-dot" />
+            {status.label}
+          </span>
         </div>
         <h2 id="review-brief-title" ref={headingRef} tabIndex={-1}>
           {brief.projectTitle}
@@ -43,6 +62,12 @@ export function ReviewBrief({ brief, headingRef }) {
         <p className="review-subtitle">{brief.subtitle}</p>
         <a className="edit-excerpt-link" href="#public-tender-excerpt">Edit excerpt ↑</a>
       </header>
+
+      <div className={`brief-notice brief-notice--${sourceStatus}`} role="status" aria-atomic="true">
+        <p className={sourceStatus === 'current' ? 'visually-hidden' : 'brief-notice-message'}>
+          {status.message}
+        </p>
+      </div>
 
       <div className="review-tabs" role="tablist" aria-label="Review sections">
         {TABS.map((tab, index) => (

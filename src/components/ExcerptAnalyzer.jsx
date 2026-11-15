@@ -4,21 +4,8 @@ import {
   analyzeExcerpt,
   validateExcerptInput,
 } from '../rules/analyzeExcerpt'
-import { sampleExcerpt } from '../sampleBrief'
-import {
-  readSessionValue,
-  removeSessionValue,
-  writeSessionValue,
-} from '../storage/sessionStorage'
 
-const EXCERPT_STORAGE_KEY = 'tender-brief-ui-current-excerpt'
-
-function loadStoredExcerpt() {
-  return readSessionValue(EXCERPT_STORAGE_KEY, sampleExcerpt)
-}
-
-export function ExcerptAnalyzer({ onAnalyze, onReset }) {
-  const [excerpt, setExcerpt] = useState(loadStoredExcerpt)
+export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }) {
   const [error, setError] = useState('')
 
   const excerptDescription = error
@@ -27,8 +14,7 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
 
   function handleExcerptChange(event) {
     const nextExcerpt = event.target.value
-    setExcerpt(nextExcerpt)
-    writeSessionValue(EXCERPT_STORAGE_KEY, nextExcerpt)
+    onExcerptChange(nextExcerpt)
 
     if (error) {
       setError('')
@@ -48,8 +34,6 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
   }
 
   function handleReset() {
-    setExcerpt(sampleExcerpt)
-    removeSessionValue(EXCERPT_STORAGE_KEY)
     setError('')
     onReset()
   }

@@ -93,6 +93,10 @@ test('operates disclosures by keyboard and resets same-length source replacement
   await expect(disclosure).toHaveJSProperty('open', false)
   await summary.press('Enter')
 
+  await page.getByRole('tab', { name: 'Overview', exact: true }).click()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(disclosure).toHaveJSProperty('open', true)
+
   await generateBrief(page, first)
   await expect(disclosure).toHaveJSProperty('open', true)
   await generateBrief(page, second)

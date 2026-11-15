@@ -81,3 +81,93 @@ test('keeps the previous brief and the full input when validation fails', async 
   await expect(input).toHaveValue('x'.repeat(50001))
   await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
 })
+
+test('tracks the excerpt behind a brief through edits, reloads, regeneration, and sample reset', async ({ page }) => {
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
+  const first = 'Water pressure must remain at 1.5 bar.'
+  const second = 'Fire-safety drawings must be checked.'
+
+  await input.fill(first)
+  await generate.click()
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  await input.fill(second)
+  await expect(page.getByRole('status')).toHaveText('The excerpt has changed. Generate the brief again to update the results.')
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(page.locator('.evidence-text')).toHaveText(first)
+  await input.fill(first)
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  await input.fill(second)
+
+  await page.reload()
+  await expect(input).toHaveValue(second)
+  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(page.locator('.evidence-text')).toHaveText(first)
+
+  await generate.click()
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  await expect(page.locator('.evidence-text')).toHaveText(second)
+  await page.reload()
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+
+  await input.fill(first)
+  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Restore sample', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  const sample = await input.inputValue()
+  await page.reload()
+  await expect(input).toHaveValue(sample)
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+})
+
+for (const { name, sourceExcerpt } of [
+  { name: 'an older saved brief' },
+  { name: 'a saved brief with invalid source metadata', sourceExcerpt: 42 },
+  { name: 'a saved brief with a blank source', sourceExcerpt: ' \n\t' },
+  { name: 'a saved brief with an oversized source', sourceExcerpt: 'x'.repeat(50001) },
+]) {
+  test(`handles ${name} without claiming it uses the current excerpt`, async ({ page }) => {
+    const text = 'Water pressure must remain at 1.5 bar.'
+    await page.evaluate(({ text, sourceExcerpt }) => {
+      sessionStorage.setItem('tender-brief-ui-current-excerpt', text)
+      sessionStorage.setItem('tender-brief-ui-active-brief', JSON.stringify({
+        projectTitle: 'Saved review',
+        subtitle: 'Previously generated brief',
+        reviewerRole: 'Technical review support',
+        summary: 'The previous review remains available.',
+        technicalScopes: ['Structural works'],
+        reviewDomains: ['Technical risk'],
+        followUpChecks: ['Check drawings.'],
+        reviewerQuestions: ['Which drawings apply?'],
+        evidenceSnippets: [{ id: 'legacy', source: 'Structural works', text: 'Structural drawings are required.' }],
+        sourceExcerpt,
+      }))
+    }, { text, sourceExcerpt })
+    await page.reload()
+    await expect(page.getByRole('heading', { name: 'Saved review', exact: true })).toBeVisible()
+    await expect(page.getByText('Saved brief', { exact: true })).toBeVisible()
+    await expect(page.getByRole('status')).toHaveText('Generate this saved brief again to confirm it matches the current excerpt.')
+
+    await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+    await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+    await page.reload()
+    await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  })
+}
+
+test('keeps the review usable when session storage is unavailable', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'sessionStorage', {
+      get() { throw new DOMException('Storage unavailable', 'SecurityError') },
+    })
+  })
+  await page.reload()
+  await page.getByLabel('Public tender excerpt', { exact: true }).fill('Water drainage drawings are required.')
+  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(page.locator('.evidence-text')).toHaveText('Water drainage drawings are required.')
+})

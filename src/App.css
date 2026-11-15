@@ -283,9 +283,62 @@ h4 {
   color: var(--accent);
 }
 
-.method-label {
-  color: var(--muted);
+.source-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: #edf6f1;
+  color: #37634e;
   font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.source-status-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.source-status--stale {
+  background: #fff2d9;
+  color: #80501b;
+}
+
+.source-status--unknown {
+  background: #edf2f7;
+  color: #506578;
+}
+
+.brief-notice-message {
+  margin: 0 24px 18px;
+  border-left: 3px solid #b78132;
+  border-radius: 4px;
+  padding: 10px 12px;
+  background: #fff8e9;
+  color: #74501f;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.brief-notice--unknown .brief-notice-message {
+  border-color: #7d9bb3;
+  background: var(--soft);
+  color: var(--muted);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
 }
 
 .review-header h2 {
@@ -542,6 +595,10 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
   }
   .review-header {
     padding: 18px;
+  }
+
+  .brief-notice-message {
+    margin-inline: 18px;
   }
   .review-tabs {
     padding-inline: 6px;
