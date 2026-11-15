@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test'
 async function generateBrief(page, excerpt) {
   await page.getByLabel('Public tender excerpt', { exact: true }).fill(excerpt)
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
 }
 
 async function wordPositions(passage, words) {
@@ -78,6 +79,12 @@ test('operates disclosures by keyboard and resets same-length source replacement
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).press('Tab')
   await expect(restore).toBeFocused()
   await restore.press('Tab')
+  const passagesTab = page.getByRole('tab', { name: 'Source passages', exact: true })
+  await expect(passagesTab).toBeFocused()
+  await passagesTab.press('Tab')
+  const panel = page.getByRole('tabpanel', { name: 'Source passages', exact: true })
+  await expect(panel).toBeFocused()
+  await panel.press('Tab')
   await expect(summary).toBeFocused()
   await expect(summary).toHaveCSS('outline-style', 'solid')
   await summary.press('Enter')

@@ -9,15 +9,15 @@ function EvidenceText({ text }) {
 
 export function EvidenceSnippets({ snippets }) {
   return (
-    <section className="card evidence-card" aria-labelledby="evidence-title">
-      <h2 id="evidence-title">Supporting source passages</h2>
+    <section className="brief-section evidence-section" aria-labelledby="evidence-title">
+      <h3 id="evidence-title">Supporting source passages</h3>
       <p className="evidence-note">
         Check each passage against the complete tender documents.
       </p>
       <div className="evidence-list">
         {snippets.map((snippet) => (
           <article className="evidence-snippet" key={snippet.id}>
-            <h3>{snippet.source}</h3>
+            <h4>{snippet.source}</h4>
             {/* Changed text must reset disclosure state even at the same source offsets. */}
             {snippet.text.length > MAX_INLINE_PASSAGE_CHARS ? (
               <details key={snippet.text} className="evidence-details">

@@ -1,7 +1,7 @@
 export function TextList({ id, title, items }) {
   return (
-    <section className="card" aria-labelledby={id}>
-      <h2 id={id}>{title}</h2>
+    <section className="brief-section" aria-labelledby={id}>
+      <h3 id={id}>{title}</h3>
       <ul className="text-list">
         {items.map((item) => (
           <li key={item}>{item}</li>

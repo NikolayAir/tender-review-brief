@@ -2,11 +2,8 @@ import { useState } from 'react'
 import './App.css'
 import { BriefHeader } from './components/BriefHeader'
 import { DisclaimerFooter } from './components/DisclaimerFooter'
-import { EvidenceSnippets } from './components/EvidenceSnippets'
 import { ExcerptAnalyzer } from './components/ExcerptAnalyzer'
-import { SummaryCard } from './components/SummaryCard'
-import { TagList } from './components/TagList'
-import { TextList } from './components/TextList'
+import { ReviewBrief } from './components/ReviewBrief'
 import { parseStoredBrief } from './brief/parseStoredBrief'
 import { sampleBrief } from './sampleBrief'
 import {
@@ -45,33 +42,7 @@ export default function App() {
       <div className="brief-grid">
         <ExcerptAnalyzer onAnalyze={handleAnalyze} onReset={handleReset} />
 
-        <SummaryCard summary={activeBrief.summary} />
-
-        <TagList
-          id="technical-scopes"
-          title="Detected technical scopes"
-          items={activeBrief.technicalScopes}
-        />
-
-        <TagList
-          id="review-focus-areas"
-          title="Suggested review focus areas"
-          items={activeBrief.reviewDomains}
-        />
-
-        <TextList
-          id="follow-up-checks"
-          title="Suggested follow-up checks"
-          items={activeBrief.followUpChecks}
-        />
-
-        <TextList
-          id="reviewer-questions"
-          title="Suggested reviewer questions"
-          items={activeBrief.reviewerQuestions}
-        />
-
-        <EvidenceSnippets snippets={activeBrief.evidenceSnippets} />
+        <ReviewBrief brief={activeBrief} />
       </div>
 
       <DisclaimerFooter />

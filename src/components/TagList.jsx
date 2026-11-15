@@ -1,7 +1,7 @@
 export function TagList({ id, title, items }) {
   return (
-    <section className="card" aria-labelledby={id}>
-      <h2 id={id}>{title}</h2>
+    <section className="brief-section" aria-labelledby={id}>
+      <h3 id={id}>{title}</h3>
       <ul className="tag-list">
         {items.map((item) => (
           <li className="tag" key={item}>
