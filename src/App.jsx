@@ -32,6 +32,7 @@ export default function App() {
   const [activeBrief, setActiveBrief] = useState(loadStoredBrief)
   const [excerpt, setExcerpt] = useState(loadStoredExcerpt)
   const resultHeadingRef = useRef(null)
+  const resultPanelRef = useRef(null)
   const focusResult = useRef(false)
 
   useEffect(() => {
@@ -39,7 +40,7 @@ export default function App() {
     focusResult.current = false
     resultHeadingRef.current?.focus({ preventScroll: true })
     if (window.matchMedia('(max-width: 899px)').matches) {
-      resultHeadingRef.current?.scrollIntoView({ block: 'start' })
+      resultPanelRef.current?.scrollIntoView({ block: 'start' })
     }
   }, [activeBrief])
 
@@ -85,7 +86,12 @@ export default function App() {
             onAnalyze={handleAnalyze}
             onReset={handleReset}
           />
-          <ReviewBrief brief={activeBrief} sourceStatus={sourceStatus} headingRef={resultHeadingRef} />
+          <ReviewBrief
+            brief={activeBrief}
+            sourceStatus={sourceStatus}
+            headingRef={resultHeadingRef}
+            panelRef={resultPanelRef}
+          />
         </div>
         <DisclaimerFooter />
       </main>

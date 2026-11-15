@@ -67,6 +67,18 @@ test('moves to a generated brief on mobile and provides a way back to editing', 
   expect(widths.page).toBeLessThanOrEqual(widths.viewport)
 })
 
+test('keeps the result status visible after generating on a short mobile screen', async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 667 })
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+
+  await expect(page.getByRole('heading', { name: 'Generated review brief', exact: true })).toBeFocused()
+  const result = await page.getByRole('region', { name: 'Review brief', exact: true }).boundingBox()
+  const status = await page.getByText('Current excerpt', { exact: true }).boundingBox()
+  expect(result.y).toBeGreaterThanOrEqual(0)
+  expect(status.y).toBeGreaterThanOrEqual(0)
+  expect(status.y + status.height).toBeLessThan(667)
+})
+
 test('keeps the previous brief and the full input when validation fails', async ({ page }) => {
   const input = page.getByLabel('Public tender excerpt', { exact: true })
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })

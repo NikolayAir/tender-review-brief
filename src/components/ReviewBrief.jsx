@@ -25,7 +25,7 @@ const SOURCE_STATUS = {
   },
 }
 
-export function ReviewBrief({ brief, sourceStatus, headingRef }) {
+export function ReviewBrief({ brief, sourceStatus, headingRef, panelRef }) {
   const [activeTab, setActiveTab] = useState('overview')
   const tabRefs = useRef({})
   const status = SOURCE_STATUS[sourceStatus]
@@ -47,7 +47,7 @@ export function ReviewBrief({ brief, sourceStatus, headingRef }) {
   }
 
   return (
-    <section className="workspace-panel review-panel" aria-label="Review brief">
+    <section ref={panelRef} className="workspace-panel review-panel" aria-label="Review brief">
       <header className="review-header">
         <div className="review-header-label">
           <p className="section-label"><span aria-hidden="true">02 / </span>Review brief</p>
