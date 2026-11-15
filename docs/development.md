@@ -42,7 +42,7 @@ npm run test:browser
 
 The browser command starts a temporary preview at `http://127.0.0.1:4188/tender-review-brief/`. Keep port 4188 available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
-The tests check visible whitespace and Unicode line breaks, keyboard operation, disclosure reset, and 320-pixel-wide layouts. Traces are retained on failure in `test-results/`. See [browser checks for source evidence](testing-evidence.md) for additional manual checks in other browsers.
+The tests check the desktop workspace, keyboard-operated result tabs, mobile navigation, and result status through edits, reloads, and regeneration. They also cover legacy saved briefs, storage failures, visible whitespace and Unicode line breaks, disclosure reset, and 320-pixel-wide layouts. Traces are retained on failure in `test-results/`. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 
 ## Dependency audits
 
@@ -57,8 +57,8 @@ The first command checks production dependencies; the second also checks develop
 
 | Path | Responsibility |
 | --- | --- |
-| [`src/App.jsx`](../src/App.jsx) | Display the active brief and coordinate analysis and reset |
-| [`src/components/`](../src/components) | Input controls and brief sections |
+| [`src/App.jsx`](../src/App.jsx) | Coordinate the excerpt, active brief, source association, generation, and reset |
+| [`src/components/`](../src/components) | Input controls, result tabs, status notices, and brief sections |
 | [`src/rules/analyzeExcerpt.js`](../src/rules/analyzeExcerpt.js) | Input validation, keyword rules, and brief generation |
 | [`src/rules/evidencePassages.js`](../src/rules/evidencePassages.js) | Paragraph context and merging shared passages |
 | [`src/brief/`](../src/brief) | Validation of restored briefs |

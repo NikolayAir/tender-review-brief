@@ -6,17 +6,19 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 
 [Open the application](https://nikolayair.github.io/tender-review-brief/)
 
-![Bundled tender excerpt with controls to generate a review brief or restore the sample](docs/images/tender-review-brief-overview.png)
+![Bundled excerpt beside the review overview and detected technical scopes](docs/images/tender-review-brief-overview.png)
 
 ## Review workflow
 
-1. Choose **Restore bundled sample** to try the example, or paste public, non-confidential text into **Analyze tender excerpt**.
-2. Choose **Generate review brief**, then review the detected scopes, suggested checks, and questions.
-3. Read the supporting source passages in context and check the complete tender documents before deciding what needs further investigation.
+1. Choose **Restore sample** to try the example, or paste public, non-confidential text into **Tender excerpt**.
+2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.
+3. Open **Source passages** to read the supporting quotations. Check the complete tender documents before deciding what needs further investigation.
 
-After editing the excerpt, generate the brief again. Editing alone leaves the previous result visible, including after a reload.
+On narrow screens, generation moves to the result; **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side.
 
-![Generated brief with detected technical scopes, suggested review focus areas, checks, and questions](docs/images/tender-review-brief-results.png)
+Editing the excerpt leaves the previous result visible with an **Excerpt changed** notice. Generate again to update it. The brief saves its source text, so the notice also works after a reload when browser storage is available.
+
+![Source passages tab showing one quotation shared by five technical scopes](docs/images/tender-review-brief-results.png)
 
 ## How it works
 
@@ -61,7 +63,7 @@ The rules cover structural works, fire safety, accessibility, building envelope,
 
 Matching identifies declared keywords; it does not interpret whether work is included, excluded, or negated. If no rule matches, the brief asks for manual review. French coverage is limited to selected construction terms. Conditions outside the quoted paragraphs may still affect a requirement.
 
-Automated tests cover matching, quote preservation, stored-brief validation, storage failures, keyboard interaction, and narrow layouts. The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
+Automated tests cover matching, quote preservation, stored-brief validation, storage failures, result status after edits and reloads, keyboard interaction, and narrow layouts. The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
 
 PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Briefs restored from older sessions keep their previous content until a new brief is generated.
 
@@ -73,7 +75,7 @@ The output supports human technical review. It does not make legal, regulatory, 
 | --- | --- |
 | [Source passages](docs/evidence.md) | Match selection, paragraph context, shared quotes, formatting, and limits |
 | [Development](docs/development.md) | Local checks, browser setup, project structure, rule changes, and deployment |
-| [Browser checks](docs/testing-evidence.md) | Manual examples for quote formatting, keyboard interaction, and narrow layouts |
+| [Browser checks](docs/testing-evidence.md) | Manual examples for quote formatting, result status, keyboard interaction, and narrow layouts |
 
 ## Releases and support
 

@@ -1,8 +1,10 @@
-# Browser checks for source evidence
+# Browser checks for the review workspace
 
-Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Restore the bundled sample before starting. Generate a new brief after each input change.
+Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Choose **Restore sample** before starting. For the quotation checks below, generate a new brief after each input change and open **Source passages**.
 
-Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` for automated Chromium checks of visible line breaks, keyboard operation, disclosure reset, and narrow layouts; see the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
+Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` for automated Chromium checks of the workspace, result tabs, mobile navigation, result status, source formatting, and narrow layouts; see the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
+
+The result tabs use Left and Right Arrow to switch sections; Home and End select the first and last tab. Tab moves from the selected tab into its panel, then to any controls within it.
 
 For fixtures containing tabs, Unicode separators, or long padding, the commands below use the [Chrome DevTools Console `copy()` utility](https://developer.chrome.com/docs/devtools/console/utilities#copyobject). Run each command in that console, then paste into the excerpt field. JavaScript escapes such as `\n`, `\t`, and `\u2028` produce real characters. To check another browser, paste the copied fixture there.
 
@@ -60,5 +62,11 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
    ```js
    copy('Water requirements:\n' + '\t'.repeat(40) + '1.5 bar.\n' + 'x'.repeat(1200))
    ```
+
+9. Expand a long passage, switch to **Overview** or **Checks**, then return to **Source passages**. The passage must remain expanded. Repeat with it collapsed; switching tabs must preserve that state too.
+
+10. Generate a brief from `Water drawings are required.`, then replace the input with `Fire-safety drawings are required.` without generating again. **Excerpt changed** must appear while the source passage still shows the water requirement. Reload and reopen **Source passages**: when browser storage is available, both texts and the notice must remain. Generate again: **Current excerpt** must appear, and **Source passages** must show the fire-safety requirement. Reload again to check that the association is retained. **Restore sample** must restore both the sample text and its brief.
+
+11. At 390 pixels wide, generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels: the result's status badge must stay within the screen after generation. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side; the bundled sample's overview should fit within a 1440 × 900 viewport.
 
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

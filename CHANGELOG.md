@@ -2,11 +2,14 @@
 
 ## Unreleased
 
-This version preserves more source context in supporting quotations and makes
-long passages easier to read.
+This version preserves more source context in supporting quotations and brings
+the excerpt and brief together in a compact review workspace.
 
 ### Changed
 
+- Place the editor beside the brief on desktop, with a compact application bar
+  and Overview, Checks, and Source passages tabs. On narrow screens, move to the
+  generated result and provide a link back to editing.
 - Select the earliest matching term or phrase for each review rule, preferring
   the longest phrase when matches start at the same position.
 - Quote the complete source paragraphs spanned by a match, preserving related
@@ -21,11 +24,14 @@ long passages easier to read.
 
 ### Fixed
 
+- Identify briefs based on an earlier excerpt, including after reloading a saved
+  session. Ask for regeneration when an older saved brief has no recorded source
+  text, while keeping its result available.
 - Prevent supporting quotations from cutting off decimal values, abbreviations,
   section references, URLs, or matched phrases spanning multiple lines.
 - Reset a long passage to its collapsed state when its content changes, including
   replacements with the same length and source offsets. Preserve disclosure
-  state when regenerating unchanged input.
+  state when regenerating unchanged input or switching result tabs.
 - Keep long unbroken text and deep tab indentation within narrow layouts.
 - Clarify wording about supporting source passages and browser processing; use
   plain language in accessibility checks and questions.
@@ -34,6 +40,9 @@ long passages easier to read.
 
 - Add Chromium regression tests for source formatting, Unicode separators,
   keyboard operation, disclosure reset, and 320-pixel-wide layouts; run them in CI.
+- Cover desktop layout, result-tab keyboard navigation, mobile focus, and source
+  association through edits, reloads, regeneration, and sample reset, including
+  legacy saved briefs and unavailable storage.
 - Require successful CI checks for the same commit before GitHub Pages deployment.
 - Expand unit tests for paragraph context, shared passages, multiline phrases,
   maximum-length input, and disclosure markup.

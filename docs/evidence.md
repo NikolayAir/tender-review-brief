@@ -1,6 +1,6 @@
 # How source passages are selected
 
-When rules match, the brief includes quotations from the pasted excerpt to help a reviewer check the suggested technical scopes. Locate each passage in the complete tender documents before interpreting a requirement.
+When rules match, the brief includes quotations from the pasted excerpt in **Source passages** to help a reviewer check the suggested technical scopes. Locate each passage in the complete tender documents before interpreting a requirement.
 
 ## Match selection
 
@@ -39,14 +39,16 @@ Supporting passages display ordinary line breaks, tabs, and Unicode line and par
 
 Passages longer than 1,000 UTF-16 code units are collapsed by default. Choose **Full source passage** with the pointer or focus it with Tab and press Enter or Space to read the complete quotation. No text is truncated.
 
-A changed long passage starts collapsed, including when a replacement has the same length and source offsets. Generating a brief from unchanged text preserves its open or closed state.
+A changed long passage starts collapsed, including when a replacement has the same length and source offsets. Generating a brief from unchanged text or switching review tabs preserves its open or closed state.
 
 The input limit is 50,000 UTF-16 code units. The interface labels these counts as characters: an ASCII letter counts as one code unit and `😀` counts as two.
 
 ## Saved results
 
-The current excerpt and last generated brief are saved separately when `sessionStorage` is available. Editing the excerpt does not update the result; choose **Generate review brief** again after making changes. A reload can restore an edited excerpt alongside an older brief.
+The current excerpt and last generated brief are saved separately when `sessionStorage` is available. Each generated brief includes the source excerpt it used. Editing the input leaves the result visible with an **Excerpt changed** notice; choose **Generate review brief** again to update it. The comparison also works after reloading a saved session.
 
-Briefs restored from an earlier application version retain their previous wording and quotations until a new brief is generated.
+**Current excerpt** means that the brief's source text matches the editor. It does not certify the analysis or detect changes to the application's rules.
+
+Saved briefs without valid recorded source text remain readable, display **Saved brief**, and ask for regeneration. Restored briefs keep their previous wording and quotations until a new brief is generated. Storage failures do not prevent editing or generation, but changes may not survive a reload.
 
 See [browser checks](testing-evidence.md) for fixtures covering paragraph context, whitespace, keyboard interaction, and narrow layouts, or [development](development.md) to run the automated regressions.

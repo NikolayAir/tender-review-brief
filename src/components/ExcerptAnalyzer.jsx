@@ -45,7 +45,7 @@ export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }
         <h2 id="analyzer-title">Tender excerpt</h2>
       </div>
       <p id="excerpt-help" className="analyzer-note">
-        Paste a public, non-confidential excerpt, or try the bundled sample.
+        Paste a public, non-confidential excerpt or use the sample.
       </p>
 
       <textarea
