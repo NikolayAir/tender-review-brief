@@ -10,6 +10,8 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 
 ## Review workflow
 
+**How to use** opens a short guide in the application, with a link to the full documentation on GitHub.
+
 1. Choose **Restore sample** to try the example, or paste public, non-confidential text into **Tender excerpt**.
 2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.
 3. Open **Source passages** to read the supporting quotations. Check the complete tender documents before deciding what needs further investigation.

@@ -7,6 +7,8 @@ the excerpt and brief together in a compact review workspace.
 
 ### Changed
 
+- Open a short How to use guide inside the application, with keyboard-accessible
+  modal controls and a link to the full documentation on GitHub.
 - Place the editor beside the brief on desktop, with a compact application bar
   and Overview, Checks, and Source passages tabs. On narrow screens, move to the
   generated result and provide a link back to editing.
@@ -47,6 +49,8 @@ the excerpt and brief together in a compact review workspace.
   association through edits, reloads, regeneration, and sample reset, including
   legacy saved briefs and unavailable storage. Add regressions for desktop
   regeneration after scrolling and resized editors with validation errors.
+- Check help-dialog focus, dismissal, narrow layouts, and preservation of the
+  current excerpt and result tab.
 - Require successful CI checks for the same commit before GitHub Pages deployment.
 - Expand unit tests for paragraph context, shared passages, multiline phrases,
   maximum-length input, and disclosure markup.
