@@ -12,7 +12,7 @@ export function EvidenceSnippets({ snippets }) {
     <section className="card evidence-card" aria-labelledby="evidence-title">
       <h2 id="evidence-title">Supporting source passages</h2>
       <p className="evidence-note">
-        Newly generated briefs show shared context once for all matched scopes.
+        Check each passage against the complete tender documents.
       </p>
       <div className="evidence-list">
         {snippets.map((snippet) => (

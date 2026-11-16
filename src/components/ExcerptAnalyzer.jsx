@@ -58,12 +58,12 @@ export function ExcerptAnalyzer({ onAnalyze, onReset }) {
     <section className="card analyzer-card" aria-labelledby="analyzer-title">
       <h2 id="analyzer-title">Analyze tender excerpt</h2>
       <p id="excerpt-help" className="analyzer-note">
-        Paste a public, non-confidential tender excerpt to generate a
-        structured, source-linked review brief.
+        Paste a public, non-confidential tender excerpt to get suggested review
+        points and supporting source passages.
       </p>
       <p id="excerpt-storage-note" className="analyzer-limit-note">
-        Browser-only processing: text stays in this tab session and is not sent to
-        a server. Human review is required.
+        Your excerpt is processed in this browser and is not sent to a server.
+        Human review is required.
       </p>
 
       <textarea
