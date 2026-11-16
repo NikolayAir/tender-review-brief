@@ -24,6 +24,9 @@ the excerpt and brief together in a compact review workspace.
 
 ### Fixed
 
+- Bring an off-screen result header back into view after desktop regeneration.
+  Keep the editor's controls reachable when textarea resizing or input errors
+  make the panel too tall to remain pinned.
 - Identify briefs based on an earlier excerpt, including after reloading a saved
   session. Ask for regeneration when an older saved brief has no recorded source
   text, while keeping its result available.
@@ -42,7 +45,8 @@ the excerpt and brief together in a compact review workspace.
   keyboard operation, disclosure reset, and 320-pixel-wide layouts; run them in CI.
 - Cover desktop layout, result-tab keyboard navigation, mobile focus, and source
   association through edits, reloads, regeneration, and sample reset, including
-  legacy saved briefs and unavailable storage.
+  legacy saved briefs and unavailable storage. Add regressions for desktop
+  regeneration after scrolling and resized editors with validation errors.
 - Require successful CI checks for the same commit before GitHub Pages deployment.
 - Expand unit tests for paragraph context, shared passages, multiline phrases,
   maximum-length input, and disclosure markup.

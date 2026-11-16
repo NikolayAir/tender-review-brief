@@ -42,7 +42,7 @@ npm run test:browser
 
 The browser command starts a temporary preview at `http://127.0.0.1:4188/tender-review-brief/`. Keep port 4188 available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
-The tests check the desktop workspace, keyboard-operated result tabs, mobile navigation, and result status through edits, reloads, and regeneration. They also cover legacy saved briefs, storage failures, visible whitespace and Unicode line breaks, disclosure reset, and 320-pixel-wide layouts. Traces are retained on failure in `test-results/`. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
+The tests check the desktop workspace, regeneration after scrolling through long passages, resized editors with validation errors, keyboard-operated result tabs, mobile navigation, and result status through edits, reloads, and regeneration. They also cover legacy saved briefs, storage failures, visible whitespace and Unicode line breaks, disclosure reset, and 320-pixel-wide layouts. Traces are retained on failure in `test-results/`. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 
 ## Dependency audits
 
@@ -70,7 +70,7 @@ The application uses React and JavaScript with CSS. Vite builds the application;
 
 ## Changing review rules
 
-Rules are defined in [`src/rules/analyzeExcerpt.js`](../src/rules/analyzeExcerpt.js). Each rule has keywords, a technical scope, a focus area, a follow-up check, and a reviewer question. Rule order determines the order of the generated output.
+Rules are defined in [`src/rules/analyzeExcerpt.js`](../src/rules/analyzeExcerpt.js). Each rule has keywords, a technical scope, a focus area, a follow-up check, and a reviewer question. Rule order determines the order of items in the generated brief.
 
 When adding or changing a rule:
 

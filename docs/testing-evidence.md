@@ -69,4 +69,20 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 11. At 390 pixels wide, generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels: the result's status badge must stay within the screen after generation. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side; the bundled sample's overview should fit within a 1440 × 900 viewport.
 
+12. At a wide desktop viewport, generate a brief from this long passage:
+
+    ```js
+    copy('Water requirements:\n' + 'Drawings and installation details must be checked.\n'.repeat(100))
+    ```
+
+    Open **Source passages**, expand the quotation, and scroll until the result header is above the screen. The editor stays visible while it fits within the viewport. Choose **Generate review brief** again: focus must move to the result heading, its header and status must return to view, and the unchanged quotation must stay expanded.
+
+13. With the same long result open, use a 1000 × 800 viewport and enlarge the textarea with its resize handle. Paste an oversized input:
+
+    ```js
+    copy('x'.repeat(50001))
+    ```
+
+    Choose **Generate review brief** to show the input error. When the editor becomes taller than the available viewport, it must scroll with the page. Scroll to **Restore sample**: the whole button must be visible and usable, and it must restore both the sample text and brief.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

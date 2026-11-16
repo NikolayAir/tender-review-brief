@@ -14,7 +14,7 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.
 3. Open **Source passages** to read the supporting quotations. Check the complete tender documents before deciding what needs further investigation.
 
-On narrow screens, generation moves to the result; **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side.
+On narrow screens, generation moves to the result; **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side; generation brings an off-screen result back into view.
 
 Editing the excerpt leaves the previous result visible with an **Excerpt changed** notice. Generate again to update it. The brief saves its source text, so the notice also works after a reload when browser storage is available.
 
@@ -67,7 +67,7 @@ Automated tests cover matching, quote preservation, stored-brief validation, sto
 
 PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Briefs restored from older sessions keep their previous content until a new brief is generated.
 
-The output supports human technical review. It does not make legal, regulatory, safety, compliance, or engineering determinations.
+Human technical review is required. Generated briefs do not constitute legal, regulatory, safety, compliance, or engineering determinations.
 
 ## Documentation
 
