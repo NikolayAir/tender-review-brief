@@ -1,0 +1,81 @@
+import { useRef } from 'react'
+
+export function ReviewHelp() {
+  const dialogRef = useRef(null)
+  const titleRef = useRef(null)
+  const closeRef = useRef(null)
+  const documentationRef = useRef(null)
+
+  function openHelp() {
+    dialogRef.current.showModal()
+    // Start at the title so the numbered instructions can be read in order.
+    titleRef.current.focus({ preventScroll: true })
+  }
+
+  function closeHelp() {
+    dialogRef.current.close()
+  }
+
+  function handleKeyDown(event) {
+    if (event.key !== 'Tab') return
+
+    // Keep Tab at the dialog's boundaries instead of moving into browser chrome.
+    if (!event.shiftKey && event.target === documentationRef.current) {
+      event.preventDefault()
+      closeRef.current.focus()
+    } else if (event.shiftKey && (event.target === closeRef.current || event.target === titleRef.current)) {
+      event.preventDefault()
+      documentationRef.current.focus()
+    }
+  }
+
+  return (
+    <>
+      <button type="button" className="help-trigger" aria-haspopup="dialog" onClick={openHelp}>
+        <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <circle cx="10" cy="10" r="8" />
+          <path d="M7.75 7.5a2.25 2.25 0 0 1 4.5 0c0 1.5-2.25 1.5-2.25 3" />
+          <circle className="help-icon-dot" cx="10" cy="14" r="0.75" />
+        </svg>
+        How to use
+      </button>
+      <dialog
+        ref={dialogRef}
+        className="help-dialog"
+        aria-labelledby="review-help-title"
+        onKeyDown={handleKeyDown}
+        onClick={(event) => {
+          if (event.target === event.currentTarget) closeHelp()
+        }}
+      >
+        <div className="help-dialog-content">
+          <header className="help-dialog-header">
+            <h2 id="review-help-title" ref={titleRef} tabIndex={-1}>How to use</h2>
+            <button ref={closeRef} type="button" className="help-close" aria-label="Close help" onClick={closeHelp}>
+              <span aria-hidden="true">×</span>
+            </button>
+          </header>
+          <div className="help-dialog-body">
+            <ol className="help-steps">
+              <li>Paste a public, non-confidential excerpt, or choose <strong>Restore sample</strong>.</li>
+              <li>Choose <strong>Generate review brief</strong>. The rules suggest technical scopes and review points.</li>
+              <li>Review <strong>Overview</strong> and <strong>Checks</strong>, then check <strong>Source passages</strong> against the complete tender documents.</li>
+              <li>After editing the excerpt, generate again. An <strong>Excerpt changed</strong> notice marks the previous result.</li>
+            </ol>
+            <p className="help-note">Processing runs in this browser. Keyword matches require human review.</p>
+            <a
+              ref={documentationRef}
+              className="help-documentation"
+              href="https://github.com/NikolayAir/tender-review-brief#review-workflow"
+              target="_blank"
+              rel="noreferrer"
+            >
+              Full documentation on GitHub <span aria-hidden="true">↗</span>
+              <span className="visually-hidden"> (opens in a new tab)</span>
+            </a>
+          </div>
+        </div>
+      </dialog>
+    </>
+  )
+}

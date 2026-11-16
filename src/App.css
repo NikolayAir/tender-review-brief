@@ -109,16 +109,129 @@ h4 {
   font-size: 0.75rem;
 }
 
-.help-link {
+.help-trigger {
+  display: inline-flex;
   flex-shrink: 0;
-  padding: 8px 0 8px 8px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px 10px;
+  background: var(--surface);
+  color: var(--accent-strong);
   font-size: 0.8125rem;
   font-weight: 600;
-  text-decoration: none;
 }
 
-.help-link span {
-  margin-left: 4px;
+.help-icon {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.help-icon-dot {
+  fill: currentColor;
+  stroke: none;
+}
+
+.help-trigger:hover, .help-close:hover {
+  background: var(--accent-soft);
+}
+
+body:has(.help-dialog[open]) {
+  overflow: hidden;
+}
+
+.help-dialog {
+  width: min(560px, calc(100% - 32px));
+  max-width: none;
+  max-height: calc(100svh - 32px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  color: var(--ink);
+  background: var(--surface);
+  box-shadow: 0 18px 60px #15384f33;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+.help-dialog::backdrop {
+  background: #102d46a6;
+}
+
+.help-dialog-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.help-dialog-header h2 {
+  font-size: 1.25rem;
+}
+
+.help-close {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: var(--soft);
+  color: var(--accent-strong);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.help-dialog-body {
+  padding: 20px;
+  font-size: 0.875rem;
+}
+
+.help-steps {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.help-steps li {
+  padding-left: 4px;
+}
+
+.help-steps li::marker {
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.help-note {
+  margin-top: 20px;
+  padding: 12px;
+  border-radius: 7px;
+  background: var(--soft);
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+
+.help-documentation {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  margin-top: 10px;
 }
 
 .app-shell {
@@ -516,7 +629,7 @@ h4 {
   text-align: center;
 }
 
-button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible, #review-brief-title:focus-visible {
+button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible, #review-brief-title:focus-visible, #review-help-title:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
@@ -591,7 +704,7 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
   .application-bar p {
     font-size: 0.6875rem;
   }
-  .help-link {
+  .help-trigger {
     font-size: 0.75rem;
   }
   .app-shell {

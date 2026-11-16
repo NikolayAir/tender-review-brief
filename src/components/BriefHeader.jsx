@@ -1,3 +1,5 @@
+import { ReviewHelp } from './ReviewHelp'
+
 export function BriefHeader() {
   return (
     <header className="application-bar">
@@ -12,14 +14,7 @@ export function BriefHeader() {
             <p>Technical review support</p>
           </div>
         </div>
-        <a
-          className="help-link"
-          href="https://github.com/NikolayAir/tender-review-brief#review-workflow"
-          target="_blank"
-          rel="noreferrer"
-        >
-          How to use <span aria-hidden="true">↗</span>
-        </a>
+        <ReviewHelp />
       </div>
     </header>
   )

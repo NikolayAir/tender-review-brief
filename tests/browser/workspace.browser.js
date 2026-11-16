@@ -165,7 +165,7 @@ test('tracks the excerpt behind a brief through edits, reloads, regeneration, an
 
   await page.reload()
   await expect(input).toHaveValue(second)
-  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Review brief', exact: true }).getByText('Excerpt changed', { exact: true })).toBeVisible()
   await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
   await expect(page.locator('.evidence-text')).toHaveText(first)
 
@@ -176,7 +176,7 @@ test('tracks the excerpt behind a brief through edits, reloads, regeneration, an
   await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
 
   await input.fill(first)
-  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Review brief', exact: true }).getByText('Excerpt changed', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Restore sample', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
   await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
@@ -229,7 +229,7 @@ test('keeps the review usable when session storage is unavailable', async ({ pag
   })
   await page.reload()
   await page.getByLabel('Public tender excerpt', { exact: true }).fill('Water drainage drawings are required.')
-  await expect(page.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await expect(page.getByRole('region', { name: 'Review brief', exact: true }).getByText('Excerpt changed', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
   await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
   await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
