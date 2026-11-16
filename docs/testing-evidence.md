@@ -87,4 +87,6 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 14. Choose **How to use**. A four-step guide must open with focus on its title. Tab and Shift+Tab must cycle through its close button and documentation link. Escape, the close button, and clicking the backdrop must each close the guide and return focus to **How to use**. The current excerpt, result, and selected result tab must stay unchanged. Repeat at 320 × 568 pixels: the guide must fit the viewport, its content must scroll when needed, and its close button must remain available.
 
+15. At 640 × 360 pixels, open the guide, scroll to the documentation link, close it, and reopen it. The first step must appear below the header again. Select text inside the guide and release the pointer outside it: the guide must remain open. Repeat with a press on the backdrop and release inside the guide. A normal click on the backdrop must still dismiss it.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

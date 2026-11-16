@@ -84,3 +84,47 @@ test('fits help within a narrow screen and keeps its close control available whi
   await close.click()
   await expect(dialog).toBeHidden()
 })
+
+test('reopens a scrolled help guide at its first step', async ({ page }) => {
+  await page.setViewportSize({ width: 640, height: 360 })
+  const trigger = page.getByRole('button', { name: 'How to use', exact: true })
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  await trigger.click()
+  await dialog.getByRole('link', { name: 'Full documentation on GitHub', exact: false }).scrollIntoViewIfNeeded()
+  await expect.poll(() => dialog.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
+  await dialog.getByRole('button', { name: 'Close help', exact: true }).click()
+  await trigger.click()
+
+  await expect(dialog.getByRole('heading', { name: 'How to use', exact: true })).toBeFocused()
+  const header = await dialog.locator('header').boundingBox()
+  const firstStep = await dialog.getByRole('listitem').first().boundingBox()
+  expect(firstStep.y).toBeGreaterThanOrEqual(header.y + header.height)
+})
+
+test('keeps help open when selecting text ends on its backdrop', async ({ page }) => {
+  await page.getByRole('button', { name: 'How to use', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  const firstStep = await dialog.getByRole('listitem').first().boundingBox()
+  await page.mouse.move(firstStep.x + 10, firstStep.y + 10)
+  await page.mouse.down()
+  await page.mouse.move(8, 8, { steps: 5 })
+  await page.mouse.up()
+
+  await expect(dialog).toBeVisible()
+  await page.mouse.click(8, 8)
+  await expect(dialog).toBeHidden()
+})
+
+test('keeps help open when a backdrop press ends inside the guide', async ({ page }) => {
+  await page.getByRole('button', { name: 'How to use', exact: true }).click()
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  const firstStep = await dialog.getByRole('listitem').first().boundingBox()
+  await page.mouse.move(8, 8)
+  await page.mouse.down()
+  await page.mouse.move(firstStep.x + 10, firstStep.y + 10, { steps: 5 })
+  await page.mouse.up()
+
+  await expect(dialog).toBeVisible()
+  await page.mouse.click(8, 8)
+  await expect(dialog).toBeHidden()
+})

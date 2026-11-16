@@ -42,7 +42,7 @@ npm run test:browser
 
 The browser command starts a temporary preview at `http://127.0.0.1:4188/tender-review-brief/`. Keep port 4188 available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
-The tests cover desktop layout, keyboard-operated result tabs, mobile navigation, and the help dialog's focus and dismissal. Desktop regressions include regeneration after scrolling through long passages and resized editors with validation errors. Saved-result checks cover edits, reloads, regeneration, legacy briefs, and storage failures. Evidence checks cover visible whitespace, Unicode line breaks, disclosure reset, and 320-pixel-wide layouts.
+The tests cover desktop layout, keyboard-operated result tabs, mobile navigation, and the help dialog's focus and dismissal, including reopening after scrolling and text-selection gestures. Desktop regressions include regeneration after scrolling through long passages and resized editors with validation errors. Saved-result checks cover edits, reloads, regeneration, legacy briefs, and storage failures. Evidence checks cover visible whitespace, Unicode line breaks, disclosure reset, and 320-pixel-wide layouts.
 
 Traces are retained on failure in `test-results/`. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 

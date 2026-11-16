@@ -26,6 +26,8 @@ the excerpt and brief together in a compact review workspace.
 
 ### Fixed
 
+- Start the help guide at its first step when reopened. Keep text-selection and
+  cross-boundary pointer gestures from dismissing it accidentally.
 - Bring an off-screen result header back into view after desktop regeneration.
   Keep the editor's controls reachable when textarea resizing or input errors
   make the panel too tall to remain pinned.
@@ -50,7 +52,8 @@ the excerpt and brief together in a compact review workspace.
   legacy saved briefs and unavailable storage. Add regressions for desktop
   regeneration after scrolling and resized editors with validation errors.
 - Check help-dialog focus, dismissal, narrow layouts, and preservation of the
-  current excerpt and result tab.
+  current excerpt and result tab, including repeated opening and text-selection
+  gestures.
 - Require successful CI checks for the same commit before GitHub Pages deployment.
 - Expand unit tests for paragraph context, shared passages, multiline phrases,
   maximum-length input, and disclosure markup.

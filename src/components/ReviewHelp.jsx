@@ -5,15 +5,25 @@ export function ReviewHelp() {
   const titleRef = useRef(null)
   const closeRef = useRef(null)
   const documentationRef = useRef(null)
+  const pointerStartedOnBackdrop = useRef(false)
 
   function openHelp() {
-    dialogRef.current.showModal()
+    const dialog = dialogRef.current
+    dialog.showModal()
+    dialog.scrollTop = 0
+    pointerStartedOnBackdrop.current = false
     // Start at the title so the numbered instructions can be read in order.
     titleRef.current.focus({ preventScroll: true })
   }
 
   function closeHelp() {
     dialogRef.current.close()
+  }
+
+  function isBackdropEvent(event) {
+    if (event.target !== event.currentTarget) return false
+    const { left, right, top, bottom } = event.currentTarget.getBoundingClientRect()
+    return event.clientX < left || event.clientX > right || event.clientY < top || event.clientY > bottom
   }
 
   function handleKeyDown(event) {
@@ -44,8 +54,15 @@ export function ReviewHelp() {
         className="help-dialog"
         aria-labelledby="review-help-title"
         onKeyDown={handleKeyDown}
+        onPointerDown={(event) => {
+          pointerStartedOnBackdrop.current = isBackdropEvent(event)
+        }}
+        onPointerCancel={() => { pointerStartedOnBackdrop.current = false }}
         onClick={(event) => {
-          if (event.target === event.currentTarget) closeHelp()
+          // A text-selection drag can end on the backdrop without starting there.
+          const dismiss = pointerStartedOnBackdrop.current && isBackdropEvent(event)
+          pointerStartedOnBackdrop.current = false
+          if (dismiss) closeHelp()
         }}
       >
         <div className="help-dialog-content">
