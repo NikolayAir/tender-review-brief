@@ -235,3 +235,44 @@ test('keeps the review usable when session storage is unavailable', async ({ pag
   await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
   await expect(page.locator('.evidence-text')).toHaveText('Water drainage drawings are required.')
 })
+
+for (const { name, failedKey } of [
+  { name: 'the excerpt', failedKey: 'tender-brief-ui-current-excerpt' },
+  { name: 'the brief', failedKey: 'tender-brief-ui-active-brief' },
+]) {
+  test(`keeps source status correct when saving ${name} fails`, async ({ page }) => {
+    const first = 'Water drawings are required.'
+    const second = 'Fire-safety drawings are required.'
+    const input = page.getByLabel('Public tender excerpt', { exact: true })
+    const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
+    const result = page.getByRole('region', { name: 'Review brief', exact: true })
+    await input.fill(first)
+    await generate.click()
+
+    await page.evaluate((failedKey) => {
+      const setItem = Storage.prototype.setItem
+      Storage.prototype.setItem = function (key, value) {
+        if (key === failedKey) throw new DOMException('Storage full', 'QuotaExceededError')
+        return setItem.call(this, key, value)
+      }
+    }, failedKey)
+    await input.fill(second)
+    await generate.click()
+    await expect(input).toHaveValue(second)
+    await expect(result.getByText('Current excerpt', { exact: true })).toBeVisible()
+    await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+    await expect(page.locator('.evidence-text')).toHaveText(second)
+
+    await page.reload()
+    await expect(result.getByText('Excerpt changed', { exact: true })).toBeVisible()
+    const restoredInput = name === 'the excerpt' ? first : second
+    const restoredSource = name === 'the excerpt' ? second : first
+    await expect(input).toHaveValue(restoredInput)
+    await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+    await expect(page.locator('.evidence-text')).toHaveText(restoredSource)
+
+    await generate.click()
+    await expect(result.getByText('Current excerpt', { exact: true })).toBeVisible()
+    await expect(page.locator('.evidence-text')).toHaveText(restoredInput)
+  })
+}

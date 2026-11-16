@@ -128,3 +128,32 @@ test('keeps help open when a backdrop press ends inside the guide', async ({ pag
   await page.mouse.click(8, 8)
   await expect(dialog).toBeHidden()
 })
+
+test('keeps help usable when the viewport changes orientation while it is open', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  await input.fill('Water drawings are required.')
+  const trigger = page.getByRole('button', { name: 'How to use', exact: true })
+  await trigger.click()
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  const close = dialog.getByRole('button', { name: 'Close help', exact: true })
+
+  for (const viewport of [{ width: 844, height: 390 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport)
+    await expect(dialog).toBeVisible()
+    await dialog.getByRole('link', { name: 'Full documentation on GitHub', exact: false }).scrollIntoViewIfNeeded()
+    const bounds = await dialog.boundingBox()
+    const button = await close.boundingBox()
+    expect(bounds.x).toBeGreaterThanOrEqual(0)
+    expect(bounds.y).toBeGreaterThanOrEqual(0)
+    expect(bounds.x + bounds.width).toBeLessThanOrEqual(viewport.width)
+    expect(bounds.y + bounds.height).toBeLessThanOrEqual(viewport.height)
+    expect(button.y).toBeGreaterThanOrEqual(0)
+    expect(button.y + button.height).toBeLessThanOrEqual(viewport.height)
+  }
+
+  await close.press('Escape')
+  await expect(dialog).toBeHidden()
+  await expect(trigger).toBeFocused()
+  await expect(input).toHaveValue('Water drawings are required.')
+})
