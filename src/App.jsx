@@ -38,9 +38,18 @@ export default function App() {
   useEffect(() => {
     if (!focusResult.current) return
     focusResult.current = false
-    resultHeadingRef.current?.focus({ preventScroll: true })
-    if (window.matchMedia('(max-width: 899px)').matches) {
-      resultPanelRef.current?.scrollIntoView({ block: 'start' })
+    const heading = resultHeadingRef.current
+    const panel = resultPanelRef.current
+    if (!heading || !panel) return
+
+    heading.focus({ preventScroll: true })
+    // The sticky editor can stay visible while a long result's header is off screen.
+    if (
+      window.matchMedia('(max-width: 899px)').matches ||
+      panel.getBoundingClientRect().top < 0 ||
+      heading.getBoundingClientRect().bottom > window.innerHeight
+    ) {
+      panel.scrollIntoView({ block: 'start' })
     }
   }, [activeBrief])
 
@@ -64,6 +73,7 @@ export default function App() {
     removeSessionValue(ACTIVE_BRIEF_STORAGE_KEY)
   }
 
+  // Legacy briefs can be valid without a usable snapshot of their source excerpt.
   const savedSource = activeBrief.sourceExcerpt
   const briefSource = activeBrief === sampleBrief
     ? sampleExcerpt

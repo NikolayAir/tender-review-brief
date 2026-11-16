@@ -144,9 +144,12 @@ h4 {
 }
 
 .analyzer-card {
+  padding: 22px;
+}
+
+.analyzer-card--sticky {
   position: sticky;
   top: 24px;
-  padding: 22px;
 }
 
 .panel-heading {

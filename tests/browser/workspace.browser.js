@@ -4,6 +4,14 @@ test.beforeEach(async ({ page }) => {
   await page.goto('./')
 })
 
+async function openLongPassage(page) {
+  const excerpt = 'Water requirements:\n' + 'Drawings and installation details must be checked.\n'.repeat(100)
+  await page.getByLabel('Public tender excerpt', { exact: true }).fill(excerpt)
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await page.locator('.evidence-details summary').click()
+}
+
 test('keeps the sample excerpt and review overview together in the first desktop screen', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   const source = await page.getByRole('region', { name: 'Tender excerpt', exact: true }).boundingBox()
@@ -15,6 +23,50 @@ test('keeps the sample excerpt and review overview together in the first desktop
   expect(result.y + result.height).toBeLessThan(900)
   const height = await page.evaluate(() => document.documentElement.scrollHeight)
   expect(height).toBeLessThanOrEqual(900)
+})
+
+test('brings a regenerated brief back into view from a long desktop passage', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await openLongPassage(page)
+  const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
+  await page.mouse.wheel(0, 1200)
+
+  const heading = page.getByRole('heading', { name: 'Generated review brief', exact: true })
+  await expect.poll(async () => (await heading.boundingBox()).y).toBeLessThan(0)
+  const button = await generate.boundingBox()
+  expect(button.y).toBeGreaterThanOrEqual(0)
+  expect(button.y + button.height).toBeLessThan(900)
+  await generate.click()
+
+  await expect(heading).toBeFocused()
+  const status = await page.getByText('Current excerpt', { exact: true }).boundingBox()
+  expect(status.y).toBeGreaterThanOrEqual(0)
+  expect(status.y + status.height).toBeLessThan(900)
+  await expect(page.locator('.evidence-details')).toHaveJSProperty('open', true)
+})
+
+test('keeps reset reachable when a resized editor reports an input error', async ({ page }) => {
+  await page.setViewportSize({ width: 1000, height: 800 })
+  await openLongPassage(page)
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  const original = await input.boundingBox()
+  await page.mouse.move(original.x + original.width - 3, original.y + original.height - 3)
+  await page.mouse.down()
+  await page.mouse.move(original.x + original.width - 3, original.y + original.height + 250, { steps: 5 })
+  await page.mouse.up()
+  await expect.poll(async () => (await input.boundingBox()).height).toBeGreaterThan(original.height + 100)
+  await input.fill('x'.repeat(50001))
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await expect(page.getByRole('alert')).toContainText('Excerpt is too long')
+  await page.mouse.wheel(0, 450)
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(400)
+
+  const restore = page.getByRole('button', { name: 'Restore sample', exact: true })
+  const button = await restore.boundingBox()
+  expect(button.y).toBeGreaterThanOrEqual(0)
+  expect(button.y + button.height).toBeLessThan(800)
+  await restore.click()
+  await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
 })
 
 test('operates result tabs with arrows, Home, End, and a single tab stop', async ({ page }) => {

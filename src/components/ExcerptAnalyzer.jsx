@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   MAX_EXCERPT_CHARS,
   analyzeExcerpt,
@@ -7,6 +7,24 @@ import {
 
 export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }) {
   const [error, setError] = useState('')
+  const [fitsViewport, setFitsViewport] = useState(false)
+  const panelRef = useRef(null)
+
+  useEffect(() => {
+    const panel = panelRef.current
+    const updatePosition = () => {
+      // A resized textarea or validation error can make the card too tall to pin.
+      // Reserve the same 24 px inset above and below it as the sticky layout.
+      setFitsViewport(panel.getBoundingClientRect().height + 48 <= window.innerHeight)
+    }
+    const observer = new ResizeObserver(updatePosition)
+    observer.observe(panel)
+    window.addEventListener('resize', updatePosition)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('resize', updatePosition)
+    }
+  }, [])
 
   const excerptDescription = error
     ? 'excerpt-help excerpt-storage-note excerpt-character-count excerpt-error'
@@ -39,7 +57,11 @@ export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }
   }
 
   return (
-    <section className="workspace-panel analyzer-card" aria-labelledby="analyzer-title">
+    <section
+      ref={panelRef}
+      className={`workspace-panel analyzer-card${fitsViewport ? ' analyzer-card--sticky' : ''}`}
+      aria-labelledby="analyzer-title"
+    >
       <div className="panel-heading">
         <span className="section-number" aria-hidden="true">01</span>
         <h2 id="analyzer-title">Tender excerpt</h2>
