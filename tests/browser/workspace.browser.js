@@ -104,7 +104,7 @@ test('brings a regenerated brief back into view from a long desktop passage', as
   await page.setViewportSize({ width: 1440, height: 900 })
   await openLongPassage(page)
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
-  await page.mouse.wheel(0, 1200)
+  await page.evaluate(() => window.scrollTo(0, 1200))
 
   const heading = page.getByRole('heading', { name: 'Generated review brief', exact: true })
   await expect.poll(async () => (await heading.boundingBox()).y).toBeLessThan(0)
@@ -317,8 +317,9 @@ test('keeps the previous brief and the full input when the excerpt is blank or t
   const input = page.getByLabel('Public tender excerpt', { exact: true })
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
   await input.fill(' \n\t')
-  await generate.click()
+  await generate.press('Enter')
   await expect(page.getByRole('alert')).toContainText('Please paste')
+  await expect(input).toHaveAttribute('aria-invalid', 'true')
   await expect(generate).toBeFocused()
 
   await input.fill('x'.repeat(50001))
