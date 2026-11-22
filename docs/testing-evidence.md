@@ -69,7 +69,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
     Choose **Restore sample**. The confirmation must start with focus on **Cancel**. Cancel or press Escape and check that the excerpt, brief, and selected tab remain and focus returns to **Restore sample**. Open the confirmation again and choose **Restore sample** inside it to restore both the sample text and its brief.
 
-11. At 390 pixels wide, check that the editor uses the root font size (16 px at default settings). Generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels and check that the result's status badge stays within the screen. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side, and the bundled sample's overview should fit within a 1440 × 900 viewport.
+11. At 390 pixels wide, check that the editor uses the root font size (18 px with **Medium** and default browser settings). Generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels and check that the result's status badge stays within the screen. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side, and the bundled sample's overview should fit within a 1440 × 900 viewport.
 
 12. At a wide desktop viewport, generate a brief from this long passage:
 
@@ -110,5 +110,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 19. With the bundled overview at 1440 × 1000 pixels, look for **Source code** on the right near the bottom of the page. At 320 pixels wide, it must appear below the disclaimer on the left. The link opens the repository in a new tab. In **How to use**, the link with the document icon opens [Review a tender excerpt](../README.md#review-a-tender-excerpt) in a new tab.
 
 20. Set the theme to **System** and change the operating system or browser's preferred appearance between light and dark. The editor, brief, and dialogs should follow it without a reload. Choose **Day** with a dark preference or **Night** with a light preference. Reload to check that the manual choice is restored. Select **System** again to resume automatic changes. Check that switching themes preserves the current excerpt, brief, and selected result tab.
+
+21. Choose **Night** and try **Small**, **Medium**, and **Large** in the text size selector. Check the editor, a source passage, and **How to use** at each size. At 320 pixels wide with **Large**, the page must fit without horizontal scrolling. The help link must remain reachable by scrolling or with Tab. Reload to check that both Night and Large are restored.
 
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

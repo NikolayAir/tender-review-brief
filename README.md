@@ -14,7 +14,7 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 
 **How to use** opens a short guide in the application, with a link to the full documentation on GitHub.
 
-The theme selector beside **How to use** offers **Day**, **Night**, and **System**. **System** follows your browser's light or dark preference, even when it changes while the app is open. The browser remembers your selection when local storage is available.
+The theme selector offers **Day**, **Night**, and **System**. **System** follows your browser's light or dark preference, even when it changes while the app is open. Use the **Text size** selector beside it to choose **Small**, **Medium** (default), or **Large**. The browser remembers both choices when local storage is available.
 
 1. Choose **Restore sample** to try the example, or paste public, non-confidential text into **Tender excerpt**.
 2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.

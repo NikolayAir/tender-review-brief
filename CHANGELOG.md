@@ -7,6 +7,8 @@ the excerpt editor beside the generated brief on wider screens.
 
 ### Changed
 
+- Offer **Small**, **Medium**, and **Large** text sizes, with **Medium** as the
+  default. Soften text, heading, and link colors in **Night**.
 - Add **Day**, **Night**, and **System** themes and save the selection in the
   browser. **System** follows light or dark appearance as it changes.
 - Add a **Source code** link to the application footer.
