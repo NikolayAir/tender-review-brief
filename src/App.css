@@ -709,6 +709,7 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
   .excerpt-input {
     height: 200px;
     min-height: 180px;
+    font-size: 1rem;
   }
   .edit-excerpt-link {
     display: inline-block;

@@ -248,6 +248,7 @@ test('keeps the selected tab visible when focus moves to its panel in forced col
 test('moves to a generated brief on mobile and provides a way back to editing', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   const input = page.getByLabel('Public tender excerpt', { exact: true })
+  await expect(input).toHaveCSS('font-size', '16px')
   await input.fill('Water pressure must remain at 1.5 bar.')
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
 

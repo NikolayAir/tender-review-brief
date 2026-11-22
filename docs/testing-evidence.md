@@ -69,7 +69,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
     Choose **Restore sample**. The confirmation must start with focus on **Cancel**. Cancel or press Escape and check that the excerpt, brief, and selected tab remain and focus returns to **Restore sample**. Open the confirmation again and choose **Restore sample** inside it to restore both the sample text and its brief.
 
-11. At 390 pixels wide, generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels: the result's status badge must stay within the screen after generation. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side; the bundled sample's overview should fit within a 1440 × 900 viewport.
+11. At 390 pixels wide, check that the editor uses the root font size (16 px at default settings). Generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels and check that the result's status badge stays within the screen. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side, and the bundled sample's overview should fit within a 1440 × 900 viewport.
 
 12. At a wide desktop viewport, generate a brief from this long passage:
 
