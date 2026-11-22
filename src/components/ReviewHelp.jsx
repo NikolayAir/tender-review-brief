@@ -3,15 +3,15 @@ import { useRef } from 'react'
 export function ReviewHelp() {
   const triggerRef = useRef(null)
   const dialogRef = useRef(null)
+  const bodyRef = useRef(null)
   const titleRef = useRef(null)
   const closeRef = useRef(null)
   const documentationRef = useRef(null)
   const pointerStartedOnBackdrop = useRef(false)
 
   function openHelp() {
-    const dialog = dialogRef.current
-    dialog.showModal()
-    dialog.scrollTop = 0
+    dialogRef.current.showModal()
+    bodyRef.current.scrollTop = 0
     pointerStartedOnBackdrop.current = false
     // Start at the title so the numbered instructions can be read in order.
     titleRef.current.focus({ preventScroll: true })
@@ -65,35 +65,33 @@ export function ReviewHelp() {
           if (dismiss) closeHelp()
         }}
       >
-        <div className="help-dialog-content">
-          <header className="help-dialog-header">
-            <h2 id="review-help-title" ref={titleRef} tabIndex={-1}>How to use</h2>
-            <button ref={closeRef} type="button" className="help-close" aria-label="Close help" onClick={closeHelp}>
-              <span aria-hidden="true">×</span>
-            </button>
-          </header>
-          <div className="help-dialog-body">
-            <ol className="help-steps">
-              <li>Paste a public, non-confidential excerpt, or choose <strong>Restore sample</strong>.</li>
-              <li>Choose <strong>Generate review brief</strong>. The rules suggest technical scopes and review points.</li>
-              <li>Review <strong>Overview</strong> and <strong>Checks</strong>, then check <strong>Source passages</strong> against the complete tender documents.</li>
-              <li>After editing the excerpt, generate again. An <strong>Excerpt changed</strong> notice marks the previous result.</li>
-            </ol>
-            <p className="help-note">Processing runs in this browser. Keyword matches require human review.</p>
-            <a
-              ref={documentationRef}
-              className="help-documentation"
-              href="https://github.com/NikolayAir/tender-review-brief#review-a-tender-excerpt"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                <path d="M5 2.75h6l4 4v10.5H5zM11 2.75v4h4M7.5 10h5M7.5 13h5" />
-              </svg>
-              Full documentation on GitHub <span aria-hidden="true">↗</span>
-              <span className="visually-hidden"> (opens in a new tab)</span>
-            </a>
-          </div>
+        <header className="help-dialog-header">
+          <h2 id="review-help-title" ref={titleRef} tabIndex={-1}>How to use</h2>
+          <button ref={closeRef} type="button" className="help-close" aria-label="Close help" onClick={closeHelp}>
+            <span aria-hidden="true">×</span>
+          </button>
+        </header>
+        <div ref={bodyRef} className="help-dialog-body">
+          <ol className="help-steps">
+            <li>Paste a public, non-confidential excerpt, or choose <strong>Restore sample</strong>.</li>
+            <li>Choose <strong>Generate review brief</strong>. The rules suggest technical scopes and review points.</li>
+            <li>Review <strong>Overview</strong> and <strong>Checks</strong>, then check <strong>Source passages</strong> against the complete tender documents.</li>
+            <li>After editing the excerpt, generate again. An <strong>Excerpt changed</strong> notice marks the previous result.</li>
+          </ol>
+          <p className="help-note">Processing runs in this browser. Keyword matches require human review.</p>
+          <a
+            ref={documentationRef}
+            className="help-documentation"
+            href="https://github.com/NikolayAir/tender-review-brief#review-a-tender-excerpt"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <path d="M5 2.75h6l4 4v10.5H5zM11 2.75v4h4M7.5 10h5M7.5 13h5" />
+            </svg>
+            Full documentation on GitHub <span aria-hidden="true">↗</span>
+            <span className="visually-hidden"> (opens in a new tab)</span>
+          </a>
         </div>
       </dialog>
     </>

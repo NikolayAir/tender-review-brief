@@ -79,32 +79,49 @@ test('fits help within a narrow screen and keeps its close control available whi
   const button = await close.boundingBox()
   expect(button.y).toBeGreaterThanOrEqual(0)
   expect(button.y + button.height).toBeLessThanOrEqual(568)
-  const widths = await dialog.evaluate((element) => ({
-    dialog: element.scrollWidth,
+  const widths = await dialog.locator('.help-dialog-body').evaluate((element) => ({
+    content: element.scrollWidth,
     available: element.clientWidth,
     page: document.documentElement.scrollWidth,
     viewport: document.documentElement.clientWidth,
   }))
-  expect(widths.dialog).toBeLessThanOrEqual(widths.available)
+  expect(widths.content).toBeLessThanOrEqual(widths.available)
   expect(widths.page).toBeLessThanOrEqual(widths.viewport)
   await close.click()
   await expect(dialog).toBeHidden()
+})
+
+test('keeps the focused documentation link below the header at 200% text size', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 320 })
+  await page.addStyleTag({ content: 'html { font-size: 200%; }' })
+  await page.getByRole('button', { name: 'How to use', exact: true }).press('Enter')
+
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  const docs = dialog.getByRole('link', { name: 'Full documentation on GitHub (opens in a new tab)', exact: true })
+  await page.keyboard.press('Tab')
+  await page.keyboard.press('Tab')
+  await expect(docs).toBeFocused()
+
+  const headerBounds = await dialog.locator('header').boundingBox()
+  const dialogBounds = await dialog.boundingBox()
+  const linkBounds = await docs.boundingBox()
+  expect(linkBounds.y).toBeGreaterThanOrEqual(headerBounds.y + headerBounds.height)
+  expect(linkBounds.y + linkBounds.height).toBeLessThanOrEqual(dialogBounds.y + dialogBounds.height)
 })
 
 test('reopens a scrolled help guide at its first step', async ({ page }) => {
   await page.setViewportSize({ width: 640, height: 360 })
   const trigger = page.getByRole('button', { name: 'How to use', exact: true })
   const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  const firstStep = dialog.getByRole('listitem').first()
   await trigger.click()
   await dialog.getByRole('link', { name: 'Full documentation on GitHub', exact: false }).scrollIntoViewIfNeeded()
-  await expect.poll(() => dialog.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
+  await expect(firstStep).not.toBeInViewport({ ratio: 1 })
   await dialog.getByRole('button', { name: 'Close help', exact: true }).click()
   await trigger.click()
 
   await expect(dialog.getByRole('heading', { name: 'How to use', exact: true })).toBeFocused()
-  const header = await dialog.locator('header').boundingBox()
-  const firstStep = await dialog.getByRole('listitem').first().boundingBox()
-  expect(firstStep.y).toBeGreaterThanOrEqual(header.y + header.height)
+  await expect(firstStep).toBeInViewport({ ratio: 1 })
 })
 
 test('keeps help open when selecting text ends on its backdrop', async ({ page }) => {

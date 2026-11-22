@@ -175,6 +175,12 @@ body:has(.review-dialog[open]) {
   width: min(560px, calc(100% - 32px));
 }
 
+.help-dialog[open] {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .restore-dialog {
   width: min(420px, calc(100% - 32px));
   padding: 20px;
@@ -186,10 +192,8 @@ body:has(.review-dialog[open]) {
 }
 
 .help-dialog-header {
-  position: sticky;
-  top: 0;
-  z-index: 1;
   display: flex;
+  flex-shrink: 0;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -218,6 +222,8 @@ body:has(.review-dialog[open]) {
 .help-dialog-body {
   padding: 20px;
   font-size: 0.875rem;
+  overflow-y: auto;
+  scroll-padding-block: 6px;
 }
 
 .help-steps {
