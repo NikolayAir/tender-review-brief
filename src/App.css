@@ -535,6 +535,21 @@ body:has(.review-dialog[open]) {
   color: var(--accent-strong);
 }
 
+@media (forced-colors: active) {
+  .review-tabs button {
+    position: relative;
+    border-bottom: 0;
+    padding-bottom: 14px;
+  }
+
+  .review-tabs button[aria-selected="true"]::after {
+    position: absolute;
+    inset: auto 6px 4px;
+    border-bottom: 2px solid Highlight;
+    content: '';
+  }
+}
+
 .review-tab-panel {
   padding: 24px;
 }

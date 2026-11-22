@@ -28,6 +28,8 @@ the excerpt editor beside the generated brief on wider screens.
 
 - Ask for confirmation before restoring the sample over an edited excerpt or
   a generated or saved brief.
+- Keep the selected result tab visible in forced colors when keyboard focus
+  moves into the panel.
 - Keep the application header and result-tab labels readable with enlarged text
   on narrow screens, without overlapping the help control or splitting words.
 - Start the help guide at its first step when reopened. Keep text-selection and

@@ -93,4 +93,6 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 16. At widths of 320 and 390 pixels, enlarge the text to 200%. For a repeatable check, run `document.documentElement.style.fontSize = '200%'` in the DevTools Console. The application title and subtitle must remain readable without overlapping **How to use** or causing horizontal overflow. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line. Open and close the guide to check that its control remains usable. Run `document.documentElement.style.removeProperty('font-size')` afterwards to restore normal text sizing.
 
+17. Enable forced colors using a system contrast theme or browser emulation. Focus **Overview**, press Right Arrow to select **Checks**, then press Tab to focus its panel. Only **Checks** should have the selected underline. Press Shift+Tab to return to the tab and check that its focus outline and selected underline are both visible.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.
