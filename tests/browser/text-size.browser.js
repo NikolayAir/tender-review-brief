@@ -48,3 +48,43 @@ test('keeps the review readable and its selected tab when enlarging text at 320 
   }))
   expect(widths.page).toBeLessThanOrEqual(widths.viewport)
 })
+
+test('keeps the three header controls in one row with Large text on phones', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 720 })
+  await page.goto('./')
+
+  const size = page.getByRole('combobox', { name: 'Text size', exact: true })
+  const help = page.getByRole('button', { name: 'How to use', exact: true })
+  const label = help.getByText('How to use', { exact: true })
+  await size.selectOption('large')
+
+  for (const width of [320, 393, 440]) {
+    await page.setViewportSize({ width, height: 720 })
+    const centers = await page.locator('.application-controls select, .help-trigger').evaluateAll((controls) => (
+      controls.map((control) => {
+        const bounds = control.getBoundingClientRect()
+        return bounds.top + bounds.height / 2
+      })
+    ))
+    expect(Math.max(...centers) - Math.min(...centers)).toBeLessThan(2)
+
+    if (width === 440) {
+      await expect(label).toBeVisible()
+    } else {
+      await expect(help).toBeVisible()
+      await expect(label).toBeHidden()
+      const target = await help.boundingBox()
+      expect(target.width).toBeGreaterThanOrEqual(44)
+      expect(target.height).toBeGreaterThanOrEqual(44)
+    }
+  }
+
+  await page.setViewportSize({ width: 393, height: 720 })
+  await help.press('Enter')
+  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  await expect(dialog).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(help).toBeFocused()
+  await size.selectOption('medium')
+  await expect(label).toBeVisible()
+})

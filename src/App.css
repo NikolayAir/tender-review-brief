@@ -875,3 +875,22 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
     gap: 22px;
   }
 }
+
+@media (max-width: 410px) {
+  :root[data-text-size="large"] .application-controls {
+    column-gap: 6px;
+  }
+  :root[data-text-size="large"] .appearance-control select {
+    padding-inline: 24px 16px;
+  }
+  :root[data-text-size="large"] .appearance-control::after {
+    inset-inline-end: 6px;
+  }
+  :root[data-text-size="large"] .help-trigger {
+    min-inline-size: 44px;
+    padding-inline: 0;
+  }
+  :root[data-text-size="large"] .help-trigger-label {
+    display: none;
+  }
+}

@@ -40,13 +40,20 @@ export function ReviewHelp() {
 
   return (
     <>
-      <button ref={triggerRef} type="button" className="help-trigger" aria-haspopup="dialog" onClick={openHelp}>
+      <button
+        ref={triggerRef}
+        type="button"
+        className="help-trigger"
+        aria-label="How to use"
+        aria-haspopup="dialog"
+        onClick={openHelp}
+      >
         <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="10" cy="10" r="8" />
           <path d="M7.75 7.5a2.25 2.25 0 0 1 4.5 0c0 1.5-2.25 1.5-2.25 3" />
           <circle className="help-icon-dot" cx="10" cy="14" r="0.75" />
         </svg>
-        How to use
+        <span className="help-trigger-label">How to use</span>
       </button>
       <dialog
         ref={dialogRef}
