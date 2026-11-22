@@ -320,6 +320,23 @@ body:has(.review-dialog[open]) {
   margin-top: 10px;
 }
 
+/* Give enlarged help text more room to wrap in short windows. */
+@media (max-height: 400px) {
+  .help-dialog {
+    max-height: calc(100svh - 16px);
+  }
+  .help-dialog-header {
+    padding-block: 8px;
+  }
+  .help-documentation {
+    display: inline-block;
+  }
+  .help-documentation .help-icon {
+    margin-inline-end: 6px;
+    vertical-align: -0.125em;
+  }
+}
+
 .app-shell {
   display: flex;
   flex: 1;

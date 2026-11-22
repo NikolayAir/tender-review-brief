@@ -91,9 +91,13 @@ test('fits help within a narrow screen and keeps its close control available whi
   await expect(dialog).toBeHidden()
 })
 
-test('scrolls the help instructions by keyboard and keeps the focused link visible at 200%', async ({ page }) => {
+test('scrolls the help instructions by keyboard and keeps the focused link visible at double text size', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 320 })
-  await page.addStyleTag({ content: 'html { font-size: 200%; }' })
+  await page.evaluate(() => {
+    const root = document.documentElement
+    const initialFontSize = Number.parseFloat(getComputedStyle(root).fontSize)
+    root.style.fontSize = `${initialFontSize * 2}px`
+  })
   await page.getByRole('button', { name: 'How to use', exact: true }).press('Enter')
 
   const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
