@@ -25,21 +25,29 @@ test('keeps the sample excerpt and review overview together in the first desktop
   expect(height).toBeLessThanOrEqual(900)
 })
 
-test('aligns the source code link to the right on desktop and to the left on mobile', async ({ page }) => {
-  const footer = page.locator('.application-footer')
+test('places the source code link in the page footer on desktop and mobile', async ({ page }) => {
+  const footer = page.getByRole('contentinfo')
   const source = footer.getByRole('link', { name: 'Source code (opens in a new tab)', exact: true })
   await expect(source).toHaveAttribute('href', 'https://github.com/NikolayAir/tender-review-brief')
   await expect(source).toHaveAttribute('target', '_blank')
 
-  await page.setViewportSize({ width: 1440, height: 900 })
+  const desktop = { width: 1440, height: 1000 }
+  await page.setViewportSize(desktop)
   const desktopFooter = await footer.boundingBox()
   const desktopLink = await source.boundingBox()
   expect(desktopLink.x + desktopLink.width).toBeCloseTo(desktopFooter.x + desktopFooter.width)
+  expect(desktopFooter.y + desktopFooter.height).toBeGreaterThanOrEqual(desktop.height - 32)
+  expect(desktopFooter.y + desktopFooter.height).toBeLessThanOrEqual(desktop.height)
 
-  await page.setViewportSize({ width: 390, height: 844 })
+  const mobile = { width: 320, height: 568 }
+  await page.setViewportSize(mobile)
+  await page.addStyleTag({ content: 'html { font-size: 200%; }' })
   const mobileFooter = await footer.boundingBox()
   const mobileLink = await source.boundingBox()
+  const disclaimer = await footer.getByText('Human technical review is required.', { exact: false }).boundingBox()
   expect(mobileLink.x).toBeCloseTo(mobileFooter.x)
+  expect(mobileLink.y).toBeGreaterThanOrEqual(disclaimer.y + disclaimer.height)
+  expect(mobileLink.x + mobileLink.width).toBeLessThanOrEqual(mobile.width)
 })
 
 for (const width of [320, 390]) {
