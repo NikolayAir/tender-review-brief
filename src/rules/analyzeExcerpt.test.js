@@ -36,12 +36,7 @@ describe('analyzeExcerpt', () => {
     expect(brief.reviewerRole).toBe('Technical review support')
     expect(brief.technicalScopes).toEqual(['Manual review required'])
     expect(brief.reviewDomains).toEqual(['Manual review'])
-    expect(brief.evidenceSnippets).toEqual([
-      expect.objectContaining({
-        id: 'no-rule-match',
-        source: 'No matching technical scope',
-      }),
-    ])
+    expect(brief.evidenceSnippets).toEqual([])
   })
 
   it('detects matching technical scopes from lexical rules', () => {
@@ -250,7 +245,7 @@ describe('lexical matching safeguards', () => {
     )
 
     expect(brief.technicalScopes).toEqual(['Manual review required'])
-    expect(brief.evidenceSnippets[0].id).toBe('no-rule-match')
+    expect(brief.evidenceSnippets).toEqual([])
   })
 
   it('matches multi-word phrases across repeated whitespace', () => {

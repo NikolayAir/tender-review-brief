@@ -8,6 +8,18 @@ function EvidenceText({ text }) {
 }
 
 export function EvidenceSnippets({ snippets }) {
+  if (snippets.length === 0) {
+    return (
+      <section className="brief-section" aria-labelledby="evidence-title">
+        <h3 id="evidence-title">No matching source passages</h3>
+        <p className="evidence-note">
+          The current keyword rules found no matches in the excerpt.
+          Review the complete tender documents for relevant requirements.
+        </p>
+      </section>
+    )
+  }
+
   return (
     <section className="brief-section evidence-section" aria-labelledby="evidence-title">
       <h3 id="evidence-title">Supporting source passages</h3>

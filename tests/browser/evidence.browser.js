@@ -26,6 +26,21 @@ test.beforeEach(async ({ page }) => {
   await page.goto('./')
 })
 
+test('shows an empty passage state for an unmatched excerpt, including after reload', async ({ page }) => {
+  const excerpt = 'The contractor shall hold a weekly site progress meeting and circulate the minutes to the project team within two working days. ' +
+    'The minutes shall record each agreed action, the person responsible, and the due date.'
+  await generateBrief(page, excerpt)
+  const panel = page.getByRole('tabpanel', { name: 'Source passages', exact: true })
+  const emptyState = panel.getByRole('heading', { name: 'No matching source passages', exact: true })
+  await expect(emptyState).toBeVisible()
+  await expect(panel.getByRole('article')).toHaveCount(0)
+
+  await page.reload()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(emptyState).toBeVisible()
+  await expect(panel.getByRole('article')).toHaveCount(0)
+})
+
 test('shows wrapped units, internal indentation, and negation on separate lines', async ({ page }) => {
   const excerpt = 'Water pressure must be 1.5\n\tbar.\nDo not exceed this value.'
   await generateBrief(page, excerpt)

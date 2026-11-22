@@ -1,6 +1,6 @@
 # How source passages are selected
 
-When rules match, the brief includes quotations from the pasted excerpt in **Source passages** to help a reviewer check the suggested technical scopes. Locate each passage in the complete tender documents before interpreting a requirement.
+When rules match, the brief includes quotations from the pasted excerpt in **Source passages** to help a reviewer check the suggested technical scopes. Locate each passage in the complete tender documents before interpreting a requirement. If the current rules find no matches, the tab shows **No matching source passages** and prompts review of the complete documents.
 
 ## Match selection
 
@@ -49,6 +49,6 @@ The current excerpt and last generated brief are saved separately when `sessionS
 
 **Current excerpt** means that the brief's source text matches the editor. It does not certify the analysis or detect changes to the application's rules.
 
-Saved briefs without valid recorded source text remain readable, display **Saved brief**, and ask for regeneration. Restored briefs keep their previous wording and quotations until a new brief is generated. Storage failures do not prevent editing or generation, but changes may not survive a reload.
+Saved briefs without valid recorded source text remain readable, display **Saved brief**, and ask for regeneration. Restored briefs keep their previous quotations until a new brief is generated. Older briefs created without a match show the same empty state as new briefs. Storage failures do not prevent editing or generation, but changes may not survive a reload.
 
 See [browser checks](testing-evidence.md) for fixtures covering paragraph context, whitespace, keyboard interaction, and narrow layouts, or [development](development.md) to run the automated regressions.

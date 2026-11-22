@@ -49,5 +49,10 @@ export function parseStoredBrief(serializedBrief) {
     throw new TypeError('Stored review brief has an invalid structure.')
   }
 
+  // Older unmatched briefs stored an explanatory message as a source passage.
+  if (brief.evidenceSnippets.length === 1 && brief.evidenceSnippets[0].id === 'no-rule-match') {
+    return { ...brief, evidenceSnippets: [] }
+  }
+
   return brief
 }

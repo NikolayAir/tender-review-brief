@@ -71,7 +71,7 @@ Matching identifies declared keywords; it does not interpret whether work is inc
 
 Automated tests cover matching, quote preservation, stored-brief validation, storage failures, result status after edits and reloads, keyboard interaction, and narrow layouts. The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
 
-PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Briefs restored from older sessions keep their previous content until a new brief is generated.
+PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Restored briefs retain their original quotations until regeneration.
 
 Human technical review is required. Generated briefs do not constitute legal, regulatory, safety, compliance, or engineering determinations.
 

@@ -95,4 +95,14 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 17. Enable forced colors using a system contrast theme or browser emulation. Focus **Overview**, press Right Arrow to select **Checks**, then press Tab to focus its panel. Only **Checks** should have the selected underline. Press Shift+Tab to return to the tab and check that its focus outline and selected underline are both visible.
 
+18. Generate a brief from this meeting and reporting requirement:
+
+    ```text
+    The contractor shall hold a weekly site progress meeting and circulate the
+    minutes to the project team within two working days. The minutes shall record
+    each agreed action, the person responsible, and the due date.
+    ```
+
+    Open **Source passages**. The tab should show **No matching source passages** with a prompt to review the complete documents. Reload and reopen the tab to check that the empty state is restored.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.
