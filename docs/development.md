@@ -50,7 +50,7 @@ Saved-result checks cover edits, reloads, regeneration, and older briefs. They v
 
 Enlarged-text checks at 320 and 390 pixels verify that the header stays readable and tab labels keep whole words. Separate checks cover the footer link's placement and the visibility of the focused documentation link in a short help dialog.
 
-Appearance checks cover changes to the browser's preferred color scheme, restoring the theme and text size after reload, and applying preferences with `localStorage` blocked. They also verify that the editor, source passages, and help scale. Appearance preferences use `localStorage`. Excerpts and briefs use `sessionStorage`.
+Appearance checks cover changes to the browser's preferred color scheme, restoring the theme and text size after reload, and applying preferences with `localStorage` blocked. They verify that the saved Night palette appears while the app bundle is still loading and that the editor, source passages, and help scale. Appearance preferences use `localStorage`. Excerpts and briefs use `sessionStorage`.
 
 Playwright keeps a trace in `test-results/` when a browser test fails. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 

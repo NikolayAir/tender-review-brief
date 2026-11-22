@@ -1,5 +1,34 @@
 import { expect, test } from '@playwright/test'
 
+test('applies the saved Night palette while the app bundle is loading', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' })
+  await page.goto('./')
+
+  const theme = page.getByRole('combobox', { name: 'Color theme', exact: true })
+  const root = page.locator('html')
+  await theme.selectOption('night')
+  await expect(root).toHaveCSS('color-scheme', 'dark')
+  const nightBackground = await root.evaluate((element) => getComputedStyle(element).backgroundColor)
+
+  let resumeBundle
+  const bundlePaused = new Promise((resolve) => { resumeBundle = resolve })
+  await page.route('**/assets/*.js', async (route) => {
+    await bundlePaused
+    await route.continue()
+  })
+
+  try {
+    await page.reload({ waitUntil: 'commit' })
+    await expect(root).toHaveCSS('background-color', nightBackground)
+    await expect(root).toHaveCSS('color-scheme', 'dark')
+    await expect(theme).toHaveCount(0)
+  } finally {
+    resumeBundle()
+  }
+
+  await expect(theme).toHaveValue('night')
+})
+
 test('follows the system color scheme on load and when it changes', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'dark' })
   await page.goto('./')

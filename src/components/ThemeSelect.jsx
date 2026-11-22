@@ -1,6 +1,7 @@
 import { useLayoutEffect } from 'react'
 import { useAppearancePreference } from '../storage/useAppearancePreference'
 
+// index.html reads the same preference before the app bundle loads.
 const THEME_STORAGE_KEY = 'tender-brief-ui-color-theme'
 
 export function ThemeSelect() {
