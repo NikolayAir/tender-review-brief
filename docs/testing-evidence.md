@@ -105,4 +105,6 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
     Open **Source passages**. The tab should show **No matching source passages** with a prompt to review the complete documents. Reload and reopen the tab to check that the empty state is restored.
 
+    Replace the excerpt with `Fire-safety drawings must be checked.` and check that **Excerpt changed** appears while the empty-state message still refers to the text used for the previous brief. Generate again and check that **Source passages** quotes the fire-safety requirement.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

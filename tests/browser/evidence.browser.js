@@ -26,7 +26,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto('./')
 })
 
-test('shows an empty passage state for an unmatched excerpt, including after reload', async ({ page }) => {
+test('keeps the no-match message tied to the brief after reload and edits', async ({ page }) => {
   const excerpt = 'The contractor shall hold a weekly site progress meeting and circulate the minutes to the project team within two working days. ' +
     'The minutes shall record each agreed action, the person responsible, and the due date.'
   await generateBrief(page, excerpt)
@@ -39,6 +39,16 @@ test('shows an empty passage state for an unmatched excerpt, including after rel
   await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
   await expect(emptyState).toBeVisible()
   await expect(panel.getByRole('article')).toHaveCount(0)
+
+  const updatedExcerpt = 'Fire-safety drawings must be checked.'
+  await page.getByLabel('Public tender excerpt', { exact: true }).fill(updatedExcerpt)
+  const result = page.getByRole('region', { name: 'Review brief', exact: true })
+  await expect(result.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await expect(panel.getByText('No keywords matched the excerpt used to generate this brief.')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await expect(emptyState).toBeHidden()
+  await expect(panel.locator('.evidence-text')).toHaveText(updatedExcerpt)
 })
 
 test('shows wrapped units, internal indentation, and negation on separate lines', async ({ page }) => {

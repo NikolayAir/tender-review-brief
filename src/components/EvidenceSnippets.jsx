@@ -13,7 +13,7 @@ export function EvidenceSnippets({ snippets }) {
       <section className="brief-section" aria-labelledby="evidence-title">
         <h3 id="evidence-title">No matching source passages</h3>
         <p className="evidence-note">
-          The current keyword rules found no matches in the excerpt.
+          No keywords matched the excerpt used to generate this brief.
           Review the complete tender documents for relevant requirements.
         </p>
       </section>
