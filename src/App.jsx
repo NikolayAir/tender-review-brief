@@ -88,8 +88,8 @@ export default function App() {
     <>
       <a className="skip-link" href="#review-brief-title">Skip to review brief</a>
       <BriefHeader />
-      <main className="app-shell">
-        <div className="review-workspace">
+      <div className="app-shell">
+        <main className="review-workspace">
           <ExcerptAnalyzer
             excerpt={excerpt}
             confirmSampleRestore={excerpt !== sampleExcerpt || activeBrief !== sampleBrief}
@@ -103,9 +103,9 @@ export default function App() {
             headingRef={resultHeadingRef}
             panelRef={resultPanelRef}
           />
-        </div>
+        </main>
         <DisclaimerFooter />
-      </main>
+      </div>
     </>
   )
 }

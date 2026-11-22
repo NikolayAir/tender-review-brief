@@ -25,19 +25,49 @@ test('keeps the sample excerpt and review overview together in the first desktop
   expect(height).toBeLessThanOrEqual(900)
 })
 
+test('places the source code link in the page footer on desktop and mobile', async ({ page }) => {
+  const footer = page.getByRole('contentinfo')
+  const source = footer.getByRole('link', { name: 'Source code (opens in a new tab)', exact: true })
+  await expect(source).toHaveAttribute('href', 'https://github.com/NikolayAir/tender-review-brief')
+  await expect(source).toHaveAttribute('target', '_blank')
+
+  const desktop = { width: 1440, height: 1000 }
+  await page.setViewportSize(desktop)
+  const desktopFooter = await footer.boundingBox()
+  const desktopLink = await source.boundingBox()
+  expect(desktopLink.x + desktopLink.width).toBeCloseTo(desktopFooter.x + desktopFooter.width)
+  expect(desktopFooter.y + desktopFooter.height).toBeGreaterThanOrEqual(desktop.height - 32)
+  expect(desktopFooter.y + desktopFooter.height).toBeLessThanOrEqual(desktop.height)
+
+  const mobile = { width: 320, height: 568 }
+  await page.setViewportSize(mobile)
+  await page.addStyleTag({ content: 'html { font-size: 200%; }' })
+  const mobileFooter = await footer.boundingBox()
+  const mobileLink = await source.boundingBox()
+  const disclaimer = await footer.getByText('Human technical review is required.', { exact: false }).boundingBox()
+  expect(mobileLink.x).toBeCloseTo(mobileFooter.x)
+  expect(mobileLink.y).toBeGreaterThanOrEqual(disclaimer.y + disclaimer.height)
+  expect(mobileLink.x + mobileLink.width).toBeLessThanOrEqual(mobile.width)
+})
+
 for (const width of [320, 390]) {
   test(`keeps the application header readable with enlarged text at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 })
     await page.addStyleTag({ content: 'html { font-size: 200%; }' })
 
     const overlaps = await page.locator('.application-identity').evaluate((identity) => {
-      const help = document.querySelector('.help-trigger').getBoundingClientRect()
+      const controls = Array.from(
+        document.querySelectorAll('.application-controls select, .help-trigger'),
+        (element) => element.getBoundingClientRect(),
+      )
       return [...identity.querySelectorAll('h1, p')].flatMap((element) => {
         // Text can overflow a flex item even when the item's own box does not overlap.
         const range = document.createRange()
         range.selectNodeContents(element)
         return [...range.getClientRects()]
-          .filter((rect) => rect.left < help.right && rect.right > help.left && rect.top < help.bottom && rect.bottom > help.top)
+          .filter((rect) => controls.some((control) => (
+            rect.left < control.right && rect.right > control.left && rect.top < control.bottom && rect.bottom > control.top
+          )))
           .map(() => element.textContent)
       })
     })
@@ -48,6 +78,8 @@ for (const width of [320, 390]) {
       viewport: document.documentElement.clientWidth,
     }))
     expect(widths.page).toBeLessThanOrEqual(widths.viewport)
+    await expect(page.getByRole('combobox', { name: 'Color theme', exact: true })).toBeVisible()
+    await expect(page.getByRole('combobox', { name: 'Text size', exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'How to use', exact: true }).click()
     await expect(page.getByRole('dialog', { name: 'How to use', exact: true })).toBeVisible()
   })
@@ -79,7 +111,7 @@ test('brings a regenerated brief back into view from a long desktop passage', as
   await page.setViewportSize({ width: 1440, height: 900 })
   await openLongPassage(page)
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
-  await page.mouse.wheel(0, 1200)
+  await page.evaluate(() => window.scrollTo(0, 1200))
 
   const heading = page.getByRole('heading', { name: 'Generated review brief', exact: true })
   await expect.poll(async () => (await heading.boundingBox()).y).toBeLessThan(0)
@@ -254,7 +286,7 @@ test('keeps the selected tab visible when focus moves to its panel in forced col
 test('moves to a generated brief on mobile and provides a way back to editing', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
   const input = page.getByLabel('Public tender excerpt', { exact: true })
-  await expect(input).toHaveCSS('font-size', '16px')
+  await expect(input).toHaveCSS('font-size', '18px')
   await input.fill('Water pressure must remain at 1.5 bar.')
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
 
@@ -292,8 +324,9 @@ test('keeps the previous brief and the full input when the excerpt is blank or t
   const input = page.getByLabel('Public tender excerpt', { exact: true })
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
   await input.fill(' \n\t')
-  await generate.click()
+  await generate.press('Enter')
   await expect(page.getByRole('alert')).toContainText('Please paste')
+  await expect(input).toHaveAttribute('aria-invalid', 'true')
   await expect(generate).toBeFocused()
 
   await input.fill('x'.repeat(50001))

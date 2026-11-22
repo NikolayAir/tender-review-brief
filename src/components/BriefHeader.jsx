@@ -1,4 +1,6 @@
 import { ReviewHelp } from './ReviewHelp'
+import { TextSizeSelect } from './TextSizeSelect'
+import { ThemeSelect } from './ThemeSelect'
 
 export function BriefHeader() {
   return (
@@ -14,7 +16,11 @@ export function BriefHeader() {
             <p>Technical review support</p>
           </div>
         </div>
-        <ReviewHelp />
+        <div className="application-controls">
+          <ThemeSelect />
+          <TextSizeSelect />
+          <ReviewHelp />
+        </div>
       </div>
     </header>
   )
