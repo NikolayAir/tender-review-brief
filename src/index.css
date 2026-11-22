@@ -90,4 +90,13 @@
 html {
   min-width: 320px;
   background: var(--canvas);
+  font-size: var(--text-scale, 112.5%);
+}
+
+[data-text-size="small"] {
+  --text-scale: 100%;
+}
+
+[data-text-size="large"] {
+  --text-scale: 125%;
 }

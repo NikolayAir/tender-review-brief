@@ -124,7 +124,7 @@ h4 {
   margin-inline-start: auto;
 }
 
-.theme-control {
+.appearance-control {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -132,7 +132,7 @@ h4 {
   color: var(--accent-strong);
 }
 
-.theme-control select {
+.appearance-control select {
   /* The native mobile appearance in WebKit can override the tap target size. */
   appearance: none;
   min-height: 44px;
@@ -148,7 +148,7 @@ h4 {
   cursor: pointer;
 }
 
-.theme-control::after {
+.appearance-control::after {
   position: absolute;
   inset-inline-end: 12px;
   width: 7px;
@@ -160,7 +160,7 @@ h4 {
   content: '';
 }
 
-.theme-icon {
+.appearance-icon {
   position: absolute;
   inset-inline-start: 9px;
   pointer-events: none;
@@ -182,7 +182,7 @@ h4 {
   font-weight: 600;
 }
 
-.help-icon, .theme-icon, .source-code-link svg {
+.help-icon, .appearance-icon, .source-code-link svg {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
@@ -197,7 +197,7 @@ h4 {
   stroke: none;
 }
 
-.theme-control select:hover, .help-trigger:hover, .help-close:hover {
+.appearance-control select:hover, .help-trigger:hover, .help-close:hover {
   background: var(--accent-soft);
 }
 
@@ -834,8 +834,15 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   .application-bar p {
     font-size: 0.6875rem;
   }
-  .theme-control select {
+  .appearance-control select {
+    padding-inline: 25px 20px;
     font-size: 1rem;
+  }
+  .appearance-icon {
+    inset-inline-start: 6px;
+  }
+  .appearance-control::after {
+    inset-inline-end: 8px;
   }
   .help-trigger {
     font-size: 0.75rem;
