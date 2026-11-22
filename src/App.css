@@ -258,6 +258,12 @@ h4 {
       line-height: 1.2;
     }
 
+    @media (hover: hover) and (pointer: fine) and (not (any-pointer: coarse)) {
+      .appearance-control option {
+        min-block-size: 26px;
+      }
+    }
+
     .appearance-control option:is(:focus-visible, :hover) {
       background: var(--accent-soft);
       color: var(--accent-strong);

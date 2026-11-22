@@ -43,8 +43,13 @@ test('themes both appearance menus and preserves keyboard selection', async ({ p
       const picker = await select.evaluate((element) => ({
         background: getComputedStyle(element, '::picker(select)').backgroundColor,
         arrow: getComputedStyle(element, '::picker-icon').display,
+        optionHeights: Array.from(element.options, (option) => option.getBoundingClientRect().height),
       }))
-      expect(picker).toEqual({ background: surface, arrow: 'none' })
+      expect(picker).toMatchObject({ background: surface, arrow: 'none' })
+      for (const height of picker.optionHeights) {
+        expect(height).toBeGreaterThanOrEqual(24)
+        expect(height).toBeLessThanOrEqual(28)
+      }
       await page.keyboard.press(value === 'night' ? 'ArrowUp' : 'ArrowDown')
       await page.keyboard.press('Escape')
       await expect.poll(() => select.evaluate((element) => element.matches(':open'))).toBe(false)
