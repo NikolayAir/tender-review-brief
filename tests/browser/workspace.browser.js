@@ -235,10 +235,16 @@ test('keeps the selected tab visible when focus moves to its panel in forced col
       width: marker.borderBottomWidth,
       color: marker.borderBottomColor,
       background: getComputedStyle(tab).backgroundColor,
+      bottom: tab.getBoundingClientRect().bottom - Number.parseFloat(marker.bottom),
     }
   })
   expect(indicator.width).toBe('2px')
   expect(indicator.color).not.toBe(indicator.background)
+  const panelOutlineTop = await panel.evaluate((element) => {
+    const style = getComputedStyle(element)
+    return element.getBoundingClientRect().top - Number.parseFloat(style.outlineOffset) - Number.parseFloat(style.outlineWidth)
+  })
+  expect(indicator.bottom).toBeLessThan(panelOutlineTop)
 
   await page.keyboard.press('Shift+Tab')
   await expect(checks).toBeFocused()

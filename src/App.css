@@ -548,6 +548,11 @@ body:has(.review-dialog[open]) {
     border-bottom: 2px solid Highlight;
     content: '';
   }
+
+  .review-panel .review-tab-panel:focus-visible {
+    /* Keep the panel's focus outline clear of the tab row. */
+    outline-offset: -3px;
+  }
 }
 
 .review-tab-panel {
