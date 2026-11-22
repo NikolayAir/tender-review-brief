@@ -87,6 +87,9 @@ export function ReviewHelp() {
               target="_blank"
               rel="noreferrer"
             >
+              <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                <path d="M5 2.75h6l4 4v10.5H5zM11 2.75v4h4M7.5 10h5M7.5 13h5" />
+              </svg>
               Full documentation on GitHub <span aria-hidden="true">↗</span>
               <span className="visually-hidden"> (opens in a new tab)</span>
             </a>

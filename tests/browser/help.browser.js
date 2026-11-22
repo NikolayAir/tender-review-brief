@@ -24,7 +24,10 @@ test('opens keyboard help without losing the excerpt, result tab, or changed-inp
   const close = dialog.getByRole('button', { name: 'Close help', exact: true })
   await expect(close).toBeFocused()
   await close.press('Tab')
-  const documentation = dialog.getByRole('link', { name: 'Full documentation on GitHub', exact: false })
+  const documentation = dialog.getByRole('link', {
+    name: 'Full documentation on GitHub (opens in a new tab)',
+    exact: true,
+  })
   await expect(documentation).toBeFocused()
   await expect(documentation).toHaveAttribute('href', 'https://github.com/NikolayAir/tender-review-brief#review-a-tender-excerpt')
   await expect(documentation).toHaveAttribute('target', '_blank')
