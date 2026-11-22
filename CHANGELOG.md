@@ -37,6 +37,8 @@ the excerpt editor beside the generated brief on wider screens.
   on narrow screens, without overlapping the help control or splitting words.
 - Start the help guide at its first step when reopened. Keep text-selection and
   cross-boundary pointer gestures from dismissing it accidentally.
+- Keep Tab navigation within the help guide and return focus to **How to use**
+  when the guide closes, including in WebKit.
 - Bring an off-screen result header back into view after desktop regeneration.
   Keep the editor's controls reachable when textarea resizing or input errors
   make the panel too tall to remain pinned.

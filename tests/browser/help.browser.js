@@ -32,7 +32,9 @@ test('opens keyboard help without losing the excerpt, result tab, or changed-inp
   await expect(close).toBeFocused()
   await close.press('Shift+Tab')
   await expect(documentation).toBeFocused()
-  await documentation.press('Escape')
+  await documentation.press('Shift+Tab')
+  await expect(close).toBeFocused()
+  await close.press('Escape')
 
   await expect(dialog).toBeHidden()
   await expect(trigger).toBeFocused()
@@ -42,9 +44,10 @@ test('opens keyboard help without losing the excerpt, result tab, or changed-inp
   await expect(page.locator('.evidence-text')).toHaveText('Water drawings are required.')
 })
 
-test('closes help through its close button and backdrop, and can reopen it', async ({ page }) => {
+test('returns pointer-opened help focus to its trigger after closing', async ({ page }) => {
   const trigger = page.getByRole('button', { name: 'How to use', exact: true })
   const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+  await page.getByRole('textbox', { name: 'Public tender excerpt', exact: true }).focus()
   await trigger.click()
   await dialog.getByRole('button', { name: 'Close help', exact: true }).click()
   await expect(dialog).toBeHidden()

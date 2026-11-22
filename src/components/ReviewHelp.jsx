@@ -1,6 +1,7 @@
 import { useRef } from 'react'
 
 export function ReviewHelp() {
+  const triggerRef = useRef(null)
   const dialogRef = useRef(null)
   const titleRef = useRef(null)
   const closeRef = useRef(null)
@@ -29,19 +30,17 @@ export function ReviewHelp() {
   function handleKeyDown(event) {
     if (event.key !== 'Tab') return
 
-    // Keep Tab at the dialog's boundaries instead of moving into browser chrome.
-    if (!event.shiftKey && event.target === documentationRef.current) {
-      event.preventDefault()
-      closeRef.current.focus()
-    } else if (event.shiftKey && (event.target === closeRef.current || event.target === titleRef.current)) {
-      event.preventDefault()
-      documentationRef.current.focus()
-    }
+    // WebKit can skip both controls during native Tab navigation.
+    event.preventDefault()
+    const focusDocumentation = event.target === closeRef.current ||
+      (event.target === titleRef.current && event.shiftKey)
+    const next = focusDocumentation ? documentationRef.current : closeRef.current
+    next.focus()
   }
 
   return (
     <>
-      <button type="button" className="help-trigger" aria-haspopup="dialog" onClick={openHelp}>
+      <button ref={triggerRef} type="button" className="help-trigger" aria-haspopup="dialog" onClick={openHelp}>
         <svg className="help-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <circle cx="10" cy="10" r="8" />
           <path d="M7.75 7.5a2.25 2.25 0 0 1 4.5 0c0 1.5-2.25 1.5-2.25 3" />
@@ -53,6 +52,7 @@ export function ReviewHelp() {
         ref={dialogRef}
         className="review-dialog help-dialog"
         aria-labelledby="review-help-title"
+        onClose={() => triggerRef.current.focus()}
         onKeyDown={handleKeyDown}
         onPointerDown={(event) => {
           pointerStartedOnBackdrop.current = isBackdropEvent(event)

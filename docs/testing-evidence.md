@@ -87,7 +87,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
     Choose **Generate review brief** to show the input error. When the editor becomes taller than the available viewport, it must scroll with the page. Scroll to **Restore sample**. The whole button must be visible and usable, and confirming must restore both the sample text and brief.
 
-14. Choose **How to use**. A four-step guide must open with focus on its title. Tab and Shift+Tab must cycle through its close button and documentation link. Escape, the close button, and clicking the backdrop must each close the guide and return focus to **How to use**. The current excerpt, result, and selected result tab must stay unchanged. Repeat at 320 × 568 pixels: the guide must fit the viewport, its content must scroll when needed, and its close button must remain available.
+14. Focus the excerpt editor and click **How to use**. A four-step guide must open with focus on its title. Tab and Shift+Tab must cycle through its close button and documentation link. Escape, the close button, and clicking the backdrop must each close the guide and return focus to **How to use**. The current excerpt, result, and selected result tab must stay unchanged. Repeat at 320 × 568 pixels and check that the guide fits the viewport, its content scrolls when needed, and its close button remains available.
 
 15. At 640 × 360 pixels, open the guide, scroll to the documentation link, close it, and reopen it. The first step must appear below the header again. Select text inside the guide and release the pointer outside it: the guide must remain open. Repeat with a press on the backdrop and release inside the guide. A normal click on the backdrop must still dismiss it.
 
