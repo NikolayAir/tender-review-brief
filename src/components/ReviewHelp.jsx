@@ -32,10 +32,19 @@ export function ReviewHelp() {
 
     // WebKit can skip both controls during native Tab navigation.
     event.preventDefault()
-    const focusDocumentation = event.target === closeRef.current ||
-      (event.target === titleRef.current && event.shiftKey)
-    const next = focusDocumentation ? documentationRef.current : closeRef.current
-    next.focus()
+    const body = bodyRef.current
+    const controls = [closeRef.current, documentationRef.current]
+    const instructionsScroll = body.scrollHeight > body.clientHeight
+
+    // Keyboard scrolling starts when the overflow region itself receives focus.
+    if (instructionsScroll || event.target === body) {
+      controls.splice(1, 0, body)
+    }
+
+    const current = controls.indexOf(event.target)
+    const previous = current > 0 ? current - 1 : controls.length - 1
+    const next = (current + 1) % controls.length
+    controls[event.shiftKey ? previous : next].focus()
   }
 
   return (
@@ -78,7 +87,7 @@ export function ReviewHelp() {
             <span aria-hidden="true">×</span>
           </button>
         </header>
-        <div ref={bodyRef} className="help-dialog-body">
+        <div ref={bodyRef} className="help-dialog-body" role="region" aria-label="Help instructions" tabIndex={-1}>
           <ol className="help-steps">
             <li>Paste a public, non-confidential excerpt, or choose <strong>Restore sample</strong>.</li>
             <li>Choose <strong>Generate review brief</strong>. The rules suggest technical scopes and review points.</li>

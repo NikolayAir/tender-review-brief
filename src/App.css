@@ -275,10 +275,16 @@ body:has(.review-dialog[open]) {
 }
 
 .help-dialog-body {
-  padding: 20px;
+  /* Keep the focused link inside the scroll area at its lower limit. */
+  padding: 20px 20px 8px;
   font-size: 0.875rem;
   overflow-y: auto;
   scroll-padding-block: 6px;
+}
+
+.help-dialog-body:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: -3px;
 }
 
 .help-steps {

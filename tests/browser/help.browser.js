@@ -91,14 +91,19 @@ test('fits help within a narrow screen and keeps its close control available whi
   await expect(dialog).toBeHidden()
 })
 
-test('keeps the focused documentation link below the header at 200% text size', async ({ page }) => {
+test('scrolls the help instructions by keyboard and keeps the focused link visible at 200%', async ({ page }) => {
   await page.setViewportSize({ width: 320, height: 320 })
   await page.addStyleTag({ content: 'html { font-size: 200%; }' })
   await page.getByRole('button', { name: 'How to use', exact: true }).press('Enter')
 
   const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
   const docs = dialog.getByRole('link', { name: 'Full documentation on GitHub (opens in a new tab)', exact: true })
+  const instructions = dialog.getByRole('region', { name: 'Help instructions', exact: true })
   await page.keyboard.press('Tab')
+  await page.keyboard.press('Tab')
+  await expect(instructions).toBeFocused()
+  await page.keyboard.press('PageDown')
+  await expect.poll(() => instructions.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
   await page.keyboard.press('Tab')
   await expect(docs).toBeFocused()
 
@@ -107,6 +112,11 @@ test('keeps the focused documentation link below the header at 200% text size', 
   const linkBounds = await docs.boundingBox()
   expect(linkBounds.y).toBeGreaterThanOrEqual(headerBounds.y + headerBounds.height)
   expect(linkBounds.y + linkBounds.height).toBeLessThanOrEqual(dialogBounds.y + dialogBounds.height)
+
+  await page.keyboard.press('Shift+Tab')
+  await expect(instructions).toBeFocused()
+  await page.keyboard.press('Shift+Tab')
+  await expect(dialog.getByRole('button', { name: 'Close help', exact: true })).toBeFocused()
 })
 
 test('reopens a scrolled help guide at its first step', async ({ page }) => {
