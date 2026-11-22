@@ -43,7 +43,7 @@ test('keeps explicit themes across reloads and follows the system again when sel
   await expect(root).toHaveCSS('color-scheme', 'dark')
 })
 
-test('changes theme with storage blocked and preserves the current review', async ({ page }) => {
+test('applies display preferences with storage blocked and preserves the review', async ({ page }) => {
   await page.addInitScript(() => {
     Object.defineProperty(window, 'localStorage', {
       get() { throw new DOMException('Access denied', 'SecurityError') },
@@ -53,6 +53,7 @@ test('changes theme with storage blocked and preserves the current review', asyn
   await page.goto('./')
 
   const theme = page.getByRole('combobox', { name: 'Color theme', exact: true })
+  const size = page.getByRole('combobox', { name: 'Text size', exact: true })
   const input = page.getByRole('textbox', { name: 'Public tender excerpt', exact: true })
   const brief = page.getByRole('region', { name: 'Review brief', exact: true })
   const passages = brief.getByRole('tab', { name: 'Source passages', exact: true })
@@ -63,7 +64,9 @@ test('changes theme with storage blocked and preserves the current review', asyn
   await input.fill('Fire-safety drawings must be checked.')
 
   await theme.selectOption('night')
+  await size.selectOption('large')
   await expect(page.locator('html')).toHaveCSS('color-scheme', 'dark')
+  await expect(page.locator('html')).toHaveCSS('font-size', '20px')
   await expect(input).toHaveValue('Fire-safety drawings must be checked.')
   await expect(passages).toHaveAttribute('aria-selected', 'true')
   await expect(brief.getByText('Excerpt changed', { exact: true })).toBeVisible()
@@ -71,6 +74,7 @@ test('changes theme with storage blocked and preserves the current review', asyn
 
   await page.reload()
   await expect(theme).toHaveValue('system')
+  await expect(size).toHaveValue('medium')
   await expect(page.locator('html')).toHaveCSS('color-scheme', 'light')
 })
 
