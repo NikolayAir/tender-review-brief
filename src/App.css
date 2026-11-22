@@ -15,7 +15,7 @@ body {
   line-height: 1.6;
 }
 
-button, textarea {
+button, select, textarea {
   font: inherit;
 }
 
@@ -80,8 +80,8 @@ h4 {
 
 .application-identity {
   display: flex;
-  /* Give the app title and subtitle enough room to wrap at word boundaries. */
-  flex: 1 1 min-content;
+  /* Wrap the controls onto a new row before squeezing the title. */
+  flex: 1 1 max-content;
   align-items: center;
   gap: 12px;
   min-width: 0;
@@ -114,6 +114,58 @@ h4 {
   font-size: 0.75rem;
 }
 
+.application-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  margin-inline-start: auto;
+}
+
+.theme-control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  color: var(--accent-strong);
+}
+
+.theme-control select {
+  /* The native mobile appearance in WebKit can override the tap target size. */
+  appearance: none;
+  min-height: 44px;
+  max-width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 8px;
+  padding-inline: 30px 26px;
+  color: inherit;
+  background-color: var(--surface);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.theme-control::after {
+  position: absolute;
+  inset-inline-end: 12px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  pointer-events: none;
+  content: '';
+}
+
+.theme-icon {
+  position: absolute;
+  inset-inline-start: 9px;
+  pointer-events: none;
+}
+
 .help-trigger {
   display: inline-flex;
   flex-shrink: 0;
@@ -121,7 +173,6 @@ h4 {
   justify-content: center;
   gap: 6px;
   min-height: 44px;
-  margin-inline-start: auto;
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: 8px 10px;
@@ -131,7 +182,7 @@ h4 {
   font-weight: 600;
 }
 
-.help-icon, .source-code-link svg {
+.help-icon, .theme-icon, .source-code-link svg {
   flex-shrink: 0;
   width: 16px;
   height: 16px;
@@ -146,7 +197,7 @@ h4 {
   stroke: none;
 }
 
-.help-trigger:hover, .help-close:hover {
+.theme-control select:hover, .help-trigger:hover, .help-close:hover {
   background: var(--accent-soft);
 }
 
@@ -169,6 +220,10 @@ body:has(.review-dialog[open]) {
 
 .review-dialog::backdrop {
   background: #102d46a6;
+}
+
+:root[data-theme="night"] .review-dialog::backdrop {
+  background: #050b14bd;
 }
 
 .help-dialog {
@@ -696,7 +751,7 @@ body:has(.review-dialog[open]) {
   font-weight: 600;
 }
 
-button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible, #review-brief-title:focus-visible, #review-help-title:focus-visible {
+button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible, #review-brief-title:focus-visible, #review-help-title:focus-visible {
   outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
@@ -778,6 +833,9 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
   }
   .application-bar p {
     font-size: 0.6875rem;
+  }
+  .theme-control select {
+    font-size: 1rem;
   }
   .help-trigger {
     font-size: 0.75rem;

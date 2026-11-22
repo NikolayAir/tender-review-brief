@@ -1,4 +1,6 @@
 :root {
+  color-scheme: light;
+
   --ink: #263d50;
   --heading: #15384f;
   --muted: #5c7183;
@@ -39,6 +41,46 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+:root[data-theme="night"] {
+  color-scheme: dark;
+
+  --ink: #dce7f1;
+  --heading: #eef6ff;
+  --muted: #a8bacb;
+  --canvas: #101923;
+  --surface: #182431;
+  --soft: #1e2d3d;
+  --line: #384b5b;
+  --accent: #80b9e3;
+  --accent-strong: #a7d3f6;
+  --accent-soft: #223c51;
+  --on-accent: #102432;
+  --mark-line: #40617a;
+  --input-surface: #13202d;
+  --input-line: #6e8ca3;
+  --secondary-line: #637b8f;
+  --error-surface: #362526;
+  --error-ink: #ffd4cc;
+  --error-line: #ec998f;
+  --current-surface: #18392d;
+  --current-ink: #a9dec1;
+  --stale-surface: #3c2b17;
+  --stale-ink: #fbd493;
+  --saved-surface: #29394a;
+  --saved-ink: #c1d4e5;
+  --stale-notice-surface: #3a2d1d;
+  --stale-notice-ink: #f3d298;
+  --stale-notice-line: #d9a050;
+  --saved-notice-line: #829eb5;
+  --tag-surface: #233b50;
+  --tag-ink: #c5e0f3;
+  --tag-line: #3c5b71;
+  --list-marker: #839eb3;
+  --quote-line: #6f9abf;
+  --panel-shadow: #03070c33;
+  --dialog-shadow: #02080d99;
 }
 
 *,
