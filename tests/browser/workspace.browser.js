@@ -56,13 +56,18 @@ for (const width of [320, 390]) {
     await page.addStyleTag({ content: 'html { font-size: 200%; }' })
 
     const overlaps = await page.locator('.application-identity').evaluate((identity) => {
-      const help = document.querySelector('.help-trigger').getBoundingClientRect()
+      const controls = Array.from(
+        document.querySelectorAll('.application-controls select, .help-trigger'),
+        (element) => element.getBoundingClientRect(),
+      )
       return [...identity.querySelectorAll('h1, p')].flatMap((element) => {
         // Text can overflow a flex item even when the item's own box does not overlap.
         const range = document.createRange()
         range.selectNodeContents(element)
         return [...range.getClientRects()]
-          .filter((rect) => rect.left < help.right && rect.right > help.left && rect.top < help.bottom && rect.bottom > help.top)
+          .filter((rect) => controls.some((control) => (
+            rect.left < control.right && rect.right > control.left && rect.top < control.bottom && rect.bottom > control.top
+          )))
           .map(() => element.textContent)
       })
     })
@@ -73,6 +78,7 @@ for (const width of [320, 390]) {
       viewport: document.documentElement.clientWidth,
     }))
     expect(widths.page).toBeLessThanOrEqual(widths.viewport)
+    await expect(page.getByRole('combobox', { name: 'Color theme', exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'How to use', exact: true }).click()
     await expect(page.getByRole('dialog', { name: 'How to use', exact: true })).toBeVisible()
   })
