@@ -39,22 +39,20 @@
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
 :root[data-theme="night"] {
   color-scheme: dark;
 
-  --ink: #dce7f1;
-  --heading: #eef6ff;
+  --ink: #c8d4de;
+  --heading: #dfe8ef;
   --muted: #a8bacb;
   --canvas: #101923;
   --surface: #182431;
   --soft: #1e2d3d;
   --line: #384b5b;
   --accent: #80b9e3;
-  --accent-strong: #a7d3f6;
+  --accent-strong: #a1c8e6;
   --accent-soft: #223c51;
   --on-accent: #102432;
   --mark-line: #40617a;
