@@ -7,7 +7,6 @@ the excerpt editor beside the generated brief on wider screens.
 
 ### Changed
 
-- Display the package version beside the application title.
 - Link to the GitHub repository from the footer.
 - Open a short How to use guide inside the application, with keyboard-accessible
   modal controls and a link to the full documentation on GitHub.

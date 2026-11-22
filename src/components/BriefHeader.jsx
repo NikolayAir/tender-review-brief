@@ -1,4 +1,3 @@
-import { version } from '../../package.json'
 import { ReviewHelp } from './ReviewHelp'
 
 export function BriefHeader() {
@@ -11,10 +10,7 @@ export function BriefHeader() {
             <path d="M14 3v5h4M9 12h6M9 16h4" />
           </svg>
           <div>
-            <div className="application-title">
-              <h1>Tender Review Brief</h1>
-              <small className="application-version">v{version}</small>
-            </div>
+            <h1>Tender Review Brief</h1>
             <p>Technical review support</p>
           </div>
         </div>
