@@ -91,37 +91,55 @@ test('fits help within a narrow screen and keeps its close control available whi
   await expect(dialog).toBeHidden()
 })
 
-test('scrolls the help instructions by keyboard and keeps the focused link visible at double text size', async ({ page }) => {
-  await page.setViewportSize({ width: 320, height: 320 })
-  await page.evaluate(() => {
-    const root = document.documentElement
-    const initialFontSize = Number.parseFloat(getComputedStyle(root).fontSize)
-    root.style.fontSize = `${initialFontSize * 2}px`
+const enlargedHelpCases = [
+  { size: 'medium', height: 320 },
+  { size: 'large', height: 320 },
+  { size: 'large', height: 320, scrollbarWidth: 15 },
+  { size: 'large', height: 401 },
+]
+
+for (const { size, height, scrollbarWidth = 0 } of enlargedHelpCases) {
+  const scrollbarLabel = scrollbarWidth ? ` with ${scrollbarWidth} px reserved for the scrollbar` : ''
+  test(`scrolls help by keyboard and keeps the focused link visible at doubled ${size} text at 320 × ${height} px${scrollbarLabel}`, async ({ page }) => {
+    await page.setViewportSize({ width: 320, height })
+    await page.getByRole('combobox', { name: 'Text size', exact: true }).selectOption(size)
+    await page.evaluate(() => {
+      const root = document.documentElement
+      const initialFontSize = Number.parseFloat(getComputedStyle(root).fontSize)
+      root.style.fontSize = `${initialFontSize * 2}px`
+    })
+    await page.getByRole('button', { name: 'How to use', exact: true }).press('Enter')
+
+    const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
+    const docs = dialog.getByRole('link', { name: 'Full documentation on GitHub (opens in a new tab)', exact: true })
+    const instructions = dialog.getByRole('region', { name: 'Help instructions', exact: true })
+    if (scrollbarWidth) {
+      await instructions.evaluate((element, width) => {
+        // Account for any space already taken up by the native scrollbar.
+        const nativeWidth = element.offsetWidth - element.clientWidth
+        const remainingWidth = Math.max(width - nativeWidth, 0)
+        element.style.borderInlineEnd = `${remainingWidth}px solid transparent`
+      }, scrollbarWidth)
+    }
+    await page.keyboard.press('Tab')
+    await page.keyboard.press('Tab')
+    await expect(instructions).toBeFocused()
+    await page.keyboard.press('PageDown')
+    await expect.poll(() => instructions.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
+    await page.keyboard.press('Tab')
+    await expect(docs).toBeFocused()
+
+    const instructionsBounds = await instructions.boundingBox()
+    const linkBounds = await docs.boundingBox()
+    expect(linkBounds.y).toBeGreaterThanOrEqual(instructionsBounds.y)
+    expect(linkBounds.y + linkBounds.height).toBeLessThanOrEqual(instructionsBounds.y + instructionsBounds.height)
+
+    await page.keyboard.press('Shift+Tab')
+    await expect(instructions).toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(dialog.getByRole('button', { name: 'Close help', exact: true })).toBeFocused()
   })
-  await page.getByRole('button', { name: 'How to use', exact: true }).press('Enter')
-
-  const dialog = page.getByRole('dialog', { name: 'How to use', exact: true })
-  const docs = dialog.getByRole('link', { name: 'Full documentation on GitHub (opens in a new tab)', exact: true })
-  const instructions = dialog.getByRole('region', { name: 'Help instructions', exact: true })
-  await page.keyboard.press('Tab')
-  await page.keyboard.press('Tab')
-  await expect(instructions).toBeFocused()
-  await page.keyboard.press('PageDown')
-  await expect.poll(() => instructions.evaluate((element) => element.scrollTop)).toBeGreaterThan(0)
-  await page.keyboard.press('Tab')
-  await expect(docs).toBeFocused()
-
-  const headerBounds = await dialog.locator('header').boundingBox()
-  const dialogBounds = await dialog.boundingBox()
-  const linkBounds = await docs.boundingBox()
-  expect(linkBounds.y).toBeGreaterThanOrEqual(headerBounds.y + headerBounds.height)
-  expect(linkBounds.y + linkBounds.height).toBeLessThanOrEqual(dialogBounds.y + dialogBounds.height)
-
-  await page.keyboard.press('Shift+Tab')
-  await expect(instructions).toBeFocused()
-  await page.keyboard.press('Shift+Tab')
-  await expect(dialog.getByRole('button', { name: 'Close help', exact: true })).toBeFocused()
-})
+}
 
 test('reopens a scrolled help guide at its first step', async ({ page }) => {
   await page.setViewportSize({ width: 640, height: 360 })

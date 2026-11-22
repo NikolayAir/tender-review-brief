@@ -318,6 +318,7 @@ body:has(.review-dialog[open]) {
   gap: 6px;
   min-height: 44px;
   margin-top: 10px;
+  line-height: 1.3;
 }
 
 /* Give enlarged help text more room to wrap in short windows. */
@@ -327,6 +328,9 @@ body:has(.review-dialog[open]) {
   }
   .help-dialog-header {
     padding-block: 8px;
+  }
+  .help-dialog-body {
+    padding-inline: 8px;
   }
   .help-documentation {
     display: inline-block;

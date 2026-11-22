@@ -94,12 +94,18 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 16. Double the current text size in the DevTools Console, then check widths of 320 and 390 pixels.
 
     ```js
-    const root = document.documentElement
-    const initialFontSize = Number.parseFloat(getComputedStyle(root).fontSize)
-    root.style.fontSize = `${initialFontSize * 2}px`
+    {
+      const root = document.documentElement
+      const initialFontSize = Number.parseFloat(getComputedStyle(root).fontSize)
+      root.style.fontSize = `${initialFontSize * 2}px`
+    }
     ```
 
-    The application title and subtitle must remain readable without overlapping the theme selector or **How to use**. The page must fit without horizontal scrolling. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line. At 320 × 320 pixels, open **How to use** and Tab to **Full documentation on GitHub**. The whole link must be visible below the title and close button. Close the guide and run `document.documentElement.style.removeProperty('font-size')` to restore normal text sizing.
+    The application title and subtitle must remain readable without overlapping the theme selector or **How to use**. The page must fit without horizontal scrolling. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line.
+
+    At 320 × 320 pixels, open **How to use** and Tab to **Full documentation on GitHub**. The whole link must be visible below the title and close button. Close the guide and run `document.documentElement.style.removeProperty('font-size')` to restore normal text sizing. Select **Large**, double the text size again, and repeat the link check at 320 × 320 and 320 × 401 pixels. Remove the font-size override when finished.
+
+    If your system lets you show scrollbars at all times, repeat the doubled **Large** check at 320 × 320 pixels with that setting. The link should stay fully visible when the vertical scrollbar takes up part of the dialog's width.
 
 17. Enable forced colors using a system contrast theme or browser emulation. Focus **Overview**, press Right Arrow to select **Checks**, then press Tab to focus its panel. Only **Checks** should have the selected underline. Press Shift+Tab to return to the tab and check that its focus outline and selected underline are both visible.
 
