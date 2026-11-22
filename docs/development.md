@@ -72,7 +72,7 @@ The first command checks production dependencies; the second also checks develop
 | [`src/rules/analyzeExcerpt.js`](../src/rules/analyzeExcerpt.js) | Input validation, keyword rules, and brief generation |
 | [`src/rules/evidencePassages.js`](../src/rules/evidencePassages.js) | Paragraph context and merging shared passages |
 | [`src/brief/`](../src/brief) | Validation of restored briefs |
-| [`src/storage/`](../src/storage) | Best-effort browser session storage |
+| [`src/storage/`](../src/storage) | Best-effort storage for review data and appearance preferences |
 | [`tests/browser/`](../tests/browser) | Playwright regressions against the production build |
 | [`.github/workflows/`](../.github/workflows) | CI and GitHub Pages deployment |
 
