@@ -2,8 +2,8 @@
 
 ## Unreleased
 
-This version preserves more source context in supporting quotations and brings
-the excerpt and brief together in a compact review workspace.
+This version preserves more source context in supporting quotations and places
+the excerpt editor beside the generated brief on wider screens.
 
 ### Changed
 
@@ -62,7 +62,8 @@ the excerpt and brief together in a compact review workspace.
 - Document evidence selection, browser setup, and repeatable manual checks in
   the [source passage guide](docs/evidence.md), [development guide](docs/development.md),
   and [browser testing guide](docs/testing-evidence.md).
-- Organize the README around the review workflow, local setup, scope, and support.
+- Organize the README around reviewing a tender excerpt, running the app locally,
+  and understanding its scope and support options.
 - Add [private vulnerability reporting guidance](SECURITY.md).
 - Update Vite to 8.3.5, Vitest to 5.0.5, Browserslist to 4.29.4, and related
   lockfile dependencies.

@@ -43,7 +43,7 @@ export default function App() {
     if (!heading || !panel) return
 
     heading.focus({ preventScroll: true })
-    // The sticky editor can stay visible while a long result's header is off screen.
+    // The editor can stay pinned when the brief heading has scrolled out of view.
     if (
       window.matchMedia('(max-width: 899px)').matches ||
       panel.getBoundingClientRect().top < 0 ||

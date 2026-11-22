@@ -8,7 +8,9 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 
 ![Bundled excerpt beside the review overview and detected technical scopes](docs/images/tender-review-brief-overview.png)
 
-## Review workflow
+<a name="review-workflow"></a>
+
+## Review a tender excerpt
 
 **How to use** opens a short guide in the application, with a link to the full documentation on GitHub.
 
@@ -16,7 +18,7 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.
 3. Open **Source passages** to read the supporting quotations. Check the complete tender documents before deciding what needs further investigation.
 
-On narrow screens, generation moves to the result; **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side; generation brings an off-screen result back into view.
+On narrow screens, generating a brief scrolls to the result. **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side. Generating a brief brings its heading back into view if it was off screen.
 
 Editing the excerpt leaves the previous result visible with an **Excerpt changed** notice. Generate again to update it. The brief saves its source text, so the notice also works after a reload when browser storage is available.
 
@@ -40,7 +42,7 @@ flowchart LR
 
 For each matched rule, the brief quotes the paragraphs containing its earliest match. Overlapping passages appear once, and long quotes can be expanded without losing text. See [how source passages are selected](docs/evidence.md) for paragraph boundaries, formatting, and limits.
 
-When browser storage is available, the current excerpt and last generated brief are saved separately in `sessionStorage` and restored on reload. Storage is best-effort; the application provides no document history or shared workspace.
+When browser storage is available, the application saves the current excerpt and the last generated brief separately in the current tab's `sessionStorage`. Reloading can restore the last successfully saved values. Each tab keeps its own excerpt and brief.
 
 ## Run locally
 

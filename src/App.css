@@ -78,7 +78,7 @@ h4 {
 
 .application-identity {
   display: flex;
-  /* Wrap the help control before the identity loses room for whole words. */
+  /* Give the app title and subtitle enough room to wrap at word boundaries. */
   flex: 1 1 min-content;
   align-items: center;
   gap: 12px;

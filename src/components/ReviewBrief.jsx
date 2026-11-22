@@ -88,7 +88,7 @@ export function ReviewBrief({ brief, sourceStatus, headingRef, panelRef }) {
         ))}
       </div>
 
-      {/* Keep panels mounted so switching tabs preserves native disclosure state. */}
+      {/* Keep panels mounted so expanded source passages stay open across tab switches. */}
       <div
         className="review-tab-panel"
         id="panel-overview"

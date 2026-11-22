@@ -1,8 +1,8 @@
-# Browser checks for the review workspace
+# Browser checks for excerpt editing and review briefs
 
 Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Choose **Restore sample** before starting. For the quotation checks below, generate a new brief after each input change and open **Source passages**.
 
-Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` for automated Chromium checks of the workspace, result tabs, mobile navigation, result status, source formatting, and narrow layouts; see the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
+Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` to check the layout of the excerpt editor and brief, keyboard navigation, whether the brief matches the excerpt, source formatting, and the help dialog in Chromium. See the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
 
 The result tabs use Left and Right Arrow to switch sections; Home and End select the first and last tab. Tab moves from the selected tab into its panel, then to any controls within it.
 

@@ -83,7 +83,7 @@ export function ReviewHelp() {
             <a
               ref={documentationRef}
               className="help-documentation"
-              href="https://github.com/NikolayAir/tender-review-brief#review-workflow"
+              href="https://github.com/NikolayAir/tender-review-brief#review-a-tender-excerpt"
               target="_blank"
               rel="noreferrer"
             >
