@@ -26,6 +26,8 @@ the excerpt editor beside the generated brief on wider screens.
 
 ### Fixed
 
+- Ask for confirmation before restoring the sample over an edited excerpt or
+  a generated or saved brief.
 - Keep the application header and result-tab labels readable with enlarged text
   on narrow screens, without overlapping the help control or splitting words.
 - Start the help guide at its first step when reopened. Keep text-selection and

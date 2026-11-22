@@ -5,10 +5,14 @@ import {
   validateExcerptInput,
 } from '../rules/analyzeExcerpt'
 
-export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }) {
+export function ExcerptAnalyzer({ excerpt, confirmSampleRestore, onExcerptChange, onAnalyze, onReset }) {
   const [error, setError] = useState('')
   const [fitsViewport, setFitsViewport] = useState(false)
   const panelRef = useRef(null)
+  const restoreButtonRef = useRef(null)
+  const restoreDialogRef = useRef(null)
+  const cancelRestoreRef = useRef(null)
+  const confirmRestoreRef = useRef(null)
 
   useEffect(() => {
     const panel = panelRef.current
@@ -51,9 +55,29 @@ export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }
     onAnalyze(analyzeExcerpt(excerpt))
   }
 
-  function handleReset() {
+  function restoreSample() {
     setError('')
     onReset()
+  }
+
+  function requestSampleRestore() {
+    if (confirmSampleRestore) {
+      restoreDialogRef.current.showModal()
+      return
+    }
+
+    restoreSample()
+  }
+
+  function handleRestoreKeyDown(event) {
+    if (event.key !== 'Tab') return
+
+    // Both Tab directions cycle between the two actions without leaving the dialog.
+    event.preventDefault()
+    const nextButton = event.target === cancelRestoreRef.current
+      ? confirmRestoreRef.current
+      : cancelRestoreRef.current
+    nextButton.focus()
   }
 
   return (
@@ -97,13 +121,50 @@ export function ExcerptAnalyzer({ excerpt, onExcerptChange, onAnalyze, onReset }
           Generate review brief
           <span aria-hidden="true">→</span>
         </button>
-        <button type="button" className="secondary-button" onClick={handleReset}>
+        <button
+          ref={restoreButtonRef}
+          type="button"
+          className="secondary-button"
+          aria-haspopup={confirmSampleRestore ? 'dialog' : undefined}
+          onClick={requestSampleRestore}
+        >
           Restore sample
         </button>
       </div>
       <p id="excerpt-storage-note" className="analyzer-limit-note">
         Processed in this browser. Your text is not sent to a server.
       </p>
+      <dialog
+        ref={restoreDialogRef}
+        className="review-dialog restore-dialog"
+        aria-labelledby="restore-sample-title"
+        aria-describedby="restore-sample-message"
+        onClose={() => restoreButtonRef.current.focus()}
+        onKeyDown={handleRestoreKeyDown}
+      >
+        <h2 id="restore-sample-title">Restore the sample?</h2>
+        <p id="restore-sample-message">This replaces your current excerpt and review brief with the sample.</p>
+        <div className="analyzer-actions">
+          <button
+            ref={cancelRestoreRef}
+            type="button"
+            className="secondary-button"
+            onClick={() => restoreDialogRef.current.close()}
+          >
+            Cancel
+          </button>
+          <button
+            ref={confirmRestoreRef}
+            type="button"
+            onClick={() => {
+              restoreSample()
+              restoreDialogRef.current.close()
+            }}
+          >
+            Restore sample
+          </button>
+        </div>
+      </dialog>
     </section>
   )
 }

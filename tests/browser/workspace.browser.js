@@ -116,6 +116,74 @@ test('keeps reset reachable when a resized editor reports an input error', async
   expect(button.y).toBeGreaterThanOrEqual(0)
   expect(button.y + button.height).toBeLessThan(800)
   await restore.click()
+  await page.getByRole('dialog', { name: 'Restore the sample?' })
+    .getByRole('button', { name: 'Restore sample', exact: true }).click()
+  await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
+})
+
+test('keeps the excerpt, brief, and validation error when sample restore is cancelled', async ({ page }) => {
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
+  const restore = page.getByRole('button', { name: 'Restore sample', exact: true })
+  const dialog = page.getByRole('dialog', { name: 'Restore the sample?' })
+  const cancel = dialog.getByRole('button', { name: 'Cancel', exact: true })
+  const confirm = dialog.getByRole('button', { name: 'Restore sample', exact: true })
+  const passages = page.getByRole('tab', { name: 'Source passages', exact: true })
+  const result = page.getByRole('region', { name: 'Review brief', exact: true })
+  const excerpt = 'Water pressure must remain at 1.5 bar.'
+
+  await input.fill(excerpt)
+  await generate.click()
+  await passages.click()
+  await input.fill(' ')
+  await generate.click()
+
+  for (const key of ['Escape', 'Enter']) {
+    await restore.click()
+    await expect(cancel).toBeFocused()
+    await page.keyboard.press('Tab')
+    await expect(confirm).toBeFocused()
+    await page.keyboard.press('Tab')
+    await expect(cancel).toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(confirm).toBeFocused()
+    await page.keyboard.press('Shift+Tab')
+    await expect(cancel).toBeFocused()
+    await cancel.press(key)
+
+    await expect(dialog).toBeHidden()
+    await expect(restore).toBeFocused()
+    await expect(input).toHaveValue(' ')
+    await expect(page.getByRole('alert')).toContainText('Please paste')
+    await expect(result.getByText('Excerpt changed', { exact: true })).toBeVisible()
+    await expect(passages).toHaveAttribute('aria-selected', 'true')
+    await expect(page.locator('.evidence-text')).toHaveText(excerpt)
+  }
+
+  await page.reload()
+  await expect(input).toHaveValue(' ')
+  await passages.click()
+  await expect(page.locator('.evidence-text')).toHaveText(excerpt)
+})
+
+test('confirms replacing a generated brief even when the editor contains the sample', async ({ page }) => {
+  const input = page.getByLabel('Public tender excerpt', { exact: true })
+  const restore = page.getByRole('button', { name: 'Restore sample', exact: true })
+  const dialog = page.getByRole('dialog', { name: 'Restore the sample?' })
+  const sample = await input.inputValue()
+
+  await restore.click()
+  await expect(dialog).toBeHidden()
+
+  await input.fill('Water pressure must remain at 1.5 bar.')
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await input.fill(sample)
+  await restore.click()
+  await dialog.getByRole('button', { name: 'Restore sample', exact: true }).click()
+
+  await expect(dialog).toBeHidden()
+  await expect(restore).toBeFocused()
+  await expect(input).toHaveValue(sample)
   await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
 })
 
@@ -228,6 +296,8 @@ test('tracks the excerpt behind a brief through edits, reloads, regeneration, an
   await input.fill(first)
   await expect(page.getByRole('region', { name: 'Review brief', exact: true }).getByText('Excerpt changed', { exact: true })).toBeVisible()
   await page.getByRole('button', { name: 'Restore sample', exact: true }).click()
+  await page.getByRole('dialog', { name: 'Restore the sample?' })
+    .getByRole('button', { name: 'Restore sample', exact: true }).click()
   await expect(page.getByRole('heading', { name: 'Municipal Building Renovation Tender', exact: true })).toBeVisible()
   await expect(page.getByText('Current excerpt', { exact: true })).toBeVisible()
   const sample = await input.inputValue()

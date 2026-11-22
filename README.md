@@ -22,6 +22,8 @@ On narrow screens, generating a brief scrolls to the result. **Edit excerpt** re
 
 Editing the excerpt leaves the previous result visible with an **Excerpt changed** notice. Generate again to update it. The brief saves its source text, so the notice also works after a reload when browser storage is available.
 
+**Restore sample** asks before replacing a different excerpt or a generated or saved brief.
+
 ![Source passages tab showing one quotation shared by five technical scopes](docs/images/tender-review-brief-results.png)
 
 ## How it works

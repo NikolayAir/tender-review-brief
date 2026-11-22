@@ -92,6 +92,7 @@ export default function App() {
         <div className="review-workspace">
           <ExcerptAnalyzer
             excerpt={excerpt}
+            confirmSampleRestore={excerpt !== sampleExcerpt || activeBrief !== sampleBrief}
             onExcerptChange={handleExcerptChange}
             onAnalyze={handleAnalyze}
             onReset={handleReset}

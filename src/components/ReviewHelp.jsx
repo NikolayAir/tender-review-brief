@@ -51,7 +51,7 @@ export function ReviewHelp() {
       </button>
       <dialog
         ref={dialogRef}
-        className="help-dialog"
+        className="review-dialog help-dialog"
         aria-labelledby="review-help-title"
         onKeyDown={handleKeyDown}
         onPointerDown={(event) => {

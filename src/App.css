@@ -148,12 +148,11 @@ h4 {
   background: var(--accent-soft);
 }
 
-body:has(.help-dialog[open]) {
+body:has(.review-dialog[open]) {
   overflow: hidden;
 }
 
-.help-dialog {
-  width: min(560px, calc(100% - 32px));
+.review-dialog {
   max-width: none;
   max-height: calc(100svh - 32px);
   padding: 0;
@@ -166,8 +165,22 @@ body:has(.help-dialog[open]) {
   overflow-wrap: anywhere;
 }
 
-.help-dialog::backdrop {
+.review-dialog::backdrop {
   background: #102d46a6;
+}
+
+.help-dialog {
+  width: min(560px, calc(100% - 32px));
+}
+
+.restore-dialog {
+  width: min(420px, calc(100% - 32px));
+  padding: 20px;
+}
+
+.restore-dialog p {
+  margin-top: 8px;
+  color: var(--muted);
 }
 
 .help-dialog-header {

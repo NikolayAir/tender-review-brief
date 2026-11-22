@@ -1,6 +1,6 @@
 # Browser checks for excerpt editing and review briefs
 
-Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Choose **Restore sample** before starting. For the quotation checks below, generate a new brief after each input change and open **Source passages**.
+Run `npm run build` and `npm run preview`, then open the local URL printed by Vite. Choose **Restore sample** before starting and confirm if the dialog opens. For the quotation checks below, generate a new brief after each input change and open **Source passages**.
 
 Run `npm test` for extraction, grouping, size-limit, and disclosure-markup regressions. Run `npm run test:browser` to check the layout of the excerpt editor and brief, keyboard navigation, whether the brief matches the excerpt, source formatting, and the help dialog in Chromium. See the [browser setup instructions](development.md#browser-checks). The manual checks below also help verify these behaviors in other browsers.
 
@@ -65,7 +65,9 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 9. Expand a long passage, switch to **Overview** or **Checks**, then return to **Source passages**. The passage must remain expanded. Repeat with it collapsed; switching tabs must preserve that state too.
 
-10. Generate a brief from `Water drawings are required.`, then replace the input with `Fire-safety drawings are required.` without generating again. **Excerpt changed** must appear while the source passage still shows the water requirement. Reload and reopen **Source passages**: when browser storage is available, both texts and the notice must remain. Generate again: **Current excerpt** must appear, and **Source passages** must show the fire-safety requirement. Reload again to check that the association is retained. **Restore sample** must restore both the sample text and its brief.
+10. Generate a brief from `Water drawings are required.`, then replace the input with `Fire-safety drawings are required.` without generating again. **Excerpt changed** must appear while the source passage still shows the water requirement. Reload and reopen **Source passages**. When browser storage is available, both texts and the notice must remain. Generate again and check that **Current excerpt** appears and **Source passages** shows the fire-safety requirement. Reload again to check that the association is retained.
+
+    Choose **Restore sample**. The confirmation must start with focus on **Cancel**. Cancel or press Escape and check that the excerpt, brief, and selected tab remain and focus returns to **Restore sample**. Open the confirmation again and choose **Restore sample** inside it to restore both the sample text and its brief.
 
 11. At 390 pixels wide, generate a brief and check that focus moves to its heading and the result scrolls into view. Repeat at 375 × 667 pixels: the result's status badge must stay within the screen after generation. **Edit excerpt** must return focus to the input. At a wide desktop viewport, the editor and brief must appear side by side; the bundled sample's overview should fit within a 1440 × 900 viewport.
 
@@ -83,7 +85,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
     copy('x'.repeat(50001))
     ```
 
-    Choose **Generate review brief** to show the input error. When the editor becomes taller than the available viewport, it must scroll with the page. Scroll to **Restore sample**: the whole button must be visible and usable, and it must restore both the sample text and brief.
+    Choose **Generate review brief** to show the input error. When the editor becomes taller than the available viewport, it must scroll with the page. Scroll to **Restore sample**. The whole button must be visible and usable, and confirming must restore both the sample text and brief.
 
 14. Choose **How to use**. A four-step guide must open with focus on its title. Tab and Shift+Tab must cycle through its close button and documentation link. Escape, the close button, and clicking the backdrop must each close the guide and return focus to **How to use**. The current excerpt, result, and selected result tab must stay unchanged. Repeat at 320 × 568 pixels: the guide must fit the viewport, its content must scroll when needed, and its close button must remain available.
 
