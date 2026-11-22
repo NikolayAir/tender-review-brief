@@ -1,3 +1,4 @@
+import { version } from '../../package.json'
 import { ReviewHelp } from './ReviewHelp'
 import { TextSizeSelect } from './TextSizeSelect'
 import { ThemeSelect } from './ThemeSelect'
@@ -12,7 +13,10 @@ export function BriefHeader() {
             <path d="M14 3v5h4M9 12h6M9 16h4" />
           </svg>
           <div>
-            <h1>Tender Review Brief</h1>
+            <div className="application-title">
+              <h1>Tender Review Brief</h1>
+              <small className="application-version">v{version}</small>
+            </div>
             <p>Technical review support</p>
           </div>
         </div>

@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs'
 import { expect, test } from '@playwright/test'
+
+const { version } = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf8'))
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./')
@@ -14,6 +17,13 @@ async function openLongPassage(page) {
 
 test('keeps the sample excerpt and review overview together in the first desktop screen', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
+  const title = page.getByRole('heading', { name: 'Tender Review Brief', exact: true })
+  const versionLabel = page.getByText(`v${version}`, { exact: true })
+  await expect(versionLabel).toBeVisible()
+  const titleBox = await title.boundingBox()
+  const versionBox = await versionLabel.boundingBox()
+  expect(versionBox.x).toBeGreaterThan(titleBox.x + titleBox.width)
+
   const source = await page.getByRole('region', { name: 'Tender excerpt', exact: true }).boundingBox()
   const result = await page.getByRole('region', { name: 'Review brief', exact: true }).boundingBox()
 
@@ -60,7 +70,7 @@ for (const width of [320, 390]) {
         document.querySelectorAll('.application-controls select, .help-trigger'),
         (element) => element.getBoundingClientRect(),
       )
-      return [...identity.querySelectorAll('h1, p')].flatMap((element) => {
+      return [...identity.querySelectorAll('h1, p, .application-version')].flatMap((element) => {
         // Text can overflow a flex item even when the item's own box does not overlap.
         const range = document.createRange()
         range.selectNodeContents(element)
@@ -78,6 +88,7 @@ for (const width of [320, 390]) {
       viewport: document.documentElement.clientWidth,
     }))
     expect(widths.page).toBeLessThanOrEqual(widths.viewport)
+    await expect(page.getByText(`v${version}`, { exact: true })).toBeVisible()
     await expect(page.getByRole('combobox', { name: 'Color theme', exact: true })).toBeVisible()
     await expect(page.getByRole('combobox', { name: 'Text size', exact: true })).toBeVisible()
     await page.getByRole('button', { name: 'How to use', exact: true }).click()

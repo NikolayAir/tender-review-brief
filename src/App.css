@@ -102,6 +102,19 @@ h4 {
   stroke-linejoin: round;
 }
 
+.application-title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 8px;
+}
+
+.application-version {
+  color: var(--muted);
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
 .application-bar h1 {
   font-size: 1.125rem;
   font-weight: 700;

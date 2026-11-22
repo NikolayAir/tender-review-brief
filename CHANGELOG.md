@@ -1,12 +1,14 @@
 # Changelog
 
-## Unreleased
+## 0.2.0
 
-This version preserves more source context in supporting quotations and places
-the excerpt editor beside the generated brief on wider screens.
+This release preserves more source context in supporting quotations, places
+the excerpt editor beside the generated brief on wider screens, and adds
+settings for the color theme and text size.
 
 ### Changed
 
+- Display the package version beside the application title.
 - Offer **Small**, **Medium**, and **Large** text sizes, with **Medium** as the
   default. Soften text, heading, and link colors in **Night**.
 - Add **Day**, **Night**, and **System** themes and save the selection in the
