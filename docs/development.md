@@ -42,11 +42,13 @@ npm run test:browser
 
 The browser command starts a temporary preview at `http://127.0.0.1:4188/tender-review-brief/`. Keep port 4188 available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
+For a local run in Chromium, Firefox, and WebKit, install the two additional engines with `npx playwright install firefox webkit`, run `npm run build`, then run `npx playwright test --browser all`.
+
 The tests cover desktop layout, mobile navigation and editor text size, and keyboard-operated result tabs, including selection in forced colors. Desktop checks cover regeneration after scrolling through long passages and access to controls when a resized editor shows a validation error. Dialog checks cover focus and cancellation when restoring the sample, along with dismissal, reopening after scrolling, and text selection in the help guide.
 
 Saved-result checks cover edits, reloads, regeneration, and older briefs. They verify that brief generation works when access to `sessionStorage` is blocked. When a simulated quota error prevents saving either the updated excerpt or brief, the tests check for **Excerpt changed** after reload. Source-passage checks cover the empty state for unmatched excerpts, visible whitespace, Unicode line breaks, disclosure reset, and 320-pixel-wide layouts.
 
-Enlarged-text checks at 320 and 390 pixels verify that the application header stays readable and tab labels do not break within words.
+Enlarged-text checks at 320 and 390 pixels verify that the header stays readable and tab labels keep whole words. Separate checks cover the footer link's placement and the visibility of the focused documentation link in a short help dialog.
 
 Playwright keeps a trace in `test-results/` when a browser test fails. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 

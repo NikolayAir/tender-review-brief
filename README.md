@@ -87,7 +87,7 @@ Human technical review is required. Generated briefs do not constitute legal, re
 
 ## Releases and support
 
-**Source code** in the footer opens the GitHub repository.
+**Source code** in the application footer opens the GitHub repository in a new tab.
 
 See the [changelog](CHANGELOG.md) and [GitHub Releases](https://github.com/NikolayAir/tender-review-brief/releases) for versioned release notes. Documentation on `main` describes current development; use the documentation at a release tag for that version.
 

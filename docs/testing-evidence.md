@@ -91,7 +91,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 15. At 640 × 360 pixels, open the guide, scroll to the documentation link, close it, and reopen it. The first step must appear below the header again. Select text inside the guide and release the pointer outside it: the guide must remain open. Repeat with a press on the backdrop and release inside the guide. A normal click on the backdrop must still dismiss it.
 
-16. At widths of 320 and 390 pixels, enlarge the text to 200%. For a repeatable check, run `document.documentElement.style.fontSize = '200%'` in the DevTools Console. The application title and subtitle must remain readable without overlapping **How to use** or causing horizontal overflow. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line. Open and close the guide to check that its control remains usable. Run `document.documentElement.style.removeProperty('font-size')` afterwards to restore normal text sizing.
+16. At widths of 320 and 390 pixels, enlarge the text to 200%. For a repeatable check, run `document.documentElement.style.fontSize = '200%'` in the DevTools Console. The application title and subtitle must remain readable without overlapping **How to use** or causing horizontal overflow. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line. At 320 × 320 pixels, open **How to use** and Tab to **Full documentation on GitHub**. The whole link must be visible below the title and close button. Close the guide and run `document.documentElement.style.removeProperty('font-size')` to restore normal text sizing.
 
 17. Enable forced colors using a system contrast theme or browser emulation. Focus **Overview**, press Right Arrow to select **Checks**, then press Tab to focus its panel. Only **Checks** should have the selected underline. Press Shift+Tab to return to the tab and check that its focus outline and selected underline are both visible.
 
@@ -106,5 +106,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
     Open **Source passages**. The tab should show **No matching source passages** with a prompt to review the complete documents. Reload and reopen the tab to check that the empty state is restored.
 
     Replace the excerpt with `Fire-safety drawings must be checked.` and check that **Excerpt changed** appears while the empty-state message still refers to the text used for the previous brief. Generate again and check that **Source passages** quotes the fire-safety requirement.
+
+19. With the bundled overview at 1440 × 1000 pixels, look for **Source code** on the right near the bottom of the page. At 320 pixels wide, it must appear below the disclaimer on the left. The link opens the repository in a new tab. In **How to use**, the link with the document icon opens [Review a tender excerpt](../README.md#review-a-tender-excerpt) in a new tab.
 
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

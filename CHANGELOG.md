@@ -7,9 +7,9 @@ the excerpt editor beside the generated brief on wider screens.
 
 ### Changed
 
-- Link to the GitHub repository from the footer.
-- Open a short How to use guide inside the application, with keyboard-accessible
-  modal controls and a link to the full documentation on GitHub.
+- Add a **Source code** link to the application footer.
+- Open a short **How to use** guide in the application, with keyboard-accessible
+  controls and a document icon beside the link to the full documentation on GitHub.
 - Place the editor beside the brief on desktop, with a compact application bar
   and Overview, Checks, and Source passages tabs. On narrow screens, move to the
   generated result and provide a link back to editing.
@@ -39,7 +39,8 @@ the excerpt editor beside the generated brief on wider screens.
 - Start the help guide at its first step when reopened. Keep text-selection and
   cross-boundary pointer gestures from dismissing it accidentally.
 - Keep Tab navigation within the help guide and return focus to **How to use**
-  when the guide closes, including in WebKit.
+  when the guide closes, including in WebKit. Keep the focused documentation
+  link visible on short screens with enlarged text.
 - Bring an off-screen result header back into view after desktop regeneration.
   Keep the editor's controls reachable when textarea resizing or input errors
   make the panel too tall to remain pinned.
