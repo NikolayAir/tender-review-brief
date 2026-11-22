@@ -49,6 +49,8 @@ The current excerpt and last generated brief are saved separately when `sessionS
 
 **Current excerpt** means that the brief's source text matches the editor. It does not certify the analysis or detect changes to the application's rules.
 
-Saved briefs without valid recorded source text remain readable, display **Saved brief**, and ask for regeneration. Restored briefs keep their previous quotations until a new brief is generated. Older briefs created without a match show the same empty state as new briefs. Storage failures do not prevent editing or generation, but changes may not survive a reload.
+Saved briefs without valid recorded source text remain readable, display **Saved brief**, and ask for regeneration. Restored briefs keep their previous quotations until a new brief is generated. Older briefs created without a match show the same empty state as new briefs.
+
+Editing and generation still work when the browser blocks access to session storage. When the browser cannot save an updated excerpt or brief, reloading can restore the previous saved version. The app compares the restored values and shows **Excerpt changed** when the brief was generated from different text.
 
 See [browser checks](testing-evidence.md) for fixtures covering paragraph context, whitespace, keyboard interaction, and narrow layouts, or [development](development.md) to run the automated regressions.

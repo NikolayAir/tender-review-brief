@@ -42,11 +42,13 @@ npm run test:browser
 
 The browser command starts a temporary preview at `http://127.0.0.1:4188/tender-review-brief/`. Keep port 4188 available. On Linux, use `npx playwright install --with-deps chromium` when system dependencies are missing. See [Playwright browser installation](https://playwright.dev/docs/browsers) for details.
 
-The tests cover desktop layout, keyboard-operated result tabs, mobile navigation, and the help dialog's focus and dismissal, including reopening after scrolling and text-selection gestures. Desktop regressions include regeneration after scrolling through long passages and resized editors with validation errors. Saved-result checks cover edits, reloads, regeneration, legacy briefs, and storage failures. Evidence checks cover visible whitespace, Unicode line breaks, disclosure reset, and 320-pixel-wide layouts.
+The tests cover desktop layout, mobile navigation and editor text size, and keyboard-operated result tabs, including selection in forced colors. Desktop checks cover regeneration after scrolling through long passages and access to controls when a resized editor shows a validation error. Dialog checks cover focus and cancellation when restoring the sample, along with dismissal, reopening after scrolling, and text selection in the help guide.
+
+Saved-result checks cover edits, reloads, regeneration, and older briefs. They verify that brief generation works when access to `sessionStorage` is blocked. When a simulated quota error prevents saving either the updated excerpt or brief, the tests check for **Excerpt changed** after reload. Source-passage checks cover the empty state for unmatched excerpts, visible whitespace, Unicode line breaks, disclosure reset, and 320-pixel-wide layouts.
 
 Enlarged-text checks at 320 and 390 pixels verify that the application header stays readable and tab labels do not break within words.
 
-Traces are retained on failure in `test-results/`. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
+Playwright keeps a trace in `test-results/` when a browser test fails. See [manual browser checks](testing-evidence.md) for additional checks in other browsers.
 
 ## Dependency audits
 
@@ -90,7 +92,7 @@ See [source passages](evidence.md) for the current evidence policy. Text matchin
 
 [CI](../.github/workflows/ci.yml) runs on pull requests, pushes to `main`, and manual dispatch. It installs the locked dependencies and checks unit tests, lint, the production build, and Chromium regressions. The workflow is also callable from another workflow in this repository.
 
-The [deployment workflow](../.github/workflows/deploy.yml) runs on pushes to `main` and manual dispatch. It first calls CI from the same commit with read-only repository access. The deployment job waits for those checks to pass, then builds and publishes to GitHub Pages. Failed checks skip deployment. The standalone CI run on `main` remains separate from the deployment workflow's checks.
+The [deployment workflow](../.github/workflows/deploy.yml) runs on pushes to `main` and manual dispatch. It first calls CI from the same commit with read-only repository access. When CI succeeds, the deployment job builds and publishes to GitHub Pages. If pre-deployment CI fails, GitHub Actions skips the deployment job. The standalone CI run on `main` remains separate from the deployment workflow's checks.
 
 The Vite base path is `/tender-review-brief/`. Branch-protection rules are configured separately in GitHub; workflow changes do not enable them.
 

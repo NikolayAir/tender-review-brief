@@ -69,7 +69,9 @@ The rules cover structural works, fire safety, accessibility, building envelope,
 
 Matching identifies declared keywords; it does not interpret whether work is included, excluded, or negated. If no rule matches, the brief asks for manual review. French coverage is limited to selected construction terms. Conditions outside the quoted paragraphs may still affect a requirement.
 
-Automated tests cover matching, quote preservation, stored-brief validation, storage failures, result status after edits and reloads, keyboard interaction, and narrow layouts. The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
+Automated tests cover matching, quote preservation, restored briefs, result status after edits and reloads, keyboard interaction, and narrow layouts. They also check that generation works when browser session storage is blocked and that the app flags a mismatch after reload when saving the excerpt or brief was rejected.
+
+The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
 
 PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Restored briefs retain their original quotations until regeneration.
 

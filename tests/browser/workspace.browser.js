@@ -282,7 +282,7 @@ test('keeps the result status visible after generating on a short mobile screen'
   expect(status.y + status.height).toBeLessThan(667)
 })
 
-test('keeps the previous brief and the full input when validation fails', async ({ page }) => {
+test('keeps the previous brief and the full input when the excerpt is blank or too long', async ({ page }) => {
   const input = page.getByLabel('Public tender excerpt', { exact: true })
   const generate = page.getByRole('button', { name: 'Generate review brief', exact: true })
   await input.fill(' \n\t')
@@ -393,7 +393,7 @@ for (const { name, failedKey } of [
   { name: 'the excerpt', failedKey: 'tender-brief-ui-current-excerpt' },
   { name: 'the brief', failedKey: 'tender-brief-ui-active-brief' },
 ]) {
-  test(`keeps source status correct when saving ${name} fails`, async ({ page }) => {
+  test(`flags mismatched text after reload when a quota error blocks saving ${name}`, async ({ page }) => {
     const first = 'Water drawings are required.'
     const second = 'Fire-safety drawings are required.'
     const input = page.getByLabel('Public tender excerpt', { exact: true })

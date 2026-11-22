@@ -95,7 +95,7 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 17. Enable forced colors using a system contrast theme or browser emulation. Focus **Overview**, press Right Arrow to select **Checks**, then press Tab to focus its panel. Only **Checks** should have the selected underline. Press Shift+Tab to return to the tab and check that its focus outline and selected underline are both visible.
 
-18. Generate a brief from this meeting and reporting requirement:
+18. Use the following meeting and reporting requirement to generate a brief.
 
     ```text
     The contractor shall hold a weekly site progress meeting and circulate the

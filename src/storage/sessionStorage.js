@@ -1,5 +1,5 @@
-// Browser storage is best-effort: access, parsing, serialization, or quota
-// failures must not prevent the interface from remaining usable.
+// Editing and generation stay available when the browser blocks session storage
+// or a stored value cannot be read, parsed, saved, or removed.
 
 const identity = (value) => value
 
