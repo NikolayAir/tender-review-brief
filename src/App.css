@@ -853,6 +853,18 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   .help-trigger {
     font-size: 0.75rem;
   }
+  :root[data-text-size="large"] .application-controls {
+    column-gap: 6px;
+  }
+  :root[data-text-size="large"] .appearance-control select {
+    padding-inline: 23px 16px;
+  }
+  :root[data-text-size="large"] .appearance-control::after {
+    inset-inline-end: 6px;
+  }
+  :root[data-text-size="large"] .help-trigger {
+    padding-inline: 8px;
+  }
   .app-shell {
     gap: 16px;
     padding-top: 16px;
@@ -882,21 +894,21 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   }
 }
 
-@media (max-width: 410px) {
-  :root[data-text-size="large"] .application-controls {
-    column-gap: 6px;
-  }
-  :root[data-text-size="large"] .appearance-control select {
-    padding-inline: 24px 16px;
-  }
-  :root[data-text-size="large"] .appearance-control::after {
-    inset-inline-end: 6px;
-  }
+@media (max-width: 439px) {
   :root[data-text-size="large"] .help-trigger {
     min-inline-size: 44px;
     padding-inline: 0;
   }
   :root[data-text-size="large"] .help-trigger-label {
     display: none;
+  }
+}
+
+@media (max-width: 350px) {
+  :root[data-text-size="large"] .appearance-icon {
+    display: none;
+  }
+  :root[data-text-size="large"] .appearance-control select {
+    padding-inline-start: 8px;
   }
 }

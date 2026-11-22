@@ -58,7 +58,7 @@ test('keeps the three header controls in one row with Large text on phones', asy
   const label = help.getByText('How to use', { exact: true })
   await size.selectOption('large')
 
-  for (const width of [320, 393, 440]) {
+  for (const width of [320, 351, 393, 439, 440]) {
     await page.setViewportSize({ width, height: 720 })
     const centers = await page.locator('.application-controls select, .help-trigger').evaluateAll((controls) => (
       controls.map((control) => {
@@ -66,7 +66,7 @@ test('keeps the three header controls in one row with Large text on phones', asy
         return bounds.top + bounds.height / 2
       })
     ))
-    expect(Math.max(...centers) - Math.min(...centers)).toBeLessThan(2)
+    expect(Math.max(...centers) - Math.min(...centers), `header control row at ${width}px`).toBeLessThan(2)
 
     if (width === 440) {
       await expect(label).toBeVisible()
