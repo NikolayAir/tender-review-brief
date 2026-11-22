@@ -13,15 +13,32 @@ async function expectOpen(select) {
   await expect.poll(() => select.evaluate((element) => element.matches(':open'))).toBe(true)
 }
 
+async function expectNativePreferences(page, { themeValue, sizeValue, fontSize }) {
+  const theme = page.getByRole('combobox', { name: themeName, exact: true })
+  const size = page.getByRole('combobox', { name: sizeName, exact: true })
+  const root = page.locator('html')
+
+  await expect(theme).toHaveCSS('appearance', 'none')
+  await expect(size).toHaveCSS('appearance', 'none')
+  await theme.selectOption(themeValue)
+  await expect(theme).toHaveValue(themeValue)
+  await expect(root).toHaveAttribute('data-theme', themeValue)
+  await size.selectOption(sizeValue)
+  await expect(size).toHaveValue(sizeValue)
+  await expect(root).toHaveAttribute('data-text-size', sizeValue)
+  await expect(root).toHaveCSS('font-size', fontSize)
+}
+
 test('themes both appearance menus and preserves keyboard selection', async ({ page }) => {
   await page.goto('./')
   const theme = page.getByRole('combobox', { name: themeName, exact: true })
   const size = page.getByRole('combobox', { name: sizeName, exact: true })
-  const supports = await page.evaluate(supportsStyledPicker)
-  const appearance = supports ? 'base-select' : 'none'
-  await expect(theme).toHaveCSS('appearance', appearance)
-  await expect(size).toHaveCSS('appearance', appearance)
-  if (!supports) return
+  if (!await page.evaluate(supportsStyledPicker)) {
+    await expectNativePreferences(page, { themeValue: 'night', sizeValue: 'large', fontSize: '20px' })
+    return
+  }
+  await expect(theme).toHaveCSS('appearance', 'base-select')
+  await expect(size).toHaveCSS('appearance', 'base-select')
 
   const modes = [
     { theme: 'day', system: 'dark', scheme: 'light' },
@@ -68,13 +85,11 @@ test('themes both appearance menus and preserves keyboard selection', async ({ p
   await expect(size).toHaveValue('large')
 
   await page.emulateMedia({ forcedColors: 'active' })
-  await expect(theme).toHaveCSS('appearance', 'none')
-  await expect(size).toHaveCSS('appearance', 'none')
+  await expectNativePreferences(page, { themeValue: 'day', sizeValue: 'small', fontSize: '16px' })
 
   await page.emulateMedia({ forcedColors: 'none' })
   await page.setViewportSize({ width: 320, height: 140 })
-  await expect(theme).toHaveCSS('appearance', 'none')
-  await expect(size).toHaveCSS('appearance', 'none')
+  await expectNativePreferences(page, { themeValue: 'night', sizeValue: 'large', fontSize: '20px' })
 })
 
 test('keeps appearance menus reachable by touch at narrow and short sizes', async ({ browser, browserName, baseURL }) => {
