@@ -3,6 +3,7 @@ import { useAppearancePreference } from '../storage/useAppearancePreference'
 
 // index.html reads the same preference before the app bundle loads.
 const THEME_STORAGE_KEY = 'tender-brief-ui-color-theme'
+const SYSTEM_LABEL = 'System'
 
 export function ThemeSelect() {
   const [preference, setPreference] = useAppearancePreference(THEME_STORAGE_KEY, ['system', 'day', 'night'], 'system')
@@ -22,13 +23,13 @@ export function ThemeSelect() {
   }, [preference])
 
   return (
-    <div className="appearance-control">
+    <div className="appearance-control" data-select-width-label={SYSTEM_LABEL}>
       <svg className="appearance-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
         <circle cx="10" cy="10" r="7" />
         <path d="M10 3a7 7 0 0 0 0 14Z" fill="currentColor" stroke="none" />
       </svg>
       <select aria-label="Color theme" value={preference} onChange={(event) => setPreference(event.target.value)}>
-        <option value="system">System</option>
+        <option value="system">{SYSTEM_LABEL}</option>
         <option value="day">Day</option>
         <option value="night">Night</option>
       </select>

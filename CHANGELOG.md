@@ -11,6 +11,8 @@ the excerpt editor beside the generated brief on wider screens.
   default. Soften text, heading, and link colors in **Night**.
 - Add **Day**, **Night**, and **System** themes and save the selection in the
   browser. **System** follows light or dark appearance as it changes.
+- Match the theme and text size menus to the app palette in browsers that
+  support customizable selects.
 - Add a **Source code** link to the application footer.
 - Open a short **How to use** guide in the application, with keyboard-accessible
   controls and a document icon beside the link to the full documentation on GitHub.

@@ -125,11 +125,16 @@ h4 {
 }
 
 .appearance-control {
+  --select-padding-start: 30px;
+  --select-padding-end: 26px;
+
   position: relative;
   display: inline-flex;
   align-items: center;
   max-width: 100%;
   color: var(--accent-strong);
+  font-size: 0.8125rem;
+  font-weight: 600;
 }
 
 .appearance-control select {
@@ -140,11 +145,9 @@ h4 {
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: 8px;
-  padding-inline: 30px 26px;
+  padding-inline: var(--select-padding-start) var(--select-padding-end);
   color: inherit;
   background-color: var(--surface);
-  font-size: 0.8125rem;
-  font-weight: 600;
   cursor: pointer;
 }
 
@@ -199,6 +202,73 @@ h4 {
 
 .appearance-control select:hover, .help-trigger:hover, .help-close:hover {
   background: var(--accent-soft);
+}
+
+@supports (appearance: base-select) and selector(::picker(select)) and (position-try-fallbacks: --center-settings-picker) {
+  @media (forced-colors: none) and (min-height: 10em) {
+    .appearance-control {
+      display: inline-grid;
+    }
+
+    /* Base selects size to the selected value. Reserve the widest label. */
+    .appearance-control::before {
+      grid-area: 1 / 1;
+      padding-inline: var(--select-padding-start) var(--select-padding-end);
+      border-inline: 1px solid transparent;
+      visibility: hidden;
+      white-space: nowrap;
+      content: attr(data-select-width-label);
+    }
+
+    .appearance-control select {
+      appearance: base-select;
+      grid-area: 1 / 1;
+      inline-size: 100%;
+    }
+
+    .appearance-control select::picker-icon {
+      display: none;
+    }
+
+    .appearance-control select::picker(select) {
+      appearance: base-select;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block, flip-inline, flip-block flip-inline, --center-settings-picker;
+      position-try-order: normal;
+      max-block-size: calc(100dvh - 16px);
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    @position-try --center-settings-picker {
+      position-area: none;
+      inset: 8px;
+      margin: auto;
+      inline-size: max-content;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .appearance-control option {
+      min-block-size: 44px;
+      padding: 0 0.5em;
+      line-height: 1.2;
+    }
+
+    @media (hover: hover) and (pointer: fine) and (not (any-pointer: coarse)) {
+      .appearance-control option {
+        min-block-size: 26px;
+      }
+    }
+
+    .appearance-control option:is(:focus-visible, :hover) {
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+    }
+  }
 }
 
 body:has(.review-dialog[open]) {
@@ -861,8 +931,9 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   .application-bar p {
     font-size: 0.6875rem;
   }
-  .appearance-control select {
-    padding-inline: 25px 20px;
+  .appearance-control {
+    --select-padding-start: 25px;
+    --select-padding-end: 20px;
     font-size: 1rem;
   }
   .appearance-icon {
@@ -877,8 +948,9 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   :root[data-text-size="large"] .application-controls {
     column-gap: 6px;
   }
-  :root[data-text-size="large"] .appearance-control select {
-    padding-inline: 23px 16px;
+  :root[data-text-size="large"] .appearance-control {
+    --select-padding-start: 23px;
+    --select-padding-end: 16px;
   }
   :root[data-text-size="large"] .appearance-control::after {
     inset-inline-end: 6px;
@@ -929,7 +1001,7 @@ button:focus-visible, a:focus-visible, select:focus-visible, textarea:focus-visi
   :root[data-text-size="large"] .appearance-icon {
     display: none;
   }
-  :root[data-text-size="large"] .appearance-control select {
-    padding-inline-start: 8px;
+  :root[data-text-size="large"] .appearance-control {
+    --select-padding-start: 8px;
   }
 }

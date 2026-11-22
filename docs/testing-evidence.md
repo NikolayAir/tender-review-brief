@@ -127,4 +127,10 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 21. Choose **Night** and try **Small**, **Medium**, and **Large** in the text size selector. Check the editor, a source passage, and **How to use** at each size. At 320 and 393 pixels wide with **Large**, the header controls should share a row, with the question-mark icon opening help. At 440 pixels, **How to use** should keep its text label. At 320 pixels the page must fit without horizontal scrolling, and the help link must remain reachable by scrolling or with Tab. Reload to check that both Night and Large are restored.
 
+22. Open **Color theme** and **Text size** in Day and Night. In a browser with customizable select menus, all three options should match the app palette. With a mouse, confirm that the rows are compact at the default text size. With touch, confirm that rows are at least 44 pixels tall and tap an option to select it. Repeat at 320 pixels wide and in landscape.
+
+    Check that the menu opens below its control when there is room. In a shorter window with enlarged text, it can move above the control or to the center. Tab to each control and open it with Space. Use the arrow keys and Enter to select, then reopen it and verify that Escape cancels the next selection and returns focus.
+
+    In forced-colors mode, with a viewport shorter than 10em (160 pixels when the browser default is 16 pixels), or without the required CSS features, the menus use the browser's native picker. Check that its options remain selectable. Its palette depends on the browser and operating system.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.
