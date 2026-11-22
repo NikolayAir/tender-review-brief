@@ -673,13 +673,38 @@ body:has(.review-dialog[open]) {
   margin-bottom: 12px;
 }
 
+.application-footer {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 4px 20px;
+  margin-top: 20px;
+}
+
 .disclaimer {
-  max-width: 1050px;
-  margin: 20px auto 0;
   color: var(--muted);
   font-size: 0.75rem;
   line-height: 1.6;
-  text-align: center;
+}
+
+.source-code-link {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 6px;
+  min-height: 44px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.source-code-link svg {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-visible, [role="tabpanel"]:focus-visible, #review-brief-title:focus-visible, #review-help-title:focus-visible {
@@ -731,6 +756,13 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
   }
   .edit-excerpt-link {
     display: inline-block;
+  }
+  .application-footer {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .source-code-link {
+    justify-self: start;
   }
 }
 
@@ -787,8 +819,7 @@ button:focus-visible, a:focus-visible, textarea:focus-visible, summary:focus-vis
     grid-template-columns: 1fr;
     gap: 22px;
   }
-  .disclaimer {
+  .application-footer {
     margin-top: 16px;
-    text-align: left;
   }
 }

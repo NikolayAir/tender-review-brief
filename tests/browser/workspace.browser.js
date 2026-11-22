@@ -35,6 +35,23 @@ test('keeps the sample excerpt and review overview together in the first desktop
   expect(height).toBeLessThanOrEqual(900)
 })
 
+test('aligns the source code link to the right on desktop and to the left on mobile', async ({ page }) => {
+  const footer = page.locator('.application-footer')
+  const source = footer.getByRole('link', { name: 'Source code (opens in a new tab)', exact: true })
+  await expect(source).toHaveAttribute('href', 'https://github.com/NikolayAir/tender-review-brief')
+  await expect(source).toHaveAttribute('target', '_blank')
+
+  await page.setViewportSize({ width: 1440, height: 900 })
+  const desktopFooter = await footer.boundingBox()
+  const desktopLink = await source.boundingBox()
+  expect(desktopLink.x + desktopLink.width).toBeCloseTo(desktopFooter.x + desktopFooter.width)
+
+  await page.setViewportSize({ width: 390, height: 844 })
+  const mobileFooter = await footer.boundingBox()
+  const mobileLink = await source.boundingBox()
+  expect(mobileLink.x).toBeCloseTo(mobileFooter.x)
+})
+
 for (const width of [320, 390]) {
   test(`keeps the application header readable with enlarged text at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 })
