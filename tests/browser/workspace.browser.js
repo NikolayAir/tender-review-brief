@@ -25,6 +25,56 @@ test('keeps the sample excerpt and review overview together in the first desktop
   expect(height).toBeLessThanOrEqual(900)
 })
 
+for (const width of [320, 390]) {
+  test(`keeps the application header readable with enlarged text at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 })
+    await page.addStyleTag({ content: 'html { font-size: 200%; }' })
+
+    const overlaps = await page.locator('.application-identity').evaluate((identity) => {
+      const help = document.querySelector('.help-trigger').getBoundingClientRect()
+      return [...identity.querySelectorAll('h1, p')].flatMap((element) => {
+        // Text can overflow a flex item even when the item's own box does not overlap.
+        const range = document.createRange()
+        range.selectNodeContents(element)
+        return [...range.getClientRects()]
+          .filter((rect) => rect.left < help.right && rect.right > help.left && rect.top < help.bottom && rect.bottom > help.top)
+          .map(() => element.textContent)
+      })
+    })
+    expect(overlaps).toEqual([])
+
+    const widths = await page.evaluate(() => ({
+      page: document.documentElement.scrollWidth,
+      viewport: document.documentElement.clientWidth,
+    }))
+    expect(widths.page).toBeLessThanOrEqual(widths.viewport)
+    await page.getByRole('button', { name: 'How to use', exact: true }).click()
+    await expect(page.getByRole('dialog', { name: 'How to use', exact: true })).toBeVisible()
+  })
+
+  test(`keeps result tab labels whole with enlarged text at ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 })
+    await page.addStyleTag({ content: 'html { font-size: 200%; }' })
+
+    const brokenWords = await page.getByRole('tab').evaluateAll((tabs) => tabs.flatMap((tab) => {
+      const text = tab.firstChild
+      return [...text.textContent.matchAll(/\S+/gu)].flatMap((match) => {
+        const range = document.createRange()
+        range.setStart(text, match.index)
+        range.setEnd(text, match.index + match[0].length)
+        return range.getClientRects().length > 1 ? [match[0]] : []
+      })
+    }))
+    expect(brokenWords).toEqual([])
+
+    const overview = page.getByRole('tab', { name: 'Overview', exact: true })
+    await overview.focus()
+    await overview.press('End')
+    await expect(page.getByRole('tab', { name: 'Source passages', exact: true })).toBeFocused()
+    await expect(page.getByRole('tabpanel', { name: 'Source passages', exact: true })).toBeVisible()
+  })
+}
+
 test('brings a regenerated brief back into view from a long desktop passage', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 900 })
   await openLongPassage(page)

@@ -66,6 +66,7 @@ h4 {
 
 .application-bar-inner {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -77,6 +78,8 @@ h4 {
 
 .application-identity {
   display: flex;
+  /* Wrap the help control before the identity loses room for whole words. */
+  flex: 1 1 min-content;
   align-items: center;
   gap: 12px;
   min-width: 0;
@@ -116,6 +119,7 @@ h4 {
   justify-content: center;
   gap: 6px;
   min-height: 44px;
+  margin-inline-start: auto;
   border: 1px solid var(--line);
   border-radius: 7px;
   padding: 8px 10px;
@@ -273,6 +277,7 @@ body:has(.help-dialog[open]) {
 }
 
 .section-number {
+  flex-shrink: 0;
   padding: 3px 7px;
   border-radius: 5px;
   background: var(--accent-soft);
@@ -483,6 +488,7 @@ body:has(.help-dialog[open]) {
 
 .review-tabs {
   display: flex;
+  flex-wrap: wrap;
   padding-inline: 18px;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
@@ -491,7 +497,7 @@ body:has(.help-dialog[open]) {
 
 .review-tabs button {
   flex: 1;
-  min-width: 0;
+  min-width: min-content;
   min-height: 48px;
   margin-bottom: -1px;
   border: 0;
@@ -502,6 +508,7 @@ body:has(.help-dialog[open]) {
   font-size: 0.8125rem;
   font-weight: 600;
   line-height: 1.4;
+  overflow-wrap: normal;
 }
 
 .review-tabs button:hover {

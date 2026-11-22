@@ -89,4 +89,6 @@ For fixtures containing tabs, Unicode separators, or long padding, the commands 
 
 15. At 640 × 360 pixels, open the guide, scroll to the documentation link, close it, and reopen it. The first step must appear below the header again. Select text inside the guide and release the pointer outside it: the guide must remain open. Repeat with a press on the backdrop and release inside the guide. A normal click on the backdrop must still dismiss it.
 
+16. At widths of 320 and 390 pixels, enlarge the text to 200%. For a repeatable check, run `document.documentElement.style.fontSize = '200%'` in the DevTools Console. The application title and subtitle must remain readable without overlapping **How to use** or causing horizontal overflow. Result tabs may wrap onto another row, but individual words must stay whole and Arrow, Home, and End navigation must still work. The **01** label must stay on one line. Open and close the guide to check that its control remains usable. Run `document.documentElement.style.removeProperty('font-size')` afterwards to restore normal text sizing.
+
 Paragraph context is a text-boundary policy. These checks do not establish that all conditions elsewhere in the tender have been captured or that the keyword matcher understands exclusions.

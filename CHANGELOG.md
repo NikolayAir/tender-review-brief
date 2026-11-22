@@ -26,6 +26,8 @@ the excerpt and brief together in a compact review workspace.
 
 ### Fixed
 
+- Keep the application header and result-tab labels readable with enlarged text
+  on narrow screens, without overlapping the help control or splitting words.
 - Start the help guide at its first step when reopened. Keep text-selection and
   cross-boundary pointer gestures from dismissing it accidentally.
 - Bring an off-screen result header back into view after desktop regeneration.
