@@ -104,7 +104,7 @@ After changing either workflow, check the first deployment run on `main`: the pr
 
 ## Preparing a release
 
-1. Keep implementation, dependency, and documentation changes on a working branch. Record their release notes under **Unreleased** in [CHANGELOG.md](../CHANGELOG.md); package versions stay at the latest released version. Run the checks and both audits above.
-2. Create `release/<version>` from the reviewed working branch. Its final commit updates the version in `package.json` and both root version fields in `package-lock.json`, then renames **Unreleased** to the release version.
-3. Merge the working PR first. The release PR should be based on the updated `main` and contain only version and changelog finalization. If the working PR was squash-merged, recreate the release branch from the updated `main` and apply only the final release commit.
-4. After the release PR passes CI and is merged, wait for deployment and verify the application. Tag the merged commit and publish the release notes from the changelog.
+1. Merge the implementation, dependency, and documentation changes into `main`. Record their release notes under **Unreleased** in [CHANGELOG.md](../CHANGELOG.md) and keep the package metadata at the latest released version.
+2. Review the updated `main` and run the checks and both audits above. Create `release/<version>` from that revision.
+3. Update the version in `package.json` and both root version fields in `package-lock.json`. Rename **Unreleased** to the release version and add the publication date when it is known.
+4. After the release PR passes CI and is merged, wait for deployment and verify the published application. Check the version in the header, generate a brief, and read its supporting passages. Tag the merged commit and publish the release notes from the changelog.
