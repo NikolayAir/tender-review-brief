@@ -2,11 +2,16 @@
 
 ## Unreleased
 
-This version preserves more source context in supporting quotations and makes
-long passages easier to read.
+This version preserves more source context in supporting quotations and places
+the excerpt editor beside the generated brief on wider screens.
 
 ### Changed
 
+- Open a short How to use guide inside the application, with keyboard-accessible
+  modal controls and a link to the full documentation on GitHub.
+- Place the editor beside the brief on desktop, with a compact application bar
+  and Overview, Checks, and Source passages tabs. On narrow screens, move to the
+  generated result and provide a link back to editing.
 - Select the earliest matching term or phrase for each review rule, preferring
   the longest phrase when matches start at the same position.
 - Quote the complete source paragraphs spanned by a match, preserving related
@@ -21,11 +26,30 @@ long passages easier to read.
 
 ### Fixed
 
+- Ask for confirmation before restoring the sample over an edited excerpt or
+  a generated or saved brief.
+- Keep the selected result tab visible in forced colors when keyboard focus
+  moves into the panel.
+- Use the base text size in the excerpt editor on narrow screens.
+- Show an empty Source passages state for unmatched excerpts, including
+  older saved briefs without matches.
+- Keep the application header and result-tab labels readable with enlarged text
+  on narrow screens, without overlapping the help control or splitting words.
+- Start the help guide at its first step when reopened. Keep text-selection and
+  cross-boundary pointer gestures from dismissing it accidentally.
+- Keep Tab navigation within the help guide and return focus to **How to use**
+  when the guide closes, including in WebKit.
+- Bring an off-screen result header back into view after desktop regeneration.
+  Keep the editor's controls reachable when textarea resizing or input errors
+  make the panel too tall to remain pinned.
+- Identify briefs based on an earlier excerpt, including after reloading a saved
+  session. Ask for regeneration when an older saved brief has no recorded source
+  text, while keeping its result available.
 - Prevent supporting quotations from cutting off decimal values, abbreviations,
   section references, URLs, or matched phrases spanning multiple lines.
 - Reset a long passage to its collapsed state when its content changes, including
   replacements with the same length and source offsets. Preserve disclosure
-  state when regenerating unchanged input.
+  state when regenerating unchanged input or switching result tabs.
 - Keep long unbroken text and deep tab indentation within narrow layouts.
 - Clarify wording about supporting source passages and browser processing; use
   plain language in accessibility checks and questions.
@@ -34,13 +58,21 @@ long passages easier to read.
 
 - Add Chromium regression tests for source formatting, Unicode separators,
   keyboard operation, disclosure reset, and 320-pixel-wide layouts; run them in CI.
+- Cover desktop layout, result-tab keyboard navigation, mobile focus, and source
+  association through edits, reloads, regeneration, and sample reset, including
+  legacy saved briefs and unavailable storage. Add regressions for desktop
+  regeneration after scrolling and resized editors with validation errors.
+- Check help-dialog focus, dismissal, narrow layouts, and preservation of the
+  current excerpt and result tab, including repeated opening and text-selection
+  gestures.
 - Require successful CI checks for the same commit before GitHub Pages deployment.
 - Expand unit tests for paragraph context, shared passages, multiline phrases,
   maximum-length input, and disclosure markup.
 - Document evidence selection, browser setup, and repeatable manual checks in
   the [source passage guide](docs/evidence.md), [development guide](docs/development.md),
   and [browser testing guide](docs/testing-evidence.md).
-- Organize the README around the review workflow, local setup, scope, and support.
+- Organize the README around reviewing a tender excerpt, running the app locally,
+  and understanding its scope and support options.
 - Add [private vulnerability reporting guidance](SECURITY.md).
 - Update Vite to 8.3.5, Vitest to 5.0.5, Browserslist to 4.29.4, and related
   lockfile dependencies.

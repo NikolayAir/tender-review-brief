@@ -25,6 +25,20 @@ describe('parseStoredBrief', () => {
     expect(parseStoredBrief(JSON.stringify(validBrief))).toEqual(validBrief)
   })
 
+  it('restores an older no-match brief with an empty quotation list', () => {
+    const noMatchBrief = {
+      ...validBrief,
+      sourceExcerpt: 'The contractor shall hold a weekly site progress meeting.',
+      evidenceSnippets: [{
+        id: 'no-rule-match',
+        source: 'No matching technical scope',
+        text: 'The excerpt did not match any technical terms or phrases in the current rule set.',
+      }],
+    }
+
+    expect(parseStoredBrief(JSON.stringify(noMatchBrief))).toEqual({ ...noMatchBrief, evidenceSnippets: [] })
+  })
+
   it('rejects syntactically valid JSON with missing brief fields', () => {
     expect(() => parseStoredBrief('{}')).toThrow(
       'Stored review brief has an invalid structure.',

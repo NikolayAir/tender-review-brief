@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test'
 async function generateBrief(page, excerpt) {
   await page.getByLabel('Public tender excerpt', { exact: true }).fill(excerpt)
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
 }
 
 async function wordPositions(passage, words) {
@@ -23,6 +24,31 @@ async function wordPositions(passage, words) {
 
 test.beforeEach(async ({ page }) => {
   await page.goto('./')
+})
+
+test('keeps the no-match message tied to the brief after reload and edits', async ({ page }) => {
+  const excerpt = 'The contractor shall hold a weekly site progress meeting and circulate the minutes to the project team within two working days. ' +
+    'The minutes shall record each agreed action, the person responsible, and the due date.'
+  await generateBrief(page, excerpt)
+  const panel = page.getByRole('tabpanel', { name: 'Source passages', exact: true })
+  const emptyState = panel.getByRole('heading', { name: 'No matching source passages', exact: true })
+  await expect(emptyState).toBeVisible()
+  await expect(panel.getByRole('article')).toHaveCount(0)
+
+  await page.reload()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(emptyState).toBeVisible()
+  await expect(panel.getByRole('article')).toHaveCount(0)
+
+  const updatedExcerpt = 'Fire-safety drawings must be checked.'
+  await page.getByLabel('Public tender excerpt', { exact: true }).fill(updatedExcerpt)
+  const result = page.getByRole('region', { name: 'Review brief', exact: true })
+  await expect(result.getByText('Excerpt changed', { exact: true })).toBeVisible()
+  await expect(panel.getByText('No keywords matched the excerpt used to generate this brief.')).toBeVisible()
+
+  await page.getByRole('button', { name: 'Generate review brief', exact: true }).click()
+  await expect(emptyState).toBeHidden()
+  await expect(panel.locator('.evidence-text')).toHaveText(updatedExcerpt)
 })
 
 test('shows wrapped units, internal indentation, and negation on separate lines', async ({ page }) => {
@@ -72,12 +98,18 @@ test('operates disclosures by keyboard and resets same-length source replacement
   await generateBrief(page, first)
   const disclosure = page.locator('.evidence-details')
   const summary = disclosure.locator('summary')
-  const restore = page.getByRole('button', { name: 'Restore bundled sample', exact: true })
+  const restore = page.getByRole('button', { name: 'Restore sample', exact: true })
 
   await expect(disclosure).toHaveJSProperty('open', false)
   await page.getByRole('button', { name: 'Generate review brief', exact: true }).press('Tab')
   await expect(restore).toBeFocused()
   await restore.press('Tab')
+  const passagesTab = page.getByRole('tab', { name: 'Source passages', exact: true })
+  await expect(passagesTab).toBeFocused()
+  await passagesTab.press('Tab')
+  const panel = page.getByRole('tabpanel', { name: 'Source passages', exact: true })
+  await expect(panel).toBeFocused()
+  await panel.press('Tab')
   await expect(summary).toBeFocused()
   await expect(summary).toHaveCSS('outline-style', 'solid')
   await summary.press('Enter')
@@ -85,6 +117,10 @@ test('operates disclosures by keyboard and resets same-length source replacement
   await summary.press('Space')
   await expect(disclosure).toHaveJSProperty('open', false)
   await summary.press('Enter')
+
+  await page.getByRole('tab', { name: 'Overview', exact: true }).click()
+  await page.getByRole('tab', { name: 'Source passages', exact: true }).click()
+  await expect(disclosure).toHaveJSProperty('open', true)
 
   await generateBrief(page, first)
   await expect(disclosure).toHaveJSProperty('open', true)

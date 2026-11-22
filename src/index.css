@@ -1,5 +1,14 @@
 :root {
-  --accent: #aa3bff;
+  --ink: #263d50;
+  --heading: #15384f;
+  --muted: #5c7183;
+  --canvas: #eef3f8;
+  --surface: #fff;
+  --soft: #f6f9fc;
+  --line: #d2dee8;
+  --accent: #246b9f;
+  --accent-strong: #18517c;
+  --accent-soft: #e8f2fa;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -15,5 +24,5 @@
 
 html {
   min-width: 320px;
-  background: #f4f6f8;
+  background: var(--canvas);
 }

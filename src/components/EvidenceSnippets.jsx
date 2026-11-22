@@ -8,16 +8,28 @@ function EvidenceText({ text }) {
 }
 
 export function EvidenceSnippets({ snippets }) {
+  if (snippets.length === 0) {
+    return (
+      <section className="brief-section" aria-labelledby="evidence-title">
+        <h3 id="evidence-title">No matching source passages</h3>
+        <p className="evidence-note">
+          No keywords matched the excerpt used to generate this brief.
+          Review the complete tender documents for relevant requirements.
+        </p>
+      </section>
+    )
+  }
+
   return (
-    <section className="card evidence-card" aria-labelledby="evidence-title">
-      <h2 id="evidence-title">Supporting source passages</h2>
+    <section className="brief-section evidence-section" aria-labelledby="evidence-title">
+      <h3 id="evidence-title">Supporting source passages</h3>
       <p className="evidence-note">
         Check each passage against the complete tender documents.
       </p>
       <div className="evidence-list">
         {snippets.map((snippet) => (
           <article className="evidence-snippet" key={snippet.id}>
-            <h3>{snippet.source}</h3>
+            <h4>{snippet.source}</h4>
             {/* Changed text must reset disclosure state even at the same source offsets. */}
             {snippet.text.length > MAX_INLINE_PASSAGE_CHARS ? (
               <details key={snippet.text} className="evidence-details">

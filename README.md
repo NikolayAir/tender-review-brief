@@ -6,17 +6,25 @@ The application uses predefined keyword rules to suggest technical scopes, revie
 
 [Open the application](https://nikolayair.github.io/tender-review-brief/)
 
-![Bundled tender excerpt with controls to generate a review brief or restore the sample](docs/images/tender-review-brief-overview.png)
+![Bundled excerpt beside the review overview and detected technical scopes](docs/images/tender-review-brief-overview.png)
 
-## Review workflow
+<a name="review-workflow"></a>
 
-1. Choose **Restore bundled sample** to try the example, or paste public, non-confidential text into **Analyze tender excerpt**.
-2. Choose **Generate review brief**, then review the detected scopes, suggested checks, and questions.
-3. Read the supporting source passages in context and check the complete tender documents before deciding what needs further investigation.
+## Review a tender excerpt
 
-After editing the excerpt, generate the brief again. Editing alone leaves the previous result visible, including after a reload.
+**How to use** opens a short guide in the application, with a link to the full documentation on GitHub.
 
-![Generated brief with detected technical scopes, suggested review focus areas, checks, and questions](docs/images/tender-review-brief-results.png)
+1. Choose **Restore sample** to try the example, or paste public, non-confidential text into **Tender excerpt**.
+2. Choose **Generate review brief**. Review the detected scopes and focus areas in **Overview**, then the suggested checks and questions in **Checks**.
+3. Open **Source passages** to read the supporting quotations. Check the complete tender documents before deciding what needs further investigation.
+
+On narrow screens, generating a brief scrolls to the result. **Edit excerpt** returns to the input. On wider screens, the editor and brief appear side by side. Generating a brief brings its heading back into view if it was off screen.
+
+Editing the excerpt leaves the previous result visible with an **Excerpt changed** notice. Generate again to update it. The brief saves its source text, so the notice also works after a reload when browser storage is available.
+
+**Restore sample** asks before replacing a different excerpt or a generated or saved brief.
+
+![Source passages tab showing one quotation shared by five technical scopes](docs/images/tender-review-brief-results.png)
 
 ## How it works
 
@@ -36,7 +44,7 @@ flowchart LR
 
 For each matched rule, the brief quotes the paragraphs containing its earliest match. Overlapping passages appear once, and long quotes can be expanded without losing text. See [how source passages are selected](docs/evidence.md) for paragraph boundaries, formatting, and limits.
 
-When browser storage is available, the current excerpt and last generated brief are saved separately in `sessionStorage` and restored on reload. Storage is best-effort; the application provides no document history or shared workspace.
+When browser storage is available, the application saves the current excerpt and the last generated brief separately in the current tab's `sessionStorage`. Reloading can restore the last successfully saved values. Each tab keeps its own excerpt and brief.
 
 ## Run locally
 
@@ -61,11 +69,13 @@ The rules cover structural works, fire safety, accessibility, building envelope,
 
 Matching identifies declared keywords; it does not interpret whether work is included, excluded, or negated. If no rule matches, the brief asks for manual review. French coverage is limited to selected construction terms. Conditions outside the quoted paragraphs may still affect a requirement.
 
-Automated tests cover matching, quote preservation, stored-brief validation, storage failures, keyboard interaction, and narrow layouts. The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
+Automated tests cover matching, quote preservation, restored briefs, result status after edits and reloads, keyboard interaction, and narrow layouts. They also check that generation works when browser session storage is blocked and that the app flags a mismatch after reload when saving the excerpt or brief was rejected.
 
-PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Briefs restored from older sessions keep their previous content until a new brief is generated.
+The rules have not been validated against a representative collection of tenders, so no accuracy estimate is claimed. See [browser checks](docs/testing-evidence.md) for repeatable manual examples.
 
-The output supports human technical review. It does not make legal, regulatory, safety, compliance, or engineering determinations.
+PDF ingestion, URL fetching, OCR, brief export, saved reviewer decisions, authentication, and shared review sessions are not implemented. Restored briefs retain their original quotations until regeneration.
+
+Human technical review is required. Generated briefs do not constitute legal, regulatory, safety, compliance, or engineering determinations.
 
 ## Documentation
 
@@ -73,7 +83,7 @@ The output supports human technical review. It does not make legal, regulatory, 
 | --- | --- |
 | [Source passages](docs/evidence.md) | Match selection, paragraph context, shared quotes, formatting, and limits |
 | [Development](docs/development.md) | Local checks, browser setup, project structure, rule changes, and deployment |
-| [Browser checks](docs/testing-evidence.md) | Manual examples for quote formatting, keyboard interaction, and narrow layouts |
+| [Browser checks](docs/testing-evidence.md) | Manual examples for quote formatting, result status, keyboard interaction, and narrow layouts |
 
 ## Releases and support
 

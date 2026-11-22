@@ -190,13 +190,7 @@ export function analyzeExcerpt(excerpt) {
       reviewerQuestions: [
         'Which technical scopes, drawings, constraints, and acceptance criteria are defined in the full tender documents?',
       ],
-      evidenceSnippets: [
-        {
-          id: 'no-rule-match',
-          source: 'No matching technical scope',
-          text: 'The excerpt did not match any technical terms or phrases in the current rule set.',
-        },
-      ],
+      evidenceSnippets: [],
     }
   }
 
